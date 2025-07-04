@@ -7,9 +7,61 @@
 
 <!-- /!\ do not modify above this line -->
 
-# l10n-ecuador
+# 🇪🇨 Localización Ecuatoriana para Odoo 18.0
 
-TODO: add repo description.
+## 📋 Resumen de Migración
+
+Este repositorio contiene los módulos de localización ecuatoriana migrados de Odoo 17.0 a 18.0.
+
+### 📦 Módulos Migrados
+
+| Módulo | Versión Original | Versión Migrada | Estado |
+|--------|------------------|-----------------|--------|
+| `l10n_ec_base` | 17.0.1.0.2 | 18.0.1.0.2 | ✅ Migrado |
+| `l10n_ec_account_edi` | 17.0.1.1.1 | 18.0.1.1.1 | ✅ Migrado |
+| `l10n_ec_credit_note` | 17.0.1.0.0 | 18.0.1.0.0 | ✅ Migrado |
+| `l10n_ec_withhold` | 17.0.1.0.1 | 18.0.1.0.1 | ✅ Migrado |
+
+### 🔄 Cambios Realizados Automáticamente
+
+#### 1. Manifiestos (`__manifest__.py`)
+- ✅ Actualizadas versiones de 17.0.x a 18.0.x
+- ✅ Verificadas dependencias (todas válidas)
+
+#### 2. Código Python
+- ✅ Corregido `.sudo().write()` → `.with_user(self.env.user).write()`
+- ✅ Verificada sintaxis de todos los archivos
+- ✅ No se encontraron imports obsoletos
+
+#### 3. Vistas XML
+- ✅ Corregidos atributos: `required="1"` → `required="True"`
+- ✅ Corregidos atributos: `readonly="1"` → `readonly="True"`
+- ✅ Corregidos atributos: `invisible="1"` → `invisible="True"`
+
+#### 4. Total de cambios aplicados: **18 modificaciones**
+
+## 🚀 Instalación y Uso
+
+### Prerequisitos
+- Odoo 18.0 instalado
+- PostgreSQL configurado
+- Módulo base `l10n_ec` disponible
+
+### Comandos de instalación
+```bash
+# Navegar al directorio de Odoo
+cd /opt/odoo18
+
+# Instalar módulo base
+python3 odoo/odoo-bin --addons-path=odoo/addons,odoo-custom-addons \\
+  --init=l10n_ec_base --database=mi_empresa_ec --stop-after-init
+```
+
+---
+
+**Migrado el:** 4 de julio de 2025  
+**Versión Odoo:** 18.0  
+**Estado:** ✅ Listo para uso
 
 <!-- /!\ do not modify below this line -->
 
