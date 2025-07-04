@@ -30,7 +30,9 @@ class AccountChartTemplate(models.AbstractModel):
             # set SRI payment for records exist
             self._l10n_ec_set_default_sri_payment(company)
             Template = self.with_company(company)
-            Template._load_data({"account.tax": self._get_ec_new_account_tax()})
+            # Load only the tax data that updates existing taxes, avoid creating duplicates
+            # Temporarily disable CSV loading to avoid conflicts
+            # Template._load_data({"account.tax": self._get_ec_new_account_tax()})
             Template._load_data({"account.tax": TAX_DATA_EC})
             Template._load_data({"account.tax.group": TAX_GROUP_DATA_EC})
             Template._load_data({"account.journal": self._get_ec_new_account_journal()})
