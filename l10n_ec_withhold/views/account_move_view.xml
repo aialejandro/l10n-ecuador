@@ -42,8 +42,8 @@
                 </button>
             </xpath>
             <xpath expr="//field[@name='reversed_entry_id']" position="after">
-                <field name="l10n_latam_internal_type" invisible="1" />
-                <field name="l10n_ec_withhold_active" invisible="1" />
+                <field name="l10n_latam_internal_type" invisible="True" />
+                <field name="l10n_ec_withhold_active" invisible="True" />
             </xpath>
             <xpath expr="//group[@id='header_right_group']" position="inside">
                 <field
@@ -112,8 +112,8 @@
                 <attribute name="edit">0</attribute>
             </xpath>
             <xpath expr="//field[@name='fiscal_position_id']" position="before">
-                <field name="l10n_ec_withholding_type" invisible="1" />
-                <field name="is_move_sent" invisible="1" />
+                <field name="l10n_ec_withholding_type" invisible="True" />
+                <field name="is_move_sent" invisible="True" />
             </xpath>
             <xpath
                 expr="//button[@name='%(account.action_view_account_move_reversal)d']"
@@ -126,7 +126,7 @@
                     <field
                         name="l10n_ec_withholding_type"
                         invisible="l10n_latam_internal_type != 'withhold'"
-                        readonly="1"
+                        readonly="True"
                         nolabel="1"
                     />
                 </span>
@@ -214,8 +214,8 @@
                                 string="Withhold Amount"
                                 sum="Total Amount"
                             />
-                            <field name="currency_id" column_invisible="1" />
-                            <field name="company_currency_id" column_invisible="1" />
+                            <field name="currency_id" column_invisible="True" />
+                            <field name="company_currency_id" column_invisible="True" />
                         </tree>
                     </field>
                     <field

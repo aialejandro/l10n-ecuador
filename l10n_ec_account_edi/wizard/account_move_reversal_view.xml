@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="account.view_account_move_reversal" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='company_id']" position="after">
-                <field name="country_code" invisible="1" />
+                <field name="country_code" invisible="True" />
             </xpath>
             <xpath expr="//field[@name='reason']" position="attributes">
                 <attribute name="invisible">move_type == 'entry'</attribute>

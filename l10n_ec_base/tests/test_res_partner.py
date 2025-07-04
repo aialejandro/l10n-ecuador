@@ -10,7 +10,7 @@ class TestResPartner(TransactionCaseWithUserDemo):
         partner_final = self.env.ref("l10n_ec.ec_final_consumer")
         other_partner = self.env["res.partner"].create({"name": "OTRO CLIENTE"})
         # intentar modificar datos con usuario admin, no debe lanzar error
-        partner_final.sudo().write({"name": "NUEVO CLIENTE"})
+        partner_final.with_user(self.env.user).write({"name": "NUEVO CLIENTE"})
         # intentar modificar datos con usuario normal, debe lanzar error
         with self.assertRaises(UserError):
             partner_final.with_user(self.user_demo).write({"name": "NUEVO CLIENTE"})

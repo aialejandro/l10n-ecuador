@@ -7,16 +7,16 @@
             <form>
                 <group>
                     <group>
-                        <field name="partner_id" readonly="1" force_save="1" />
+                        <field name="partner_id" readonly="True" force_save="1" />
                         <field name="issue_date" />
                         <field
                             name="journal_id"
-                            required="1"
+                            required="True"
                             domain="[('type', '=', 'general'), ('l10n_ec_withholding_type', '=', 'purchase')]"
                             options="{'no_create': True}"
                         />
-                        <field name="document_number" readonly="1" />
-                        <field name="invoice_id" invisible="1" />
+                        <field name="document_number" readonly="True" />
+                        <field name="invoice_id" invisible="True" />
                     </group>
                 </group>
                 <notebook>
@@ -29,22 +29,22 @@
                                 <tree editable="bottom">
                                     <field
                                     name="invoice_id"
-                                    column_invisible="1"
+                                    column_invisible="True"
                                     options="{'no_create': True}"
                                 />
                                         <field
                                     name="l10n_ec_tax_support"
-                                    required="1"
+                                    required="True"
                                 />
                                         <field
                                     name="tax_group_withhold_id"
-                                    required="1"
+                                    required="True"
                                     options="{'no_create': True}"
                                     domain="[('l10n_ec_type', 'in', ['withhold_vat_purchase', 'withhold_income_purchase'])]"
                                 />
                                         <field
                                     name="tax_withhold_id"
-                                    required="1"
+                                    required="True"
                                     options="{'no_create': True}"
                                     domain="[('tax_group_id', '=', tax_group_withhold_id), ('type_tax_use', '=', 'none')]"
                                 />
