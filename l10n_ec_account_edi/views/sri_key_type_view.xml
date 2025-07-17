@@ -4,14 +4,14 @@
         <field name="name">sri.key.type.tree</field>
         <field name="model">sri.key.type</field>
         <field name="arch" type="xml">
-            <tree
+            <list
                 decoration-info="state == 'unverified'"
                 decoration-success="state == 'valid'"
                 decoration-warning="state == 'expired'"
             >
                 <field name="name" />
                 <field name="state" />
-            </tree>
+            </list>
         </field>
     </record>
     <record id="sri_key_type_form_view" model="ir.ui.view">

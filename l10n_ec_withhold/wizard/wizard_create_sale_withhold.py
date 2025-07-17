@@ -219,7 +219,24 @@ class WizardCreateSaleWithholdLine(models.TransientModel):
         ondelete="cascade",
     )
 
-    @api.onchange("invoice_id", "tax_group_withhold_id", "l10n_ec_tax_support")
+    # Explicitly define fields from abstract model to ensure they're available
+    tax_group_withhold_id = fields.Many2one(
+        comodel_name="account.tax.group",
+        string="Withholding Type",
+    )
+    tax_withhold_id = fields.Many2one(
+        comodel_name="account.tax",
+        string="Withholding tax",
+    )
+    base_amount = fields.Float(string="Amount Base", readonly=True)
+    withhold_amount = fields.Float(
+        string="Amount Withhold",
+        compute="_compute_withholding_amount",
+        store=True,
+    )
+    invoice_id = fields.Many2one("account.move")
+
+    @api.onchange("invoice_id", "tax_group_withhold_id")
     def _onchange_withholding_base(self):
         super()._onchange_withholding_base()
         currency_prec = self.invoice_id.company_id.currency_id.rounding
