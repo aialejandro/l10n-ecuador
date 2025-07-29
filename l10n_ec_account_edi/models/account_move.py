@@ -264,7 +264,7 @@ class AccountMove(models.Model):
                 .ids
             )
             return (
-                tax_values["tax_repartition_line"].tax_id.tax_group_id.id
+                tax_values["tax"].tax_group_id.id
                 not in withhold_group_ids
             )
 

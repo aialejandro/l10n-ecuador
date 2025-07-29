@@ -78,7 +78,7 @@
         <field name="name">XML Electronic Documents</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">account.edi.document</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="view_id" ref="account_edi_document_view_tree" />
     </record>
     <menuitem

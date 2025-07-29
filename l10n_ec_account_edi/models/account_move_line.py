@@ -72,15 +72,57 @@ class AccountMoveLine(models.Model):
     def _l10n_ec_get_invoice_edi_taxes(self, taxes_data):
         tax_values = []
         EdiDocument = self.env["account.edi.document"]
-        for tax_data in taxes_data.get("tax_details", {}).values():
-            tax_values.append(EdiDocument._l10n_ec_prepare_tax_vals_edi(tax_data))
+        
+        if not taxes_data:
+            return tax_values
+            
+        # En Odoo 18.0, usar la nueva estructura de datos
+        tax_details = taxes_data.get("tax_details", {})
+        
+        # Iterar sobre todos los grupos de impuestos 
+        for grouping_key, values in tax_details.items():
+            # Si el grouping_key es un impuesto (objeto account.tax)
+            if hasattr(grouping_key, 'tax_group_id') and hasattr(grouping_key, 'l10n_ec_xml_fe_code'):
+                tax_data = {
+                    "tax": grouping_key,
+                    "base_amount_currency": values.get("base_amount_currency", 0.0),
+                    "tax_amount_currency": values.get("tax_amount_currency", 0.0),
+                }
+                tax_values.append(EdiDocument._l10n_ec_prepare_tax_vals_edi(tax_data))
+            
+            # Si hay group_tax_details, procesarlos
+            elif "group_tax_details" in values:
+                for tax_data in values["group_tax_details"]:
+                    tax_values.append(EdiDocument._l10n_ec_prepare_tax_vals_edi(tax_data))
+        
         return tax_values
 
     def _l10n_ec_get_credit_note_edi_taxes(self, taxes_data):
         tax_values = []
         EdiDocument = self.env["account.edi.document"]
-        for tax_data in taxes_data.get("tax_details", {}).values():
-            tax_values.append(EdiDocument._l10n_ec_prepare_tax_vals_edi(tax_data))
+        
+        if not taxes_data:
+            return tax_values
+            
+        # En Odoo 18.0, usar la nueva estructura de datos
+        tax_details = taxes_data.get("tax_details", {})
+        
+        # Iterar sobre todos los grupos de impuestos 
+        for grouping_key, values in tax_details.items():
+            # Si el grouping_key es un impuesto (objeto account.tax)
+            if hasattr(grouping_key, 'tax_group_id') and hasattr(grouping_key, 'l10n_ec_xml_fe_code'):
+                tax_data = {
+                    "tax": grouping_key,
+                    "base_amount_currency": values.get("base_amount_currency", 0.0),
+                    "tax_amount_currency": values.get("tax_amount_currency", 0.0),
+                }
+                tax_values.append(EdiDocument._l10n_ec_prepare_tax_vals_edi(tax_data))
+            
+            # Si hay group_tax_details, procesarlos
+            elif "group_tax_details" in values:
+                for tax_data in values["group_tax_details"]:
+                    tax_values.append(EdiDocument._l10n_ec_prepare_tax_vals_edi(tax_data))
+        
         return tax_values
 
     def l10n_ec_get_debit_note_edi_data(self, taxes_data):
