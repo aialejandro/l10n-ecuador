@@ -1,5 +1,6 @@
 import logging
 import subprocess
+from OpenSSL import crypto
 from base64 import b64decode
 from random import randrange
 from tempfile import NamedTemporaryFile
@@ -175,7 +176,10 @@ class SriKeyType(models.Model):
         def new_range():
             return randrange(100000, 999999)
 
-        p12 = self._decode_certificate()
+        private_key, certificate = self._decode_certificate()
+        pkey = crypto.PKey.from_cryptography_key(private_key)
+        cert_pem = certificate.public_bytes(serialization.Encoding.PEM)
+        cert = crypto.load_certificate(crypto.FILETYPE_PEM, cert_pem)
         doc = etree.fromstring(xml_string_data)
         signature_id = f"Signature{new_range()}"
         signature_property_id = f"{signature_id}-SignedPropertiesID{new_range()}"
@@ -220,7 +224,8 @@ class SriKeyType(models.Model):
         )
         doc.append(signature)
         ctx = XAdESContext(ImpliedPolicy(xmlsig.constants.TransformSha1))
-        ctx.load_pkcs12(p12)
+        ctx.key = pkey
+        ctx.cert = cert
         ctx.sign(signature)
         ctx.verify(signature)
         return etree.tostring(doc, encoding="UTF-8", pretty_print=True).decode()
