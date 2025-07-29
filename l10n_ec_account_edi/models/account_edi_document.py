@@ -108,9 +108,28 @@ class AccountEdiDocument(models.Model):
     def l10n_ec_header_get_total_with_taxes(self, taxes_data):
         self.ensure_one()
         res = []
-        for tax_data in taxes_data.get("tax_details", {}).values():
-            tax_vals = self._l10n_ec_prepare_tax_vals_edi(tax_data)
-            res.append(tax_vals)
+        
+        # En Odoo 18.0, usar la nueva estructura de datos de _prepare_edi_tax_details
+        tax_details = taxes_data.get("tax_details", {})
+        
+        # Iterar sobre todos los grupos de impuestos 
+        for grouping_key, values in tax_details.items():
+            # Si el grouping_key es un impuesto (objeto account.tax)
+            if hasattr(grouping_key, 'tax_group_id') and hasattr(grouping_key, 'l10n_ec_xml_fe_code'):
+                tax_data = {
+                    "tax": grouping_key,
+                    "base_amount_currency": values.get("base_amount_currency", 0.0),
+                    "tax_amount_currency": values.get("tax_amount_currency", 0.0),
+                }
+                tax_vals = self._l10n_ec_prepare_tax_vals_edi(tax_data)
+                res.append(tax_vals)
+            
+            # Si hay group_tax_details, procesarlos
+            elif "group_tax_details" in values:
+                for tax_data in values["group_tax_details"]:
+                    tax_vals = self._l10n_ec_prepare_tax_vals_edi(tax_data)
+                    res.append(tax_vals)
+        
         return res
 
     def _l10n_ec_get_environment(self):
