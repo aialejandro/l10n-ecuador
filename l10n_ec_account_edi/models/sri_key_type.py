@@ -1,9 +1,7 @@
 import logging
-import subprocess
 import traceback
 from base64 import b64decode
 from random import randrange
-from tempfile import NamedTemporaryFile
 
 import xmlsig  # pylint: disable=W7936
 from cryptography.hazmat.primitives import serialization  # pylint: disable=W7936
@@ -19,25 +17,6 @@ from odoo.exceptions import UserError
 from odoo.tools.translate import _
 
 _logger = logging.getLogger(__name__)
-
-KEY_TO_PEM_CMD = (
-    "openssl pkcs12 -nocerts -in %s -out %s -passin pass:%s -passout pass:%s"
-)
-
-
-def convert_key_cer_to_pem(key, password):
-    # TODO compute it from a python way
-    with NamedTemporaryFile(
-        "wb", suffix=".key", prefix="edi.ec.tmp."
-    ) as key_file, NamedTemporaryFile(
-        "rb", suffix=".key", prefix="edi.ec.tmp."
-    ) as keypem_file:
-        key_file.write(key)
-        key_file.flush()
-        command = KEY_TO_PEM_CMD % (key_file.name, keypem_file.name, password, password)
-        subprocess.call(command.split())
-        key_pem = keypem_file.read().decode()
-    return key_pem
 
 
 class SriKeyType(models.Model):
@@ -82,8 +61,11 @@ class SriKeyType(models.Model):
             return None, None
         file_content = b64decode(self.file_content)
         try:
-            p12 = pkcs12.load_pkcs12(file_content, self.password.encode())
-        except Exception as ex:
+            password = self.password.encode()
+            private_key, certificate, additional_certs = pkcs12.load_key_and_certificates(
+                file_content, password
+            )
+        except Exception as ex:  # pylint: disable=broad-except
             _logger.warning(str(ex))
             raise UserError(
                 _(
@@ -92,54 +74,50 @@ class SriKeyType(models.Model):
                 )
                 % (str(ex))
             ) from None
-        certificate = p12.cert.certificate
-        # revisar si el certificado tiene la extension digital_signature activada
-        # caso contrario tomar del listado de certificados el primero que tengan esta
-        # extension
-        is_digital_signature = True
-        try:
-            extension = certificate.extensions.get_extension_for_oid(
-                ExtensionOID.KEY_USAGE
-            )
-            is_digital_signature = extension.value.digital_signature
-        except ExtensionNotFound as ex:
-            _logger.debug(str(ex))
-        if not is_digital_signature:
-            # cuando hay mas de un certificado, tomar el certificado correcto
-            # este deberia tener entre las extensiones digital_signature = True
-            # pero si el certificado solo tiene uno, devolvera None
-            for other_cert in p12.additional_certs:
-                try:
-                    extension = other_cert.certificate.extensions.get_extension_for_oid(
-                        ExtensionOID.KEY_USAGE
-                    )
-                except ExtensionNotFound as ex:
-                    _logger.debug(str(ex))
-                if extension.value.digital_signature:
-                    certificate = other_cert.certificate
+        additional_certs = additional_certs or []
+        if not certificate and additional_certs:
+            certificate = additional_certs[0]
+
+        def _has_digital_signature(cert):
+            try:
+                extension = cert.extensions.get_extension_for_oid(ExtensionOID.KEY_USAGE)
+                return extension.value.digital_signature
+            except ExtensionNotFound as ex:  # pylint: disable=broad-except
+                _logger.debug(str(ex))
+                return True
+
+        if certificate and not _has_digital_signature(certificate):
+            for extra_cert in additional_certs or []:
+                if _has_digital_signature(extra_cert):
+                    certificate = extra_cert
                     break
-        private_key_str = convert_key_cer_to_pem(file_content, self.password)
-        start_index = private_key_str.find("Signing Key")
-        # cuando el archivo tiene mas de una firma electronica
-        # viene varias secciones con BEGIN ENCRYPTED PRIVATE KEY
-        # diferenciandose por:
-        # * Decryption Key
-        # * Signing Key
-        # asi que tomar desde Signing Key en caso de existir
-        if start_index >= 0:
-            private_key_str = private_key_str[start_index:]
-        start_index = private_key_str.find("-----BEGIN ENCRYPTED PRIVATE KEY-----")
-        private_key_str = private_key_str[start_index:]
-        private_key = serialization.load_pem_private_key(
-            private_key_str.encode(),
-            self.password.encode(),
-        )
+
+        if not certificate:
+            raise UserError(
+                _(
+                    "The provided signature file does not contain a valid certificate with digital signature capability."
+                )
+            )
+
+        if not private_key:
+            raise UserError(
+                _(
+                    "The provided signature file does not contain a private key."
+                )
+            )
+
         return private_key, certificate
 
     def action_validate_and_load(self):
         _private_key, cert = self._decode_certificate()
         issuer = cert.issuer
         subject = cert.subject
+        issue_dt = getattr(cert, "not_valid_before_utc", cert.not_valid_before)
+        expire_dt = getattr(cert, "not_valid_after_utc", cert.not_valid_after)
+        if getattr(issue_dt, "tzinfo", None):
+            issue_dt = issue_dt.replace(tzinfo=None)
+        if getattr(expire_dt, "tzinfo", None):
+            expire_dt = expire_dt.replace(tzinfo=None)
         subject_common_name = (
             subject.get_attributes_for_oid(NameOID.COMMON_NAME)[0].value
             if subject.get_attributes_for_oid(NameOID.COMMON_NAME)
@@ -156,12 +134,8 @@ class SriKeyType(models.Model):
             else ""
         )
         vals = {
-            "issue_date": fields.Datetime.context_timestamp(
-                self, cert.not_valid_before
-            ).date(),
-            "expire_date": fields.Datetime.context_timestamp(
-                self, cert.not_valid_after
-            ).date(),
+            "issue_date": fields.Datetime.context_timestamp(self, issue_dt).date(),
+            "expire_date": fields.Datetime.context_timestamp(self, expire_dt).date(),
             "subject_common_name": subject_common_name,
             "subject_serial_number": subject_serial_number,
             "issuer_common_name": issuer_common_name,
@@ -231,28 +205,28 @@ class SriKeyType(models.Model):
         ctx = XAdESContext(ImpliedPolicy(xmlsig.constants.TransformSha1))
         
         try:
-            # Configurar contexto XAdES con certificado recargado
+            from cryptography import x509  # pylint: disable=import-outside-toplevel
+
             certificate_der = certificate.public_bytes(serialization.Encoding.DER)
-            ctx.private_key = private_key
-            
-            from cryptography import x509
             certificate_reloaded = x509.load_der_x509_certificate(certificate_der)
+
+            ctx.private_key = private_key
             ctx.certificate = certificate_reloaded
-            
-            # Intentar configuración manual si es necesario
-            if hasattr(ctx, 'set_x509'):
+
+            if hasattr(ctx, "set_x509"):
                 ctx.set_x509(certificate_reloaded)
-            elif hasattr(ctx, 'x509'):
+            elif hasattr(ctx, "x509"):
                 ctx.x509 = certificate_reloaded
-            
-            # Firmar el documento
+
             ctx.sign(signature)
             ctx.verify(signature)
-            
-            _logger.info("Documento firmado exitosamente con certificado %s", 
-                        self.subject_common_name or "sin nombre")
-            
-        except Exception as e:
+
+            _logger.info(
+                "Documento firmado exitosamente con certificado %s",
+                self.subject_common_name or "sin nombre",
+            )
+
+        except Exception as e:  # pylint: disable=broad-except
             _logger.error("Error al firmar documento: %s", str(e))
             _logger.debug("Traceback completo: %s", traceback.format_exc())
             raise
