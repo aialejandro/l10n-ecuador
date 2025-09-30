@@ -7,29 +7,28 @@
         >
             <t
                 t-set="style_div_company"
-                t-value="'min-height: 230px; padding-left: 20px;'"
+                t-value="'min-height: 173px; padding-left: 20px;'"
             />
             <t t-set="company_logo" t-value="company.logo" />
             <table class="table table-no-border">
                 <tr>
                     <td width="50%">
-                        <t t-if="company_logo">
-                            <div class="oe_product_image">
-                                <img
-                                    t-att-src="image_data_uri(company_logo)"
-                                    height="150"
-                                    width="100%"
-                                />
-                            </div>
+                                    <t t-if="company_logo">
+                                        <div class="oe_product_image">
+                                            <img
+                                                t-att-src="image_data_uri(company_logo)"
+                                                style="max-height: 150px; max-width: 100%; height: auto; width: auto;"
+                                            />
+                                        </div>
                             <br />
-                        </t>
-                        <div
-                            class="div-bordered div-radius"
-                            t-att-style="style_div_company"
-                        >
-                            <div class="text-center text-uppercase">
-                                <strong t-field="company.name" />
-                            </div>
+                                    </t>
+                                    <div
+                                        class="div-bordered div-radius"
+                                        t-att-style="style_div_company"
+                                    >
+                                        <div class="text-center text-uppercase">
+                                            <strong t-field="company.name" />
+                                        </div>
                             <div
                                 class="text-center"
                                 t-if="company.partner_id.city and company.partner_id.country_id"
@@ -95,7 +94,7 @@
                                 <br />
                                 <span t-out="company.l10n_ec_get_regimen()" />
                             </t>
-                        </div>
+                                    </div>
                     </td>
                     <td>
                         <div class="div-bordered div-radius" style="min-height: 325px;">
@@ -134,7 +133,7 @@
                             >
                                 <img
                                     class="barcode"
-                                    t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;' % ('Code128', edi_doc.l10n_ec_xml_access_key, 400, 100)"
+                                    t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;' % ('Code128', edi_doc.l10n_ec_xml_access_key, 400, 45)"
                                     alt="Clave de Acceso"
                                 />
                                 <br />
@@ -236,6 +235,8 @@
     <template id="electronic_report_common_total_info">
         <table class="table table-sm table-bordered-black small">
             <t t-set="tax_totals" t-value="o.tax_totals" />
+            <!-- Ensure currency is defined for the monetary widget inside account.document_tax_totals -->
+            <t t-set="currency" t-value="o.currency_id" />
             <t t-call="account.document_tax_totals" />
         </table>
     </template>
