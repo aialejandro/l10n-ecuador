@@ -172,11 +172,11 @@ class AccountEdiDocument(models.Model):
                 _logger.error(
                     "Wrong XML File, access_key: %s, Error: %s",
                     self.l10n_ec_xml_access_key,
-                    tools.ustr(e),
+                    str(e),
                 )
             else:
                 raise UserError(
-                    _("Wrong XML File, Detail: \n%s") % tools.ustr(e)
+                    _("Wrong XML File, Detail: \n%s") % str(e)
                 ) from None
         return True
 
@@ -552,8 +552,8 @@ class AccountEdiDocument(models.Model):
                 "%s",
                 str(client_ws),
                 self.l10n_ec_xml_access_key,
-                tools.ustr(e),
-                tools.ustr(traceback.format_exc()),
+                str(e),
+                str(traceback.format_exc()),
             )
         return response
 
@@ -586,12 +586,12 @@ class AccountEdiDocument(models.Model):
                     msj_str = f"{tipo} [{identificador}] {messaje} {additional_info}"
                     msj_list.append(msj_str)
         except Exception as e:
-            msj_list.append(tools.ustr(e))
+            msj_list.append(str(e))
             _logger.info(
                 "can't validate document, clave de acceso %s. ERROR: %s TRACEBACK: %s",
                 self.l10n_ec_xml_access_key,
-                tools.ustr(e),
-                tools.ustr(traceback.format_exc()),
+                str(e),
+                str(traceback.format_exc()),
             )
             ok = False
         return ok, msj_list
@@ -608,7 +608,7 @@ class AccountEdiDocument(models.Model):
         except Exception as e:
             response = False
             _logger.warning(
-                "Error send xml to server %s. ERROR: %s", client_ws, tools.ustr(e)
+                "Error send xml to server %s. ERROR: %s", client_ws, str(e)
             )
         return response
 

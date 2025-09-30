@@ -1,5 +1,6 @@
 import logging
 import subprocess
+import traceback
 from base64 import b64decode
 from random import randrange
 from tempfile import NamedTemporaryFile
@@ -78,18 +79,18 @@ class SriKeyType(models.Model):
     def _decode_certificate(self):
         self.ensure_one()
         if not self.password:
-            return None, None, None
+            return None, None
         file_content = b64decode(self.file_content)
         try:
             p12 = pkcs12.load_pkcs12(file_content, self.password.encode())
         except Exception as ex:
-            _logger.warning(tools.ustr(ex))
+            _logger.warning(str(ex))
             raise UserError(
                 _(
                     "Error opening the signature, possibly the signature key has "
                     "been entered incorrectly or the file is not supported. \n%s"
                 )
-                % (tools.ustr(ex))
+                % (str(ex))
             ) from None
         certificate = p12.cert.certificate
         # revisar si el certificado tiene la extension digital_signature activada
@@ -102,7 +103,7 @@ class SriKeyType(models.Model):
             )
             is_digital_signature = extension.value.digital_signature
         except ExtensionNotFound as ex:
-            _logger.debug(tools.ustr(ex))
+            _logger.debug(str(ex))
         if not is_digital_signature:
             # cuando hay mas de un certificado, tomar el certificado correcto
             # este deberia tener entre las extensiones digital_signature = True
@@ -113,7 +114,7 @@ class SriKeyType(models.Model):
                         ExtensionOID.KEY_USAGE
                     )
                 except ExtensionNotFound as ex:
-                    _logger.debug(tools.ustr(ex))
+                    _logger.debug(str(ex))
                 if extension.value.digital_signature:
                     certificate = other_cert.certificate
                     break
@@ -175,7 +176,15 @@ class SriKeyType(models.Model):
         def new_range():
             return randrange(100000, 999999)
 
-        p12 = self._decode_certificate()
+        private_key, certificate = self._decode_certificate()
+        
+        # Validar que se hayan obtenido correctamente la clave y el certificado
+        if not private_key or not certificate:
+            raise UserError(
+                _("No se pudo obtener la clave privada o el certificado. "
+                  "Por favor, verifique que el archivo y la contraseña sean correctos.")
+            )
+        
         doc = etree.fromstring(xml_string_data)
         signature_id = f"Signature{new_range()}"
         signature_property_id = f"{signature_id}-SignedPropertiesID{new_range()}"
@@ -220,9 +229,33 @@ class SriKeyType(models.Model):
         )
         doc.append(signature)
         ctx = XAdESContext(ImpliedPolicy(xmlsig.constants.TransformSha1))
-        ctx.load_pkcs12(p12)
-        ctx.sign(signature)
-        ctx.verify(signature)
+        
+        try:
+            # Configurar contexto XAdES con certificado recargado
+            certificate_der = certificate.public_bytes(serialization.Encoding.DER)
+            ctx.private_key = private_key
+            
+            from cryptography import x509
+            certificate_reloaded = x509.load_der_x509_certificate(certificate_der)
+            ctx.certificate = certificate_reloaded
+            
+            # Intentar configuración manual si es necesario
+            if hasattr(ctx, 'set_x509'):
+                ctx.set_x509(certificate_reloaded)
+            elif hasattr(ctx, 'x509'):
+                ctx.x509 = certificate_reloaded
+            
+            # Firmar el documento
+            ctx.sign(signature)
+            ctx.verify(signature)
+            
+            _logger.info("Documento firmado exitosamente con certificado %s", 
+                        self.subject_common_name or "sin nombre")
+            
+        except Exception as e:
+            _logger.error("Error al firmar documento: %s", str(e))
+            _logger.debug("Traceback completo: %s", traceback.format_exc())
+            raise
         return etree.tostring(doc, encoding="UTF-8", pretty_print=True).decode()
 
     def days_to_expire(self):

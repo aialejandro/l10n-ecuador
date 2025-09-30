@@ -298,11 +298,11 @@ class AccountEdiFormat(models.Model):
                         )
                         errors.extend(msj)
             except Exception as ex:
-                _logger.error(tools.ustr(traceback.format_exc()))
+                _logger.error(str(traceback.format_exc()))
                 errors.append(
                     _(
                         "EDI Error creating xml file: %s",
-                        tools.ustr(ex),
+                        str(ex),
                     )
                 )
             blocking_level = False
@@ -318,6 +318,12 @@ class AccountEdiFormat(models.Model):
                     }
                 }
             )
+            # Si el documento se generó exitosamente, agregarlo al chatter
+            if attachment and not errors and is_auth:
+                document.with_context(no_new_invoice=True).message_post(
+                    body=_("Documento EDI generado exitosamente: %s") % edi_doc._l10n_ec_get_edi_name(),
+                    attachment_ids=[attachment.id]
+                )
         return res
 
     def _l10n_ec_cancel_move_edi(self, moves):
@@ -358,6 +364,6 @@ class AccountEdiFormat(models.Model):
             _logger.warning(
                 "Error in Connection with web services of SRI: %s. Error: %s",
                 ws_url,
-                tools.ustr(e),
+                str(e),
             )
         return wsClient
