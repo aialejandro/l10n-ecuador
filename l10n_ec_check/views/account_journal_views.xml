@@ -9,7 +9,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='bank_id']" position="after">
                 <field name="l10n_ec_check_format_id" 
-                       attrs="{'invisible': [('type', '!=', 'bank')], 'readonly': [('bank_id', '=', False)]}"
+                       invisible="type != 'bank'" readonly="bank_id == False"
                        options="{'no_create': True}"/>
             </xpath>
         </field>

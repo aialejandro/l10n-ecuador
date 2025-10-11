@@ -6,7 +6,7 @@
         <field name="name">l10n_ec.check.format.tree</field>
         <field name="model">l10n_ec.check.format</field>
         <field name="arch" type="xml">
-            <tree string="Formatos de Cheque" decoration-info="is_default" decoration-muted="not active">
+            <list string="Formatos de Cheque" decoration-info="is_default" decoration-muted="not active">
                 <field name="active" invisible="1"/>
                 <field name="name"/>
                 <field name="bank_id"/>
@@ -19,7 +19,7 @@
                         icon="fa-eye" class="btn-secondary"/>
                 <button name="action_edit_visual" type="object" string="Editor Visual" 
                         icon="fa-edit" class="btn-primary"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -36,7 +36,7 @@
                             class="btn-primary" icon="fa-edit"/>
                     <button name="create_default_fields" type="object" string="Crear Campos por Defecto" 
                             class="btn-info" icon="fa-magic" 
-                            attrs="{'invisible': [('field_count', '>', 0)]}"/>
+                            invisible="field_count &gt; 0"/>
                     <field name="active" widget="boolean_button" 
                            options="{'terminology': {'string_true': 'Activo', 'string_false': 'Inactivo'}}"/>
                 </header>
@@ -52,7 +52,7 @@
                             </div>
                         </button>
                         <button class="oe_stat_button" type="action" name="%(action_l10n_ec_check_format_field)d" 
-                                icon="fa-list" context="{'default_format_id': active_id}">
+                                icon="fa-list" context="{'default_format_id': id}">
                             <field name="field_count" widget="statinfo" string="Campos"/>
                         </button>
                     </div>
@@ -72,8 +72,8 @@
                         <group string="Configuración del Papel">
                             <field name="paper_size"/>
                             <field name="orientation"/>
-                            <field name="paper_width" attrs="{'invisible': [('paper_size', '!=', 'custom')], 'required': [('paper_size', '=', 'custom')]}"/>
-                            <field name="paper_height" attrs="{'invisible': [('paper_size', '!=', 'custom')], 'required': [('paper_size', '=', 'custom')]}"/>
+                            <field name="paper_width" invisible="paper_size != 'custom'" required="paper_size == 'custom'"/>
+                            <field name="paper_height" invisible="paper_size != 'custom'" required="paper_size == 'custom'"/>
                         </group>
                     </group>
 
@@ -90,8 +90,8 @@
 
                     <notebook>
                         <page string="Campos del Formato" name="fields">
-                            <field name="format_field_ids" context="{'default_format_id': active_id}">
-                                <tree editable="bottom">
+                            <field name="format_field_ids" context="{'default_format_id': id}">
+                                <list editable="bottom">
                                     <field name="sequence" widget="handle"/>
                                     <field name="name"/>
                                     <field name="label"/>
@@ -106,16 +106,16 @@
                                     <button name="%(action_l10n_ec_check_format_field_form)d" type="action" 
                                             string="Configurar" icon="fa-cog" class="btn-secondary"
                                             context="{'default_format_id': parent.id}"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
-                        <page string="Diarios que usan este formato" name="journals" attrs="{'invisible': [('id', '=', False)]}">
+                        <page string="Diarios que usan este formato" name="journals" invisible="id == False">
                             <field name="journal_ids" readonly="1">
-                                <tree>
+                                <list>
                                     <field name="name"/>
                                     <field name="type"/>
                                     <field name="company_id"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>
@@ -169,14 +169,14 @@
                 <field name="field_count"/>
                 <field name="active"/>
                 <templates>
-                    <t t-name="kanban-box">
+                    <t t-name="card">
                         <div t-attf-class="oe_kanban_card oe_kanban_global_click #{record.is_default.raw_value ? 'oe_kanban_color_9' : ''} #{!record.active.raw_value ? 'oe_kanban_color_2' : ''}">
                             <div class="oe_kanban_content">
                                 <div class="row">
                                     <div class="col-6">
                                         <strong><field name="name"/></strong>
                                     </div>
-                                    <div class="col-6 text-right">
+                                    <div class="col-6 text-end">
                                         <span t-if="record.is_default.raw_value" class="badge badge-success">Por Defecto</span>
                                         <span t-if="!record.active.raw_value" class="badge badge-secondary">Inactivo</span>
                                     </div>
@@ -184,19 +184,19 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <span class="text-muted">
-                                            <i class="fa fa-university"/> <field name="bank_id"/>
+                                            <i class="fa fa-university" title="Banco" role="img" aria-label="Banco"/> <field name="bank_id"/>
                                         </span>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
                                         <span class="text-muted">
-                                            <i class="fa fa-file-o"/> <field name="paper_size"/> - <field name="orientation"/>
+                                            <i class="fa fa-file-o" title="Papel" role="img" aria-label="Papel"/> <field name="paper_size"/> - <field name="orientation"/>
                                         </span>
                                     </div>
-                                    <div class="col-6 text-right">
+                                    <div class="col-6 text-end">
                                         <span class="text-muted">
-                                            <i class="fa fa-list"/> <field name="field_count"/> campos
+                                            <i class="fa fa-list" title="Campos" role="img" aria-label="Campos"/> <field name="field_count"/> campos
                                         </span>
                                     </div>
                                 </div>
@@ -212,7 +212,7 @@
     <record id="action_l10n_ec_check_format" model="ir.actions.act_window">
         <field name="name">Formatos de Cheque</field>
         <field name="res_model">l10n_ec.check.format</field>
-        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_mode">kanban,list,form</field>
         <field name="search_view_id" ref="view_l10n_ec_check_format_search"/>
         <field name="context">{'search_default_active': 1}</field>
         <field name="help" type="html">

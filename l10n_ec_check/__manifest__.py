@@ -1,31 +1,40 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Ecuador - Gestión e Impresión de Cheques por Formato Bancario',
-    'version': '16.0.1',
+    'version': '18.0.1.0.0',
     'category': 'Accounting/Localizations',
     'summary': 'Gestión de formatos de cheques específicos por banco en Ecuador',
     'description': """
 Gestión e Impresión de Cheques por Formato Bancario - Ecuador
-============================================================
+==============================================================
 
 Este módulo extiende la funcionalidad de l10n_latam_check para Ecuador con las siguientes características:
 
-**Gestión de Formatos de Cheque:**
+Gestión de Formatos de Cheque
+------------------------------
+
 * Crear nuevos formatos de cheque con campos posicionables
 * Modificar formatos existentes mediante una interfaz visual
 * Eliminar o desactivar formatos obsoletos
 
-**Asociación por Banco:**
+Asociación por Banco
+--------------------
+
 * Asignar uno o varios formatos de cheque a cada banco registrado en Odoo
 * Establecer un formato predeterminado por banco (único activo por banco)
 
-**Impresión de Cheques:**
+Impresión de Cheques
+--------------------
+
 * El sistema selecciona automáticamente el formato asignado al banco del diario contable
 * Previsualización antes de imprimir
 * Compatibilidad con impresoras estándar y configuración de márgenes
 
-**Interfaz de Usuario:**
+Interfaz de Usuario
+-------------------
+
 * Editor visual tipo "drag-and-drop" para posicionar campos como:
+
   - Monto en letras
   - Monto en números
   - Beneficiario
@@ -33,9 +42,12 @@ Este módulo extiende la funcionalidad de l10n_latam_check para Ecuador con las 
   - Firma
   - Código de sucursal
   - Número de cuenta
+
 * Validación de campos obligatorios antes de guardar el formato
 
-**Características Especiales:**
+Características Especiales
+---------------------------
+
 * Soporte para múltiples tamaños de papel y orientación
 * Definir fuentes, tamaños y alineaciones para cada campo
 * Manejo de excepciones como cheques anulados o reimpresiones
@@ -48,6 +60,7 @@ Este módulo extiende la funcionalidad de l10n_latam_check para Ecuador con las 
         'l10n_latam_check',
         'l10n_ec',  # Módulo base de Ecuador (si existe)
         'web',
+        'account_check_printing',
     ],
     'data': [
         # Security

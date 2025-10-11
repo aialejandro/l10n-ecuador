@@ -26,21 +26,21 @@
                     <group>
                         <group>
                             <field name="preview_mode" invisible="1"/>
-                            <field name="payment_id" attrs="{'readonly': [('preview_mode', '=', True)]}" 
+                            <field name="payment_id" readonly="preview_mode == True" 
                                    options="{'no_create': True}" domain="[('payment_method_code', '=', 'check_printing')]"/>
                         </group>
                         <group>
                             <label for="format_field_ids" string="Campos Configurados"/>
                             <div>
                                 <field name="format_field_ids" nolabel="1" readonly="1">
-                                    <tree>
+                                    <list>
                                         <field name="sequence" widget="handle"/>
                                         <field name="label"/>
                                         <field name="field_type"/>
                                         <field name="x_position"/>
                                         <field name="y_position"/>
                                         <field name="is_required" widget="boolean_toggle"/>
-                                    </tree>
+                                    </list>
                                 </field>
                             </div>
                         </group>

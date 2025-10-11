@@ -10,7 +10,7 @@
             <xpath expr="//sheet" position="inside">
                 <div class="oe_button_box" name="button_box">
                     <button class="oe_stat_button" type="object" name="action_view_check_formats" 
-                            icon="fa-file-text-o" attrs="{'invisible': [('check_format_count', '=', 0)]}">
+                            icon="fa-file-text-o" invisible="check_format_count == 0">
                         <field name="check_format_count" widget="statinfo" string="Formatos de Cheque"/>
                     </button>
                 </div>
@@ -18,7 +18,7 @@
             
             <xpath expr="//field[@name='city']" position="after">
                 <field name="default_check_format_id" 
-                       attrs="{'invisible': [('check_format_count', '=', 0)]}"
+                       invisible="check_format_count == 0"
                        options="{'no_create': True}"/>
             </xpath>
         </field>
