@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Vista de Lista (Tree) para Formatos de Cheque -->
+    <record id="view_l10n_ec_check_format_tree" model="ir.ui.view">
+        <field name="name">l10n_ec.check.format.tree</field>
+        <field name="model">l10n_ec.check.format</field>
+        <field name="arch" type="xml">
+            <tree string="Formatos de Cheque" decoration-info="is_default" decoration-muted="not active">
+                <field name="active" invisible="1"/>
+                <field name="name"/>
+                <field name="bank_id"/>
+                <field name="is_default" widget="boolean_toggle"/>
+                <field name="paper_size"/>
+                <field name="orientation"/>
+                <field name="field_count" string="Campos"/>
+                <field name="active" widget="boolean_toggle"/>
+                <button name="action_preview_format" type="object" string="Vista Previa" 
+                        icon="fa-eye" class="btn-secondary"/>
+                <button name="action_edit_visual" type="object" string="Editor Visual" 
+                        icon="fa-edit" class="btn-primary"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista de Formulario para Formatos de Cheque -->
+    <record id="view_l10n_ec_check_format_form" model="ir.ui.view">
+        <field name="name">l10n_ec.check.format.form</field>
+        <field name="model">l10n_ec.check.format</field>
+        <field name="arch" type="xml">
+            <form string="Formato de Cheque">
+                <header>
+                    <button name="action_preview_format" type="object" string="Vista Previa" 
+                            class="btn-secondary" icon="fa-eye"/>
+                    <button name="action_edit_visual" type="object" string="Editor Visual" 
+                            class="btn-primary" icon="fa-edit"/>
+                    <button name="create_default_fields" type="object" string="Crear Campos por Defecto" 
+                            class="btn-info" icon="fa-magic" 
+                            attrs="{'invisible': [('field_count', '>', 0)]}"/>
+                    <field name="active" widget="boolean_button" 
+                           options="{'terminology': {'string_true': 'Activo', 'string_false': 'Inactivo'}}"/>
+                </header>
+                <sheet>
+                    <!-- Campos invisibles necesarios para attrs -->
+                    <field name="field_count" invisible="1"/>
+                    
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_preview_format" icon="fa-eye">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Vista</span>
+                                <span class="o_stat_text">Previa</span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" type="action" name="%(action_l10n_ec_check_format_field)d" 
+                                icon="fa-list" context="{'default_format_id': active_id}">
+                            <field name="field_count" widget="statinfo" string="Campos"/>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Ej: Formato Estándar Banco del Pacífico"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Información General">
+                            <field name="bank_id" options="{'no_create': True}"/>
+                            <field name="is_default"/>
+                            <field name="description" placeholder="Descripción del formato..."/>
+                        </group>
+                        <group string="Configuración del Papel">
+                            <field name="paper_size"/>
+                            <field name="orientation"/>
+                            <field name="paper_width" attrs="{'invisible': [('paper_size', '!=', 'custom')], 'required': [('paper_size', '=', 'custom')]}"/>
+                            <field name="paper_height" attrs="{'invisible': [('paper_size', '!=', 'custom')], 'required': [('paper_size', '=', 'custom')]}"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Márgenes (mm)">
+                            <field name="margin_top"/>
+                            <field name="margin_bottom"/>
+                        </group>
+                        <group string="">
+                            <field name="margin_left"/>
+                            <field name="margin_right"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Campos del Formato" name="fields">
+                            <field name="format_field_ids" context="{'default_format_id': active_id}">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="label"/>
+                                    <field name="field_type"/>
+                                    <field name="data_source"/>
+                                    <field name="x_position"/>
+                                    <field name="y_position"/>
+                                    <field name="width"/>
+                                    <field name="height"/>
+                                    <field name="font_size"/>
+                                    <field name="is_required" widget="boolean_toggle"/>
+                                    <button name="%(action_l10n_ec_check_format_field_form)d" type="action" 
+                                            string="Configurar" icon="fa-cog" class="btn-secondary"
+                                            context="{'default_format_id': parent.id}"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Diarios que usan este formato" name="journals" attrs="{'invisible': [('id', '=', False)]}">
+                            <field name="journal_ids" readonly="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="type"/>
+                                    <field name="company_id"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista de Búsqueda para Formatos de Cheque -->
+    <record id="view_l10n_ec_check_format_search" model="ir.ui.view">
+        <field name="name">l10n_ec.check.format.search</field>
+        <field name="model">l10n_ec.check.format</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Formatos de Cheque">
+                <field name="name" string="Formato" filter_domain="[('name','ilike',self)]"/>
+                <field name="bank_id" string="Banco"/>
+                <field name="description"/>
+                <separator/>
+                <filter string="Por Defecto" name="default" domain="[('is_default','=',True)]"/>
+                <filter string="Activos" name="active" domain="[('active','=',True)]"/>
+                <filter string="Inactivos" name="inactive" domain="[('active','=',False)]"/>
+                <separator/>
+                <filter string="Carta" name="letter" domain="[('paper_size','=','letter')]"/>
+                <filter string="A4" name="a4" domain="[('paper_size','=','a4')]"/>
+                <filter string="Legal" name="legal" domain="[('paper_size','=','legal')]"/>
+                <separator/>
+                <filter string="Horizontal" name="landscape" domain="[('orientation','=','landscape')]"/>
+                <filter string="Vertical" name="portrait" domain="[('orientation','=','portrait')]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Banco" name="group_bank" context="{'group_by':'bank_id'}"/>
+                    <filter string="Tamaño de Papel" name="group_paper_size" context="{'group_by':'paper_size'}"/>
+                    <filter string="Orientación" name="group_orientation" context="{'group_by':'orientation'}"/>
+                    <filter string="Estado" name="group_active" context="{'group_by':'active'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Vista Kanban para Formatos de Cheque -->
+    <record id="view_l10n_ec_check_format_kanban" model="ir.ui.view">
+        <field name="name">l10n_ec.check.format.kanban</field>
+        <field name="model">l10n_ec.check.format</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="bank_id"/>
+                <field name="is_default"/>
+                <field name="paper_size"/>
+                <field name="orientation"/>
+                <field name="field_count"/>
+                <field name="active"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click #{record.is_default.raw_value ? 'oe_kanban_color_9' : ''} #{!record.active.raw_value ? 'oe_kanban_color_2' : ''}">
+                            <div class="oe_kanban_content">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <strong><field name="name"/></strong>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <span t-if="record.is_default.raw_value" class="badge badge-success">Por Defecto</span>
+                                        <span t-if="!record.active.raw_value" class="badge badge-secondary">Inactivo</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span class="text-muted">
+                                            <i class="fa fa-university"/> <field name="bank_id"/>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span class="text-muted">
+                                            <i class="fa fa-file-o"/> <field name="paper_size"/> - <field name="orientation"/>
+                                        </span>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <span class="text-muted">
+                                            <i class="fa fa-list"/> <field name="field_count"/> campos
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Acción para Formatos de Cheque -->
+    <record id="action_l10n_ec_check_format" model="ir.actions.act_window">
+        <field name="name">Formatos de Cheque</field>
+        <field name="res_model">l10n_ec.check.format</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_l10n_ec_check_format_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                ¡Crea tu primer formato de cheque!
+            </p>
+            <p>
+                Los formatos de cheque te permiten definir la posición exacta de cada campo
+                (beneficiario, monto, fecha, etc.) según el formato específico de cada banco.
+            </p>
+            <p>
+                Una vez creado el formato, podrás asignarlo a tus diarios bancarios para 
+                que los cheques se impriman automáticamente con el formato correcto.
+            </p>
+        </field>
+    </record>
+
+</odoo>

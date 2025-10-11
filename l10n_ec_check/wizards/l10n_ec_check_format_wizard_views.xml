@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Vista de formulario para el wizard de vista previa -->
+    <record id="view_l10n_ec_check_format_wizard_form" model="ir.ui.view">
+        <field name="name">l10n_ec.check.format.wizard.form</field>
+        <field name="model">l10n_ec.check.format.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Vista Previa del Formato de Cheque">
+                <header>
+                    <button name="action_edit_format" type="object" string="Editar Formato" 
+                            class="btn-primary" icon="fa-edit"/>
+                    <button name="action_close" type="object" string="Cerrar" 
+                            class="btn-secondary" icon="fa-times"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            Vista Previa: <field name="format_id" readonly="1"/>
+                        </h1>
+                        <p>
+                            <field name="paper_info" readonly="1"/>
+                        </p>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="preview_mode" invisible="1"/>
+                            <field name="payment_id" attrs="{'readonly': [('preview_mode', '=', True)]}" 
+                                   options="{'no_create': True}" domain="[('payment_method_code', '=', 'check_printing')]"/>
+                        </group>
+                        <group>
+                            <label for="format_field_ids" string="Campos Configurados"/>
+                            <div>
+                                <field name="format_field_ids" nolabel="1" readonly="1">
+                                    <tree>
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="label"/>
+                                        <field name="field_type"/>
+                                        <field name="x_position"/>
+                                        <field name="y_position"/>
+                                        <field name="is_required" widget="boolean_toggle"/>
+                                    </tree>
+                                </field>
+                            </div>
+                        </group>
+                    </group>
+
+                    <separator string="Vista Previa del Cheque"/>
+                    <field name="preview_html" widget="html" nolabel="1" readonly="1"/>
+                    
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción para el wizard -->
+    <record id="action_l10n_ec_check_format_wizard" model="ir.actions.act_window">
+        <field name="name">Vista Previa de Formato de Cheque</field>
+        <field name="res_model">l10n_ec.check.format.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

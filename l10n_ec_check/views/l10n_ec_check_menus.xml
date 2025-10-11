@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Menú raíz para Gestión de Cheques -->
+    <menuitem 
+        id="menu_l10n_ec_check_root" 
+        name="Cheques Ecuador" 
+        sequence="85" 
+        groups="l10n_ec_check.group_check_format_user"
+        web_icon="l10n_ec_check,static/description/icon.png"/>
+
+    <!-- Submenú: Configuración -->
+    <menuitem 
+        id="menu_l10n_ec_check_configuration" 
+        name="Configuración" 
+        parent="menu_l10n_ec_check_root" 
+        sequence="10" 
+        groups="l10n_ec_check.group_check_format_manager"/>
+
+    <!-- Menú: Formatos de Cheque -->
+    <menuitem 
+        id="menu_l10n_ec_check_formats" 
+        name="Formatos de Cheque" 
+        parent="menu_l10n_ec_check_configuration" 
+        sequence="10" 
+        action="action_l10n_ec_check_format" 
+        groups="l10n_ec_check.group_check_format_manager"/>
+
+    <!-- Menú: Campos de Formato -->
+    <menuitem 
+        id="menu_l10n_ec_check_format_fields" 
+        name="Campos de Formato" 
+        parent="menu_l10n_ec_check_configuration" 
+        sequence="20" 
+        action="action_l10n_ec_check_format_field" 
+        groups="l10n_ec_check.group_check_format_manager"/>
+
+    <!-- Submenú: Operaciones -->
+    <menuitem 
+        id="menu_l10n_ec_check_operations" 
+        name="Operaciones" 
+        parent="menu_l10n_ec_check_root" 
+        sequence="20" 
+        groups="l10n_ec_check.group_check_format_user"/>
+
+    <!-- Acceso directo a Pagos con Cheques -->
+    <menuitem 
+        id="menu_l10n_ec_check_payments" 
+        name="Pagos con Cheque" 
+        parent="menu_l10n_ec_check_operations" 
+        sequence="10" 
+        action="account.action_account_payments_payable" 
+        groups="l10n_ec_check.group_check_format_user"/>
+
+    <!-- Acceso directo a Diarios Bancarios -->
+    <menuitem 
+        id="menu_l10n_ec_check_journals" 
+        name="Diarios Bancarios" 
+        parent="menu_l10n_ec_check_operations" 
+        sequence="20" 
+        action="account.action_account_journal_form" 
+        groups="l10n_ec_check.group_check_format_user"/>
+
+    <!-- También agregar al menú de Contabilidad para mejor acceso -->
+    <menuitem 
+        id="menu_account_check_formats" 
+        name="Formatos de Cheque" 
+        parent="account.menu_finance_configuration" 
+        sequence="25" 
+        action="action_l10n_ec_check_format" 
+        groups="l10n_ec_check.group_check_format_manager"/>
+
+</odoo>

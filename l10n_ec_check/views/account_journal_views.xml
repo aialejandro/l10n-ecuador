@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Heredar vista de formulario de diarios para agregar formato de cheque -->
+    <record id="view_account_journal_form_check_format" model="ir.ui.view">
+        <field name="name">account.journal.form.check.format</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bank_id']" position="after">
+                <field name="l10n_ec_check_format_id" 
+                       attrs="{'invisible': [('type', '!=', 'bank')], 'readonly': [('bank_id', '=', False)]}"
+                       options="{'no_create': True}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Heredar vista de lista de diarios para mostrar formato de cheque -->
+    <record id="view_account_journal_tree_check_format" model="ir.ui.view">
+        <field name="name">account.journal.tree.check.format</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='currency_id']" position="after">
+                <field name="l10n_ec_check_format_id" string="Formato de Cheque" 
+                       optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

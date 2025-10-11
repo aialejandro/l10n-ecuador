@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Vista de Lista (Tree) para Campos de Formato -->
+    <record id="view_l10n_ec_check_format_field_tree" model="ir.ui.view">
+        <field name="name">l10n_ec.check.format.field.tree</field>
+        <field name="model">l10n_ec.check.format.field</field>
+        <field name="arch" type="xml">
+            <tree string="Campos de Formato" editable="top">
+                <field name="sequence" widget="handle"/>
+                <field name="format_id" invisible="1"/>
+                <field name="name"/>
+                <field name="label"/>
+                <field name="field_type"/>
+                <field name="data_source"/>
+                <field name="x_position" string="X (mm)"/>
+                <field name="y_position" string="Y (mm)"/>
+                <field name="width" string="Ancho (mm)"/>
+                <field name="height" string="Alto (mm)"/>
+                <field name="font_size"/>
+                <field name="text_align"/>
+                <field name="is_required" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista de Formulario para Campos de Formato -->
+    <record id="view_l10n_ec_check_format_field_form" model="ir.ui.view">
+        <field name="name">l10n_ec.check.format.field.form</field>
+        <field name="model">l10n_ec.check.format.field</field>
+        <field name="arch" type="xml">
+            <form string="Campo de Formato de Cheque">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="label" placeholder="Ej: Beneficiario del Cheque"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Información Básica">
+                            <field name="format_id" options="{'no_create': True}"/>
+                            <field name="name" placeholder="beneficiary"/>
+                            <field name="sequence"/>
+                            <field name="field_type"/>
+                            <field name="is_required"/>
+                        </group>
+                        <group string="Origen de Datos">
+                            <field name="data_source"/>
+                            <field name="custom_value" attrs="{'invisible': [('data_source', '!=', 'custom')], 'required': [('data_source', '=', 'custom')]}"/>
+                            <field name="max_length" attrs="{'invisible': [('field_type', 'not in', ['text'])]}"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Posición y Tamaño">
+                            <field name="x_position"/>
+                            <field name="y_position"/>
+                            <field name="width"/>
+                            <field name="height"/>
+                        </group>
+                        <group string="Formato del Texto">
+                            <field name="font_family"/>
+                            <field name="font_size"/>
+                            <field name="font_weight"/>
+                            <field name="text_align"/>
+                            <field name="text_color"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Configuraciones Específicas" attrs="{'invisible': [('field_type', 'not in', ['number', 'currency', 'date'])]}">
+                            <field name="decimal_places" attrs="{'invisible': [('field_type', 'not in', ['number', 'currency'])]}"/>
+                            <field name="date_format" attrs="{'invisible': [('field_type', '!=', 'date')]}"/>
+                        </group>
+                        <group string="Transformaciones">
+                            <field name="uppercase" attrs="{'invisible': [('field_type', '!=', 'text')]}"/>
+                            <field name="show_border"/>
+                            <field name="background_color"/>
+                        </group>
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista de Búsqueda para Campos de Formato -->
+    <record id="view_l10n_ec_check_format_field_search" model="ir.ui.view">
+        <field name="name">l10n_ec.check.format.field.search</field>
+        <field name="model">l10n_ec.check.format.field</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Campos de Formato">
+                <field name="name" string="Nombre"/>
+                <field name="label" string="Etiqueta"/>
+                <field name="format_id" string="Formato"/>
+                <field name="data_source"/>
+                <separator/>
+                <filter string="Obligatorios" name="required" domain="[('is_required','=',True)]"/>
+                <filter string="Texto" name="text" domain="[('field_type','=','text')]"/>
+                <filter string="Números" name="numbers" domain="[('field_type','=','number')]"/>
+                <filter string="Fechas" name="dates" domain="[('field_type','=','date')]"/>
+                <filter string="Moneda" name="currency" domain="[('field_type','=','currency')]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Formato" name="group_format" context="{'group_by':'format_id'}"/>
+                    <filter string="Tipo de Campo" name="group_field_type" context="{'group_by':'field_type'}"/>
+                    <filter string="Origen de Datos" name="group_data_source" context="{'group_by':'data_source'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Acción para Campos de Formato -->
+    <record id="action_l10n_ec_check_format_field" model="ir.actions.act_window">
+        <field name="name">Campos de Formato</field>
+        <field name="res_model">l10n_ec.check.format.field</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_l10n_ec_check_format_field_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                ¡Define los campos para tu formato de cheque!
+            </p>
+            <p>
+                Aquí puedes configurar cada campo que aparecerá en el cheque:
+                beneficiario, monto, fecha, etc.
+            </p>
+            <p>
+                Para cada campo puedes definir su posición exacta, tamaño, fuente
+                y de dónde provienen los datos.
+            </p>
+        </field>
+    </record>
+
+    <!-- Acción específica para formulario de campo -->
+    <record id="action_l10n_ec_check_format_field_form" model="ir.actions.act_window">
+        <field name="name">Configurar Campo</field>
+        <field name="res_model">l10n_ec.check.format.field</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

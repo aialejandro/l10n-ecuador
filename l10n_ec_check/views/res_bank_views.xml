@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Heredar vista de formulario de bancos para agregar formatos de cheque -->
+    <record id="view_res_bank_form_check_format" model="ir.ui.view">
+        <field name="name">res.bank.form.check.format</field>
+        <field name="model">res.bank</field>
+        <field name="inherit_id" ref="base.view_res_bank_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <div class="oe_button_box" name="button_box">
+                    <button class="oe_stat_button" type="object" name="action_view_check_formats" 
+                            icon="fa-file-text-o" attrs="{'invisible': [('check_format_count', '=', 0)]}">
+                        <field name="check_format_count" widget="statinfo" string="Formatos de Cheque"/>
+                    </button>
+                </div>
+            </xpath>
+            
+            <xpath expr="//field[@name='city']" position="after">
+                <field name="default_check_format_id" 
+                       attrs="{'invisible': [('check_format_count', '=', 0)]}"
+                       options="{'no_create': True}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Heredar vista de lista de bancos para mostrar información de formatos -->
+    <record id="view_res_bank_tree_check_format" model="ir.ui.view">
+        <field name="name">res.bank.tree.check.format</field>
+        <field name="model">res.bank</field>
+        <field name="inherit_id" ref="base.view_res_bank_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="check_format_count" string="Formatos"/>
+                <field name="default_check_format_id" string="Formato por Defecto"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

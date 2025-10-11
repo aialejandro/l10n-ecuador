@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Bancos ecuatorianos principales -->
+        <record id="bank_pacifico" model="res.bank">
+            <field name="name">Banco del Pacífico</field>
+            <field name="country" ref="base.ec"/>
+            <field name="bic">PACIECEG</field>
+        </record>
+        
+        <record id="bank_pichincha" model="res.bank">
+            <field name="name">Banco Pichincha</field>
+            <field name="country" ref="base.ec"/>
+            <field name="bic">PICHECEG</field>
+        </record>
+        
+        <record id="bank_guayaquil" model="res.bank">
+            <field name="name">Banco de Guayaquil</field>
+            <field name="country" ref="base.ec"/>
+            <field name="bic">BAGHECEG</field>
+        </record>
+        
+        <record id="bank_internacional" model="res.bank">
+            <field name="name">Banco Internacional</field>
+            <field name="country" ref="base.ec"/>
+            <field name="bic">BINECEG</field>
+        </record>
+        
+        <record id="bank_produbanco" model="res.bank">
+            <field name="name">Produbanco</field>
+            <field name="country" ref="base.ec"/>
+            <field name="bic">PRDBECEG</field>
+        </record>
+        
+        <!-- Formato por defecto para Banco del Pacífico -->
+        <record id="format_pacifico_default" model="l10n_ec.check.format">
+            <field name="name">Formato Estándar Banco del Pacífico</field>
+            <field name="bank_id" ref="bank_pacifico"/>
+            <field name="is_default" eval="True"/>
+            <field name="paper_size">letter</field>
+            <field name="orientation">landscape</field>
+            <field name="description">Formato por defecto para cheques del Banco del Pacífico</field>
+            <field name="margin_top">15</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">20</field>
+            <field name="margin_right">20</field>
+        </record>
+        
+        <!-- Campos del formato Pacífico -->
+        <record id="format_pacifico_beneficiary" model="l10n_ec.check.format.field">
+            <field name="format_id" ref="format_pacifico_default"/>
+            <field name="name">beneficiary</field>
+            <field name="label">Beneficiario</field>
+            <field name="field_type">text</field>
+            <field name="x_position">60</field>
+            <field name="y_position">85</field>
+            <field name="width">180</field>
+            <field name="height">15</field>
+            <field name="font_size">11</field>
+            <field name="is_required" eval="True"/>
+            <field name="data_source">payment.partner_id.name</field>
+            <field name="sequence">10</field>
+        </record>
+        
+        <record id="format_pacifico_amount_words" model="l10n_ec.check.format.field">
+            <field name="format_id" ref="format_pacifico_default"/>
+            <field name="name">amount_words</field>
+            <field name="label">Monto en Letras</field>
+            <field name="field_type">text</field>
+            <field name="x_position">60</field>
+            <field name="y_position">55</field>
+            <field name="width">250</field>
+            <field name="height">15</field>
+            <field name="font_size">10</field>
+            <field name="is_required" eval="True"/>
+            <field name="data_source">payment.amount</field>
+            <field name="uppercase" eval="True"/>
+            <field name="sequence">20</field>
+        </record>
+        
+        <record id="format_pacifico_amount_numbers" model="l10n_ec.check.format.field">
+            <field name="format_id" ref="format_pacifico_default"/>
+            <field name="name">amount_numbers</field>
+            <field name="label">Monto en Números</field>
+            <field name="field_type">currency</field>
+            <field name="x_position">200</field>
+            <field name="y_position">85</field>
+            <field name="width">80</field>
+            <field name="height">15</field>
+            <field name="font_size">11</field>
+            <field name="is_required" eval="True"/>
+            <field name="data_source">payment.amount</field>
+            <field name="text_align">right</field>
+            <field name="sequence">30</field>
+        </record>
+        
+        <record id="format_pacifico_date" model="l10n_ec.check.format.field">
+            <field name="format_id" ref="format_pacifico_default"/>
+            <field name="name">payment_date</field>
+            <field name="label">Fecha</field>
+            <field name="field_type">date</field>
+            <field name="x_position">200</field>
+            <field name="y_position">110</field>
+            <field name="width">70</field>
+            <field name="height">12</field>
+            <field name="font_size">9</field>
+            <field name="is_required" eval="True"/>
+            <field name="data_source">payment.date</field>
+            <field name="date_format">%d/%m/%Y</field>
+            <field name="sequence">40</field>
+        </record>
+        
+        <!-- Formato por defecto para Banco Pichincha -->
+        <record id="format_pichincha_default" model="l10n_ec.check.format">
+            <field name="name">Formato Estándar Banco Pichincha</field>
+            <field name="bank_id" ref="bank_pichincha"/>
+            <field name="is_default" eval="True"/>
+            <field name="paper_size">letter</field>
+            <field name="orientation">landscape</field>
+            <field name="description">Formato por defecto para cheques del Banco Pichincha</field>
+            <field name="margin_top">12</field>
+            <field name="margin_bottom">12</field>
+            <field name="margin_left">18</field>
+            <field name="margin_right">18</field>
+        </record>
+        
+        <!-- Campos del formato Pichincha -->
+        <record id="format_pichincha_beneficiary" model="l10n_ec.check.format.field">
+            <field name="format_id" ref="format_pichincha_default"/>
+            <field name="name">beneficiary</field>
+            <field name="label">Beneficiario</field>
+            <field name="field_type">text</field>
+            <field name="x_position">55</field>
+            <field name="y_position">88</field>
+            <field name="width">190</field>
+            <field name="height">14</field>
+            <field name="font_size">10</field>
+            <field name="is_required" eval="True"/>
+            <field name="data_source">payment.partner_id.name</field>
+            <field name="sequence">10</field>
+        </record>
+        
+        <record id="format_pichincha_amount_words" model="l10n_ec.check.format.field">
+            <field name="format_id" ref="format_pichincha_default"/>
+            <field name="name">amount_words</field>
+            <field name="label">Monto en Letras</field>
+            <field name="field_type">text</field>
+            <field name="x_position">55</field>
+            <field name="y_position">58</field>
+            <field name="width">260</field>
+            <field name="height">14</field>
+            <field name="font_size">9</field>
+            <field name="is_required" eval="True"/>
+            <field name="data_source">payment.amount</field>
+            <field name="uppercase" eval="True"/>
+            <field name="sequence">20</field>
+        </record>
+        
+        <record id="format_pichincha_amount_numbers" model="l10n_ec.check.format.field">
+            <field name="format_id" ref="format_pichincha_default"/>
+            <field name="name">amount_numbers</field>
+            <field name="label">Monto en Números</field>
+            <field name="field_type">currency</field>
+            <field name="x_position">210</field>
+            <field name="y_position">88</field>
+            <field name="width">75</field>
+            <field name="height">14</field>
+            <field name="font_size">10</field>
+            <field name="is_required" eval="True"/>
+            <field name="data_source">payment.amount</field>
+            <field name="text_align">right</field>
+            <field name="sequence">30</field>
+        </record>
+        
+        <record id="format_pichincha_date" model="l10n_ec.check.format.field">
+            <field name="format_id" ref="format_pichincha_default"/>
+            <field name="name">payment_date</field>
+            <field name="label">Fecha</field>
+            <field name="field_type">date</field>
+            <field name="x_position">210</field>
+            <field name="y_position">115</field>
+            <field name="width">65</field>
+            <field name="height">12</field>
+            <field name="font_size">9</field>
+            <field name="is_required" eval="True"/>
+            <field name="data_source">payment.date</field>
+            <field name="date_format">%d/%m/%Y</field>
+            <field name="sequence">40</field>
+        </record>
+        
+    </data>
+</odoo>
