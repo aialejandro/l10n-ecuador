@@ -21,14 +21,14 @@ msgstr ""
 #: model:ir.model.fields.selection,name:l10n_ec_account_edi.selection__res_company__l10n_ec_invoice_version__1_0_0
 #: model:ir.model.fields.selection,name:l10n_ec_account_edi.selection__res_company__l10n_ec_liquidation_version__1_0_0
 msgid "1.0.0"
-msgstr ""
+msgstr "1.0.0"
 
 #. module: l10n_ec_account_edi
 #: model:ir.model.fields.selection,name:l10n_ec_account_edi.selection__res_company__l10n_ec_credit_note_version__1_1_0
 #: model:ir.model.fields.selection,name:l10n_ec_account_edi.selection__res_company__l10n_ec_invoice_version__1_1_0
 #: model:ir.model.fields.selection,name:l10n_ec_account_edi.selection__res_company__l10n_ec_liquidation_version__1_1_0
 msgid "1.1.0"
-msgstr ""
+msgstr "1.1.0"
 
 #. module: l10n_ec_account_edi
 #: model:ir.model.fields.selection,name:l10n_ec_account_edi.selection__res_company__l10n_ec_invoice_version__2_0_0
@@ -46,6 +46,8 @@ msgid ""
 "<br/>\n"
 "                                    <strong>Email Sucursal:</strong>"
 msgstr ""
+"<br/>\n"
+"                                    <strong>Correo electrónico:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_head
@@ -53,14 +55,17 @@ msgid ""
 "<br/>\n"
 "                                    <strong>Telf. Sucursal:</strong>"
 msgstr ""
+"<br/>\n"
+"                                    <strong>Telf. Sucursal:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_head
 msgid ""
 "<br/>\n"
-"                                <strong>Agente Retención Resolución No</"
-"strong>"
+"                                <strong>Agente Retención Resolución No</strong>"
 msgstr ""
+"<br/>\n"
+"                                <strong>Agente Retención Resolución No</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_head
@@ -68,6 +73,8 @@ msgid ""
 "<br/>\n"
 "                                <strong>Contribuyente especial Nro:</strong>"
 msgstr ""
+"<br/>\n"
+"                                <strong>Contribuyente especial Nro:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_head
@@ -75,6 +82,8 @@ msgid ""
 "<br/>\n"
 "                                <strong>Dir. Sucursal:</strong>"
 msgstr ""
+"<br/>\n"
+"                                <strong>Dir. Sucursal:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_head
@@ -82,6 +91,8 @@ msgid ""
 "<br/>\n"
 "                                <strong>Email:</strong>"
 msgstr ""
+"<br/>\n"
+"                                <strong>Correo Electrónico:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_head
@@ -89,6 +100,8 @@ msgid ""
 "<br/>\n"
 "                                <strong>Telf.:</strong>"
 msgstr ""
+"<br/>\n"
+"                                <strong>Telf.:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_head
@@ -97,6 +110,9 @@ msgid ""
 "                            <br/>\n"
 "                            <strong>AMBIENTE:</strong>"
 msgstr ""
+"<br/>\n"
+"                            <br/>\n"
+"                            <strong>AMBIENTE:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_head
@@ -106,6 +122,10 @@ msgid ""
 "                            <strong>CLAVE DE ACCESO:</strong>\n"
 "                            <br/>"
 msgstr ""
+"<br/>\n"
+"                            <br/>\n"
+"                            <strong>CLAVE DE ACCESO:</strong>\n"
+"                            <br/>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_head
@@ -114,6 +134,9 @@ msgid ""
 "                            <br/>\n"
 "                            <strong>EMISION:</strong>"
 msgstr ""
+"<br/>\n"
+"                            <br/>\n"
+"                            <strong>EMISION:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_head
@@ -122,6 +145,9 @@ msgid ""
 "                            <br/>\n"
 "                            <strong>Fecha y hora de autorización:</strong>"
 msgstr ""
+"<br/>\n"
+"                            <br/>\n"
+"                            <strong>Fecha y hora de autorización:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_head
@@ -131,6 +157,10 @@ msgid ""
 "                            <strong>NÚMERO DE AUTORIZACION</strong>\n"
 "                            <br/>"
 msgstr ""
+"<br/>\n"
+"                            <br/>\n"
+"                            <strong>NÚMERO DE AUTORIZACION</strong>\n"
+"                            <br/>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_head
@@ -138,6 +168,8 @@ msgid ""
 "<br/>\n"
 "                            <strong>Dir. Matriz:</strong>"
 msgstr ""
+"<br/>\n"
+"                            <strong>Dir. Matriz:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_head
@@ -145,6 +177,8 @@ msgid ""
 "<br/>\n"
 "                            Nº."
 msgstr ""
+"<br/>\n"
+"                            Nº."
 
 #. module: l10n_ec_account_edi
 #: model:mail.template,body_html:l10n_ec_account_edi.email_template_notify
@@ -153,11 +187,9 @@ msgid ""
 "                Dear,\n"
 "                <br>\n"
 "                This email is to notify you that the certificate\n"
-"                <t t-out=\"object.name\"></t> is next to expire on <t t-out="
-"\"object.expire_date\"></t>.\n"
+"                <t t-out=\"object.name\"></t> is next to expire on <t t-out=\"object.expire_date\"></t>.\n"
 "                <br>\n"
-"                If this certificate is not renewed, the system will not be "
-"able\n"
+"                If this certificate is not renewed, the system will not be able\n"
 "                to sign documents.\n"
 "                <br>\n"
 "                Thanks for your attention.\n"
@@ -175,30 +207,23 @@ msgid ""
 "                are unauthorized.\n"
 "                <br>\n"
 "            </p>\n"
-"            <t t-set=\"records\" t-value=\"object."
-"l10n_ec_get_edi_document_unauthorized()\"></t>\n"
+"            <t t-set=\"records\" t-value=\"object.l10n_ec_get_edi_document_unauthorized()\"></t>\n"
 "            <table width=\"100%\">\n"
 "                <thead>\n"
 "                    <tr style=\"text-align: center;\">\n"
-"                        <th style=\"width: 190px;\"><strong>Document</"
-"strong></th>\n"
-"                        <th style=\"width: 80px;\"><strong>Date</strong></"
-"th>\n"
-"                        <th style=\"width: 80px;\"><strong>Status</strong></"
-"th>\n"
+"                        <th style=\"width: 190px;\"><strong>Document</strong></th>\n"
+"                        <th style=\"width: 80px;\"><strong>Date</strong></th>\n"
+"                        <th style=\"width: 80px;\"><strong>Status</strong></th>\n"
 "                        <th><strong>Error</strong></th>\n"
 "                    </tr>\n"
 "                </thead>\n"
 "                <tbody style=\"padding: 10px; font-size: 12px;\">\n"
 "                    <tr t-foreach=\"records\" t-as=\"r\">\n"
 "                        <td>\n"
-"                            <a t-attf-href=\"{{ r.move_id."
-"_get_share_url(redirect=True) }}\" target=\"_blank\" t-out=\"r.move_id.name "
-"or ''\">INV001</a>\n"
+"                            <a t-attf-href=\"{{ r.move_id._get_share_url(redirect=True) }}\" target=\"_blank\" t-out=\"r.move_id.name or ''\">INV001</a>\n"
 "                        </td>\n"
 "                        <td style=\"text-align: center;\">\n"
-"                            <span t-field=\"r.move_id.date\">2024-01-01</"
-"span>\n"
+"                            <span t-field=\"r.move_id.date\">2024-01-01</span>\n"
 "                        </td>\n"
 "                        <td style=\"text-align: center;\">\n"
 "                            <span t-field=\"r.state\">Sent</span>\n"
@@ -224,11 +249,11 @@ msgstr "<span class=\"o_form_label\">Archivo Firma Electrónica</span>"
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.res_config_settings_l10n_ec_edi
 msgid ""
-"<span class=\"o_form_label\">Electronic Invoicing Connection Parameters</"
-"span>"
+"<span class=\"o_form_label\">Electronic Invoicing Connection "
+"Parameters</span>"
 msgstr ""
-"<span class=\"o_form_label\">Parametros Conección Facturación Electrónica</"
-"span>"
+"<span class=\"o_form_label\">Parametros Conección Facturación "
+"Electrónica</span>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.res_config_settings_l10n_ec_edi
@@ -252,22 +277,24 @@ msgid ""
 "<strong>Comprobante que modifica:</strong>\n"
 "                            FACTURA"
 msgstr ""
+"<strong>Comprobante que modifica:</strong>\n"
+"                            FACTURA"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_info_aditional
 msgid "<strong>Dirección:</strong>"
-msgstr ""
+msgstr "<strong>Dirección:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_info_aditional
 msgid "<strong>Email:</strong>"
-msgstr ""
+msgstr "<strong>Correo Electrónico:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_credit_note_document_body
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_debit_note_document_body
 msgid "<strong>Fecha Emisión(Comprobante a modificar):</strong>"
-msgstr ""
+msgstr "<strong>Fecha Emisión(Comprobante a modificar):</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_credit_note_document_body
@@ -275,13 +302,13 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_invoice_document_body
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_liquidation_document_body
 msgid "<strong>Fecha de Emisión:</strong>"
-msgstr ""
+msgstr "<strong>Fecha de Emisión:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_credit_note_document_body
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_invoice_document_body
 msgid "<strong>Guia de remisión:</strong>"
-msgstr ""
+msgstr "<strong>Guia de remisión:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_credit_note_document_body
@@ -289,7 +316,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_invoice_document_body
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_liquidation_document_body
 msgid "<strong>Identificación:</strong>"
-msgstr ""
+msgstr "<strong>Identificación:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_info_aditional
@@ -297,21 +324,23 @@ msgid ""
 "<strong>Información Adicional</strong>\n"
 "            <br/>"
 msgstr ""
+"<strong>Información Adicional</strong>\n"
+"            <br/>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_head
 msgid "<strong>Obligado a llevar contabilidad:</strong>"
-msgstr ""
+msgstr "<strong>Obligado a llevar contabilidad:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_head
 msgid "<strong>R.U.C.:</strong>"
-msgstr ""
+msgstr "<strong>R.U.C.:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_credit_note_document_body
 msgid "<strong>Razón de modificación:</strong>"
-msgstr ""
+msgstr "<strong>Razón de modificación:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_credit_note_document_body
@@ -319,12 +348,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_invoice_document_body
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_liquidation_document_body
 msgid "<strong>Razón social / Nombres y Apellidos:</strong>"
-msgstr ""
+msgstr "<strong>Razón social / Nombres y Apellidos:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_info_aditional
 msgid "<strong>Telefono:</strong>"
-msgstr ""
+msgstr "<strong>Teléfono:</strong>"
 
 #. module: l10n_ec_account_edi
 #: model:ir.model.fields,field_description:l10n_ec_account_edi.field_account_bank_statement_line__l10n_ec_xml_access_key
@@ -398,7 +427,7 @@ msgstr "No hay conexión a WebService del SRI, Intente en unos minutos"
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_invoice_document_body
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_liquidation_document_body
 msgid "Cantidad"
-msgstr ""
+msgstr "Cantidad"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.sri_key_type_form_view
@@ -414,7 +443,7 @@ msgstr "Archivo P12"
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_head
 msgid "Clave de Acceso"
-msgstr ""
+msgstr "Clave de Acceso"
 
 #. module: l10n_ec_account_edi
 #: model:ir.model,name:l10n_ec_account_edi.model_res_company
@@ -444,23 +473,19 @@ msgstr "Crear una Liquidación de Compra (Proveedor)"
 #. module: l10n_ec_account_edi
 #: model_terms:ir.actions.act_window,help:l10n_ec_account_edi.action_move_debit_note_type
 msgid ""
-"Create debit note, register payments and keep track of the discussions with "
-"your\n"
+"Create debit note, register payments and keep track of the discussions with your\n"
 "                vendors."
 msgstr ""
-"Cree notas de débito, registre pagos y realice un seguimiento de las "
-"discusiones con su\n"
+"Cree notas de débito, registre pagos y realice un seguimiento de las discusiones con su\n"
 "                proveedor."
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.actions.act_window,help:l10n_ec_account_edi.action_move_liquidation_of_purchases_type
 msgid ""
-"Create liquidation of purchases, register payments and keep track of the "
-"discussions with your\n"
+"Create liquidation of purchases, register payments and keep track of the discussions with your\n"
 "                vendors."
 msgstr ""
-"Crea Liquidación de Compras, registra pagos y realiza un seguimiento de las "
-"discusiones con tus\n"
+"Crea Liquidación de Compras, registra pagos y realiza un seguimiento de las discusiones con tus\n"
 "                proveedores."
 
 #. module: l10n_ec_account_edi
@@ -503,7 +528,7 @@ msgstr "Cliente"
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_invoice_document_body
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_liquidation_document_body
 msgid "Código Principal"
-msgstr ""
+msgstr "Código Principal"
 
 #. module: l10n_ec_account_edi
 #: model:ir.model.fields,field_description:l10n_ec_account_edi.field_sri_key_type__issue_date
@@ -537,7 +562,7 @@ msgstr "Notas de Débito"
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_invoice_document_body
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_liquidation_document_body
 msgid "Descripción"
-msgstr ""
+msgstr "Descripción"
 
 #. module: l10n_ec_account_edi
 #: model:ir.model.fields,field_description:l10n_ec_account_edi.field_l10n_ec_additional_information__description
@@ -549,7 +574,7 @@ msgstr "Descripción"
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_invoice_document_body
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_liquidation_document_body
 msgid "Descuento"
-msgstr ""
+msgstr "Descuento"
 
 #. module: l10n_ec_account_edi
 #: model:ir.model.fields,field_description:l10n_ec_account_edi.field_l10n_ec_additional_information__display_name
@@ -583,7 +608,7 @@ msgstr "Formato EDI"
 #: model:ir.model.fields,help:l10n_ec_account_edi.field_account_bank_statement_line__l10n_ec_sri_payment_id
 #: model:ir.model.fields,help:l10n_ec_account_edi.field_account_move__l10n_ec_sri_payment_id
 msgid "Ecuador: Payment Methods Defined by the SRI."
-msgstr ""
+msgstr "Ecuador: Medios de Pago Definidos por el SRI."
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.res_config_settings_l10n_ec_edi
@@ -646,12 +671,10 @@ msgstr "Tipo de Ambiente para Documentos Electrónicos"
 #: code:addons/l10n_ec_account_edi/models/sri_key_type.py:0
 #, python-format
 msgid ""
-"Error opening the signature, possibly the signature key has been entered "
-"incorrectly or the file is not supported. \n"
+"Error opening the signature, possibly the signature key has been entered incorrectly or the file is not supported. \n"
 "%s"
 msgstr ""
-"Error al abrir la Firma, posiblemente la Clave de la Firma se haya ingresado "
-"incorrectamente o el archivo no sea compatible. \n"
+"Error al abrir la Firma, posiblemente la Clave de la Firma se haya ingresado incorrectamente o el archivo no sea compatible. \n"
 "%s"
 
 #. module: l10n_ec_account_edi
@@ -693,13 +716,13 @@ msgstr "Consumidor Final"
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_payment_info
 msgid "Forma de Pago"
-msgstr ""
+msgstr "Forma de Pago"
 
 #. module: l10n_ec_account_edi
 #: model:ir.model.fields,field_description:l10n_ec_account_edi.field_l10n_ec_additional_information__id
 #: model:ir.model.fields,field_description:l10n_ec_account_edi.field_sri_key_type__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: l10n_ec_account_edi
 #: model:mail.template,subject:l10n_ec_account_edi.email_template_notify
@@ -825,6 +848,8 @@ msgid ""
 "No journal could be found in company %(company_name)s for any of those "
 "types: %(journal_types)s"
 msgstr ""
+"No se ha encontrado ningún diario en la empresa %(company_name)s para "
+"ninguno de estos tipos: %(journal_types)s"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.sri_key_type_form_view
@@ -859,6 +884,10 @@ msgid ""
 "            /\n"
 "            <span class=\"topage\"/>"
 msgstr ""
+"Pág.\n"
+"            <span class=\"page\"/>\n"
+"            /\n"
+"            <span class=\"topage\"/>"
 
 #. module: l10n_ec_account_edi
 #: model:ir.model.fields,field_description:l10n_ec_account_edi.field_account_bank_statement_line__l10n_ec_sri_payment_id
@@ -869,7 +898,7 @@ msgstr "SRI Forma de Pago"
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_payment_info
 msgid "Plazo"
-msgstr ""
+msgstr "Plazo"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_credit_note_document_body
@@ -877,7 +906,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_invoice_document_body
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_liquidation_document_body
 msgid "Precio Total"
-msgstr ""
+msgstr "Precio Total"
 
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_credit_note_document_body
@@ -885,7 +914,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_invoice_document_body
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_liquidation_document_body
 msgid "Precio Unitario"
-msgstr ""
+msgstr "Precio Unitario"
 
 #. module: l10n_ec_account_edi
 #: model:ir.model.fields.selection,name:l10n_ec_account_edi.selection__res_company__l10n_ec_type_environment__production
@@ -906,7 +935,7 @@ msgstr "Liquidación de Compras Versión XML"
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.e_debit_note_document_body
 msgid "Razón de la modificación"
-msgstr ""
+msgstr "Razón de la modificación"
 
 #. module: l10n_ec_account_edi
 #: model:ir.model.fields,field_description:l10n_ec_account_edi.field_account_bank_statement_line__l10n_ec_reason
@@ -927,14 +956,12 @@ msgstr "Documento Relacionado"
 msgid ""
 "Select 'Sale' for customer invoices journals.\n"
 "Select 'Purchase' for vendor bills journals.\n"
-"Select 'Cash' or 'Bank' for journals that are used in customer or vendor "
-"payments.\n"
+"Select 'Cash' or 'Bank' for journals that are used in customer or vendor payments.\n"
 "Select 'General' for miscellaneous operations journals."
 msgstr ""
 "Seleccione 'Venta' para Diarios de Facturas de Clientes.\n"
 "Seleccione 'Comprar' para Diarios de Facturas de Proveedores.\n"
-"Seleccione 'Efectivo' o 'Banco' para Diarios que se utilizan en pagos de "
-"Clientes o Proveedores.\n"
+"Seleccione 'Efectivo' o 'Banco' para Diarios que se utilizan en pagos de Clientes o Proveedores.\n"
 "Seleccione 'General' para Diarios de Operaciones Misceláneas."
 
 #. module: l10n_ec_account_edi
@@ -942,7 +969,7 @@ msgstr ""
 #: code:addons/l10n_ec_account_edi/models/account_move.py:0
 #, python-format
 msgid "Send"
-msgstr ""
+msgstr "Enviar"
 
 #. module: l10n_ec_account_edi
 #: model:ir.actions.server,name:l10n_ec_account_edi.ir_cron_send_email_electronic_documents_ir_actions_server
@@ -1046,7 +1073,7 @@ msgstr "Validar Certificado"
 #. module: l10n_ec_account_edi
 #: model_terms:ir.ui.view,arch_db:l10n_ec_account_edi.electronic_report_common_payment_info
 msgid "Valor"
-msgstr ""
+msgstr "Valor"
 
 #. module: l10n_ec_account_edi
 #: model:ir.model.fields,field_description:l10n_ec_account_edi.field_sri_key_type__cert_version
@@ -1085,12 +1112,10 @@ msgstr "XML Documentos Electrónicos"
 #: code:addons/l10n_ec_account_edi/models/account_move.py:0
 #, python-format
 msgid ""
-"You cannot validate an invoice with zero quantity. Please review the "
-"following items:\n"
+"You cannot validate an invoice with zero quantity. Please review the following items:\n"
 "%s"
 msgstr ""
-"No se puede Validar una Factura con Cantidad Cero. Revise los siguientes "
-"elementos:\n"
+"No se puede Validar una Factura con Cantidad Cero. Revise los siguientes elementos:\n"
 "%s"
 
 #. module: l10n_ec_account_edi
@@ -1151,6 +1176,7 @@ msgstr ""
 #, python-format
 msgid "You must set XML Version for Debit Note into company %s"
 msgstr ""
+"Debe establecer la Versión XML para la Nota de Débito en la Compañía %s"
 
 #. module: l10n_ec_account_edi
 #. odoo-python
@@ -1165,8 +1191,8 @@ msgstr "Debe Configurar la Versión XML para la Factura en la Compañia %s"
 #, python-format
 msgid "You must set XML Version for Purchase Liquidation into company %s"
 msgstr ""
-"Debe Configurar la Versión XML para la Liquidación de Compras en la Compañia "
-"%s"
+"Debe Configurar la Versión XML para la Liquidación de Compras en la Compañia"
+" %s"
 
 #. module: l10n_ec_account_edi
 #. odoo-python
@@ -1184,7 +1210,7 @@ msgstr ""
 #: code:addons/l10n_ec_account_edi/models/account_edi_format.py:0
 #, python-format
 msgid "You must set vat identification for Partner: %s"
-msgstr ""
+msgstr "Debe configurar la identificación del iva para el Socio: %s"
 
 #. module: l10n_ec_account_edi
 #. odoo-python

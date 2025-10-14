@@ -432,6 +432,11 @@ msgid "Purchases Withholding"
 msgstr ""
 
 #. module: l10n_ec_withhold
+#: model:ir.ui.menu,name:l10n_ec_withhold.sri_withhold_purchase
+msgid "Purchase Withholding"
+msgstr "Retención de Compras"
+
+#. module: l10n_ec_withhold
 #: model:ir.model.fields,field_description:l10n_ec_withhold.field_l10n_ec_wizard_abstract_withhold__invoice_id
 #: model:ir.model.fields,field_description:l10n_ec_withhold.field_l10n_ec_wizard_create_purchase_withhold__invoice_id
 #: model:ir.model.fields,field_description:l10n_ec_withhold.field_l10n_ec_wizard_create_sale_withhold__invoice_id
@@ -453,7 +458,7 @@ msgstr ""
 #: model:ir.actions.act_window,name:l10n_ec_withhold.l10n_ec_wizard_sale_withhold_action_window
 #: model:ir.ui.menu,name:l10n_ec_withhold.sri_withhold_sales
 msgid "Sales Withholding"
-msgstr ""
+msgstr "Retenciones de Ventas"
 
 #. module: l10n_ec_withhold
 #: model:ir.model.fields,help:l10n_ec_withhold.field_account_fiscal_position__l10n_ec_avoid_withhold
