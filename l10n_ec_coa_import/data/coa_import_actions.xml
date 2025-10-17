@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_download_coa_template" model="ir.actions.act_url">
+        <field name="name">Download Ecuador COA Template</field>
+        <field name="url">/l10n_ec_coa_import/template/download</field>
+        <field name="target">self</field>
+    </record>
+</odoo>
