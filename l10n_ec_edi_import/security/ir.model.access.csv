@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+l10n_ec_edi_import_session_user,access.account.edi.import.session,model_account_edi_import_session,account.group_account_user,1,1,1,1
+l10n_ec_edi_import_log_user,access.account.edi.import.log,model_account_edi_import_log,account.group_account_user,1,0,1,0
+l10n_ec_edi_import_wizard_user,access.l10n.ec.edi.import.wizard,model_l10n_ec_edi_import_wizard,account.group_account_user,1,1,1,1
+l10n_ec_edi_import_wizard_file_user,access.l10n.ec.edi.import.wizard.file,model_l10n_ec_edi_import_wizard_file,account.group_account_user,1,1,1,1

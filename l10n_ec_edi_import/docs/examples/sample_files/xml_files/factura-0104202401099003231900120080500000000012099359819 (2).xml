@@ -1,0 +1,220 @@
+<factura id="comprobante" version="1.1.0">
+  <infoTributaria>
+    <ambiente>2</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>ANTONIO PINO YCAZA CIA LTDA</razonSocial>
+    <nombreComercial>ANTONIO PINO YCAZA CIA LTDA</nombreComercial>
+    <ruc>0990032319001</ruc>
+    <claveAcceso>0104202401099003231900120080500000000012099359819</claveAcceso>
+    <codDoc>01</codDoc>
+    <estab>008</estab>
+    <ptoEmi>050</ptoEmi>
+    <secuencial>000000001</secuencial>
+    <dirMatriz>Juan Tanca Marengo 107 y Justino Cornejo</dirMatriz>
+  </infoTributaria>
+  <infoFactura>
+    <fechaEmision>01/04/2024</fechaEmision>
+    <dirEstablecimiento>Juan Tanca Marengo 107 y Justino Cornejo</dirEstablecimiento>
+    <contribuyenteEspecial>6925</contribuyenteEspecial>
+    <obligadoContabilidad>SI</obligadoContabilidad>
+    <tipoIdentificacionComprador>04</tipoIdentificacionComprador>
+    <razonSocialComprador>PROTECCION MAXIMA PROTEMAXI CIA LTDA</razonSocialComprador>
+    <identificacionComprador>0992107979001</identificacionComprador>
+    <direccionComprador>COLON   548 Y BOYACA</direccionComprador>
+    <totalSinImpuestos>111.19</totalSinImpuestos>
+    <totalDescuento>35.73</totalDescuento>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>4</codigoPorcentaje>
+        <baseImponible>111.19</baseImponible>
+        <valor>16.68</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+    <propina>0</propina>
+    <importeTotal>127.87</importeTotal>
+    <moneda>DOLAR</moneda>
+    <pagos>
+      <pago>
+        <formaPago>19</formaPago>
+        <total>127.87</total>
+      </pago>
+    </pagos>
+  </infoFactura>
+  <detalles>
+    <detalle>
+      <codigoPrincipal>BATERIA S  EXIWILL 42F UL</codigoPrincipal>
+      <descripcion> 0000093154  BATERIA S  EXIWILL 42F ULTRA 12V 65AH 13P</descripcion>
+      <cantidad>1.000000</cantidad>
+      <precioUnitario>142.920000</precioUnitario>
+      <descuento>35.73</descuento>
+      <precioTotalSinImpuesto>107.19</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15</tarifa>
+          <baseImponible>107.19</baseImponible>
+          <valor>16.08</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>JUEGO ANILLOS ANTISULFAT</codigoPrincipal>
+      <descripcion> 0000000015  JUEGO ANILLOS ANTISULFATANTES</descripcion>
+      <cantidad>1.000000</cantidad>
+      <precioUnitario>1.000000</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>1.00</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15</tarifa>
+          <baseImponible>1.00</baseImponible>
+          <valor>0.15</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>CAMBIO BATERIA</codigoPrincipal>
+      <descripcion> 0000199079  CAMBIO BATERIA</descripcion>
+      <cantidad>1.000000</cantidad>
+      <precioUnitario>3.000000</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>3.00</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15</tarifa>
+          <baseImponible>3.00</baseImponible>
+          <valor>0.45</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoPrincipal>ECOVALOR BATERIAS</codigoPrincipal>
+      <descripcion> 0000198726  ECOVALOR BATERIAS</descripcion>
+      <cantidad>1.000000</cantidad>
+      <precioUnitario>0.000000</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>0.00</precioTotalSinImpuesto>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>4</codigoPorcentaje>
+          <tarifa>15</tarifa>
+          <baseImponible>0.00</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature751137">
+<ds:SignedInfo>
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+<ds:Reference Id="SignedPropertiesID120837" URI="#Signature751137-SignedPropertiesID303282" Type="http://uri.etsi.org/01903#SignedProperties">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>WdUwhS37gZGwc848RnyhndpWbas=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate551413">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>aLYuXHDFi6u5FLpAwCg5d2ADiTU=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-417187" URI="#comprobante">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>xZNOCH9OH1QALXerb9tqnJbI7Bc=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue>efk6NzSGHrMGAaXLIzZNjNMmQP3wGjbdBhFvuOV61vFnDZy8Qo8Yn86rFkinT86w
+tn0hyYc7GL1d/KV0o45oCy5ZSuu0og9+o+Mkzul2C29E1ZEtD+PbKthMvajzEGuz
+ytJKpHSW1YmNNlC1y2CFQ4N+oyMOUvlkyzrNQrrC2Mp3GTgKs6ACoMIacDF8u7uQ
+j4yPH2HF2OzMfYrLLPR0x6lRRlZKYcHqEQ6TUHYaQ4C5B58+xpyBPL0cv2miPS7/
+EO+AwOOFwtb+NdfA4xg1CoOYYlw8b5E+ycDtn6rJU+vJNE/+kiRNbfHgW8IL3l2i
+PTMXef5ZbhDDJdgf007SSw==</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate551413">
+<ds:X509Data>
+<ds:X509Certificate>MIIMBTCCCe2gAwIBAgIEXZGQrDANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMC
+RUMxHTAbBgNVBAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMTAwLgYDVQQLDCdFTlRJ
+REFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04xOTA3BgNVBAMMMEFV
+VE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNVQkNBLTIgU0VDVVJJVFkgREFUQTAe
+Fw0yMzEyMjEyMDE5NTNaFw0yNjEyMjAyMDE5NTNaMIGWMR8wHQYDVQQDDBZBTkRS
+RVMgSk9TRSBQSU5PIEdPTUVaMRUwEwYDVQQFEwwyMTEyMjMxNTI5NDAxMDAuBgNV
+BAsMJ0VOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lPTjEdMBsG
+A1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDIxCzAJBgNVBAYTAkVDMIIBIjANBgkq
+hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2sXa8z2MRr3g0kgvmVW7T1YmJHXrtIaD
+6M7iGhNfxEBnPiglZ89sUzKALqF5eQTG8kzZ5PyLeHLxlliG6qMiC6oP0um1gN/W
+M9J/8ws1EWl2NOl8uxHawcK/W6CQDVmLDNoEMTCPIp5LpYuzubOkZI7FYdg4OWNY
+nc0kPPcNCOxFlLD3GZAO9XdXv09nB4uzMxV8UVXTp1wz2rlnwg0Fp8JG/9B5g6UZ
+FjPtiU5tbf62Pn6yURDJ7XKyIZ0VwKn0m+QikyIv0VZp39JPAgkskkqVrN3BhDtU
+grFuchYo/vs2MRrKSbUQ5IoVLw2smDbxTdNvX+QY1UVR/X6Wuhv7SQIDAQABo4IH
+VDCCB1AwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBSMusoRV3glgB1rCktVv42u
+Yt29jzBZBggrBgEFBQcBAQRNMEswSQYIKwYBBQUHMAGGPWh0dHA6Ly9vY3NwZ3cu
+c2VjdXJpdHlkYXRhLm5ldC5lYy9lamJjYS9wdWJsaWN3ZWIvc3RhdHVzL29jc3Aw
+gc8GA1UdLgSBxzCBxDCBwaCBvqCBu4aBuGxkYXA6Ly9sZGFwc2RjYTIuc2VjdXJp
+dHlkYXRhLm5ldC5lYy9DTj1BVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJD
+QS0yIFNFQ1VSSVRZIERBVEEsT1U9RU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERF
+IElORk9STUFDSU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1FQz9kZWx0YVJl
+dm9jYXRpb25MaXN0P2Jhc2UwHAYDVR0RBBUwE4ERYW5waW5vQGFweS5jb20uZWMw
+ggEVBgNVHSAEggEMMIIBCDBiBgorBgEEAYKmcgIJMFQwUgYIKwYBBQUHAgIwRh5E
+AEMAZQByAHQAaQBmAGkAYwBhAGQAbwAgAGQAZQAgAFIAZQBwAHIAZQBzAGUAbgB0
+AGEAbgB0AGUAIABMAGUAZwBhAGwwgaEGCisGAQQBgqZyAgMwgZIwgY8GCCsGAQUF
+BwIBFoGCaHR0cHM6Ly93d3cuc2VjdXJpdHlkYXRhLm5ldC5lYy93cC1jb250ZW50
+L2Rvd25sb2Fkcy9Ob3JtYXRpdmFzL1BfZGVfQ2VydGlmaWNhZG9zL1BvbGl0aWNh
+cyBkZSBDZXJ0aWZpY2FkbyBSZXByZXNlbnRhbnRlIExlZ2FsLnBkZjCCAqIGA1Ud
+HwSCApkwggKVMIHloEGgP4Y9aHR0cDovL29jc3Bndy5zZWN1cml0eWRhdGEubmV0
+LmVjL2VqYmNhL3B1YmxpY3dlYi9zdGF0dXMvb2NzcKKBn6SBnDCBmTE5MDcGA1UE
+AwwwQVVUT1JJREFEIERFIENFUlRJRklDQUNJT04gU1VCQ0EtMiBTRUNVUklUWSBE
+QVRBMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JN
+QUNJT04xHTAbBgNVBAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMQswCQYDVQQGEwJF
+QzCBx6CBxKCBwYaBvmxkYXA6Ly9sZGFwc2RjYTIuc2VjdXJpdHlkYXRhLm5ldC5l
+Yy9DTj1BVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZ
+IERBVEEsT1U9RU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFDSU9O
+LE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1FQz9jZXJ0aWZpY2F0ZVJldm9jYXRp
+b25MaXN0P2Jhc2UwgeCggd2ggdqGgddodHRwczovL3BvcnRhbC1vcGVyYWRvcjIu
+c2VjdXJpdHlkYXRhLm5ldC5lYy9lamJjYS9wdWJsaWN3ZWIvd2ViZGlzdC9jZXJ0
+ZGlzdD9jbWQ9Y3JsJmlzc3Vlcj1DTj1BVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lP
+TiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEsT1U9RU5USURBRCBERSBDRVJUSUZJQ0FD
+SU9OIERFIElORk9STUFDSU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1FQzAd
+BgNVHQ4EFgQUJxq0A//uYOYvMTTOww16mgPGWPswKwYDVR0QBCQwIoAPMjAyMzEy
+MjEyMDE5NTNagQ8yMDI2MTIyMDIwMTk1M1owCwYDVR0PBAQDAgXgMBoGCisGAQQB
+gqZyAwUEDAwKUFJFU0lERU5URTAaBgorBgEEAYKmcgMBBAwMCjA5MDk1NDA4OTAw
+GQYKKwYBBAGCpnIDCQQLDAlHVUFZQVFVSUwwEQYKKwYBBAGCpnIDIgQDDAEuMEEG
+CisGAQQBgqZyAwcEMwwxQVYgSlVBTiBUQU5DQSBNQVJFTkdPIDIgMiBZIDIgMyBZ
+IEpVU1RJTk8gQ09STkVKTzAbBgorBgEEAYKmcgMCBA0MC0FORFJFUyBKT1NFMB8G
+CisGAQQBgqZyAyAEEQwPMDAxMDAyMDAwNTAxMDk4MBMGCisGAQQBgqZyAyEEBQwD
+UEZYMBcGCisGAQQBgqZyAwwECQwHRUNVQURPUjAUBgorBgEEAYKmcgMDBAYMBFBJ
+Tk8wKwYKKwYBBAGCpnIDCgQdDBtBTlRPTklPIFBJTk8gWUNBWkEgQ0lBIExUREEw
+HQYKKwYBBAGCpnIDCwQPDA0wOTkwMDMyMzE5MDAxMBIGCisGAQQBgqZyAx0EBAwC
+Tm8wFQYKKwYBBAGCpnIDBAQHDAVHT01FWjAaBgorBgEEAYKmcgMIBAwMCjA5OTA5
+MTU0MzgwDQYJKoZIhvcNAQELBQADggIBAIlarFhpyyl/i7mqjeOH7pnyiCordlSJ
+Udhyhq+VV1/w2dUVYnS19wu+VmoSRyJdVLpMiS0ZFPEiwCl/cRqAN7Qfsu1Aj5/l
+52IN3Nmb1JSrCcytNAmiyMsD3IXClf+QfxlL4Hhwf40u4H+Eh+SJVyUSzysDck+l
+zU3ZjI7jPmdYAVKj4gGk0yDrguYNhNHVVQsP1BTqsLlVVSXCIzhw1nMPRySAqwAG
+aOZASKs1JFXaYrjnq/huQJAJBhVTa3XzsiB6n13oVCSat3ot4MCKzT8Meoo4OwmA
+WS0AlRS9AzhVkopohhx0V534cEa5mXvMTSiEmZrWihUseJCiAGwTi0+u5PoB3oGR
+6o4QOmIO5CjPgN43gwsatGu8PWmWkGsANTdgUiBKM9pWZqQCdnYVQ8n7Gb3bRx7g
+I9u7vhakkuMwyVQoFyClr9AnjL3ysnOpxSbiE4V/A3glu5OeN5xZnbjDUIDbqMgC
+3Nv4s3M0mQCfEYTFJ+nkCZHdvveOPCUC6gREB5/1hz1jN6pz19sgnnc9aT4kQXY/
+SFVBIsceJ8nFtGX6so5ZqAinmdF5HMz3Ul45gu/6lX4ZA/sXWJJRw3245no6eNXm
+5zwUJfMrPEeStpls6zkw6DFjSxLj2SLI+Gwpt3FoO3MOKBo5gMzYZ4oIiyqWqxsb
+DaX7HhDxX69n</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>2sXa8z2MRr3g0kgvmVW7T1YmJHXrtIaD6M7iGhNfxEBnPiglZ89sUzKALqF5eQTG
+8kzZ5PyLeHLxlliG6qMiC6oP0um1gN/WM9J/8ws1EWl2NOl8uxHawcK/W6CQDVmL
+DNoEMTCPIp5LpYuzubOkZI7FYdg4OWNYnc0kPPcNCOxFlLD3GZAO9XdXv09nB4uz
+MxV8UVXTp1wz2rlnwg0Fp8JG/9B5g6UZFjPtiU5tbf62Pn6yURDJ7XKyIZ0VwKn0
+m+QikyIv0VZp39JPAgkskkqVrN3BhDtUgrFuchYo/vs2MRrKSbUQ5IoVLw2smDbx
+TdNvX+QY1UVR/X6Wuhv7SQ==</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object><etsi:QualifyingProperties xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Target="#Signature751137" Id="Signature751137"><etsi:SignedProperties Id="Signature751137-SignedPropertiesID303282"><etsi:SignedSignatureProperties><etsi:SigningTime>2024-07-01T08:44:49+00:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>fblMEJwObWT35oEzWY19HgBXPWM=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA, OU=ENTIDAD DE CERTIFICACION DE INFORMACION, O=SECURITY DATA S.A. 2, C=EC</ds:X509IssuerName><ds:X509SerialNumber>1569820844</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate><etsi:SignaturePolicyIdentifier><etsi:SignaturePolicyImplied/></etsi:SignaturePolicyIdentifier></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-417187"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></factura>

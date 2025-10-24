@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_edi_import_session_list" model="ir.ui.view">
+        <field name="name">account.edi.import.session.list</field>
+        <field name="model">account.edi.import.session</field>
+        <field name="arch" type="xml">
+            <list string="EDI Import Sessions" default_order="create_date desc">
+                <field name="name"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="state" widget="badge"/>
+                <field name="success_count"/>
+                <field name="warning_count"/>
+                <field name="error_count"/>
+                <field name="skipped_count"/>
+                <field name="total_documents"/>
+                <field name="user_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_account_edi_import_session_form" model="ir.ui.view">
+        <field name="name">account.edi.import.session.form</field>
+        <field name="model">account.edi.import.session</field>
+        <field name="arch" type="xml">
+            <form string="EDI Import Session">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,running,done,failed"/>
+                    <button name="mark_done" type="object" string="Mark Done" class="oe_highlight" invisible="state != 'running'"/>
+                    <button name="mark_failed" type="object" string="Mark Failed" invisible="state != 'running'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="company_id" readonly="1"/>
+                            <field name="user_id" readonly="1"/>
+                            <field name="start_date" readonly="1"/>
+                            <field name="end_date" readonly="1"/>
+                            <field name="duration" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="total_documents" readonly="1"/>
+                            <field name="success_count" readonly="1"/>
+                            <field name="warning_count" readonly="1"/>
+                            <field name="error_count" readonly="1"/>
+                            <field name="skipped_count" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Logs">
+                            <field name="log_ids" mode="list,form" readonly="1">
+                                <list>
+                                    <field name="status"/>
+                                    <field name="document_type"/>
+                                    <field name="document_number"/>
+                                    <field name="access_key"/>
+                                    <field name="partner_id"/>
+                                    <field name="issue_date"/>
+                                    <field name="amount_total"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="note" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button string="Close" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_account_edi_import_session_search" model="ir.ui.view">
+        <field name="name">account.edi.import.session.search</field>
+        <field name="model">account.edi.import.session</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="state"/>
+                <field name="user_id"/>
+                <filter string="Successful" name="status_success" domain="[('error_count', '=', 0)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="User" name="group_user" context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_account_edi_import_session" model="ir.actions.act_window">
+        <field name="name">EDI Import Sessions</field>
+        <field name="res_model">account.edi.import.session</field>
+    <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_account_edi_import_session_list"/>
+        <field name="context">{"search_default_group_state": 1}</field>
+    </record>
+</odoo>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<autorizacion>
+<estado>AUTORIZADO</estado>
+<numeroAutorizacion>0109202504179173139500120020020000040235141754814</numeroAutorizacion>
+<fechaAutorizacion>2025-09-01T15:33:06-05:00</fechaAutorizacion>
+<ambiente>PRODUCCIÓN</ambiente>
+<comprobante><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<notaCredito id="comprobante" version="1.1.0">
+  <infoTributaria>
+    <ambiente>2</ambiente>
+    <tipoEmision>1</tipoEmision>
+    <razonSocial>TRANSCABA SA</razonSocial>
+    <nombreComercial>TRANSCABA SA</nombreComercial>
+    <ruc>1791731395001</ruc>
+    <claveAcceso>0109202504179173139500120020020000040235141754814</claveAcceso>
+    <codDoc>04</codDoc>
+    <estab>002</estab>
+    <ptoEmi>002</ptoEmi>
+    <secuencial>000004023</secuencial>
+    <dirMatriz>MARIANO CARDENAL OE1-84 Y JUAN DE CELIS</dirMatriz>
+    <agenteRetencion>1</agenteRetencion>
+  </infoTributaria>
+  <infoNotaCredito>
+    <fechaEmision>01/09/2025</fechaEmision>
+    <dirEstablecimiento>KM 7.5 VIA A DAULE, LOTIZACION EL PRADO MZ 1 SOLAR 2</dirEstablecimiento>
+    <tipoIdentificacionComprador>04</tipoIdentificacionComprador>
+    <razonSocialComprador>ANTONIO PINO YCAZA CIA. LTDA.</razonSocialComprador>
+    <identificacionComprador>0990032319001</identificacionComprador>
+    <obligadoContabilidad>SI</obligadoContabilidad>
+    <codDocModificado>01</codDocModificado>
+    <numDocModificado>002-002-000059390</numDocModificado>
+    <fechaEmisionDocSustento>01/09/2025</fechaEmisionDocSustento>
+    <totalSinImpuestos>9.80</totalSinImpuestos>
+    <valorModificacion>9.80</valorModificacion>
+    <moneda>DOLAR</moneda>
+    <totalConImpuestos>
+      <totalImpuesto>
+        <codigo>2</codigo>
+        <codigoPorcentaje>0</codigoPorcentaje>
+        <baseImponible>9.80</baseImponible>
+        <valor>0.00</valor>
+      </totalImpuesto>
+    </totalConImpuestos>
+    <motivo>ANULACION DE COMPROBANTE</motivo>
+  </infoNotaCredito>
+  <detalles>
+    <detalle>
+      <codigoInterno>BUL1</codigoInterno>
+      <descripcion>TRANSPORTE DE BULTO CON MERCADERIA</descripcion>
+      <cantidad>1</cantidad>
+      <precioUnitario>3</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>3.00</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Marca" valor="-- N/A --"></detAdicional>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.00</tarifa>
+          <baseImponible>3.00</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+    <detalle>
+      <codigoInterno>LLANT2</codigoInterno>
+      <descripcion>TRANSPORTE DE LLANTAS RIN 16</descripcion>
+      <cantidad>4</cantidad>
+      <precioUnitario>1.70</precioUnitario>
+      <descuento>0.00</descuento>
+      <precioTotalSinImpuesto>6.80</precioTotalSinImpuesto>
+      <detallesAdicionales>
+        <detAdicional nombre="Marca" valor="-- N/A --"></detAdicional>
+      </detallesAdicionales>
+      <impuestos>
+        <impuesto>
+          <codigo>2</codigo>
+          <codigoPorcentaje>0</codigoPorcentaje>
+          <tarifa>0.00</tarifa>
+          <baseImponible>6.80</baseImponible>
+          <valor>0.00</valor>
+        </impuesto>
+      </impuestos>
+    </detalle>
+  </detalles>
+  <infoAdicional>
+    <campoAdicional nombre="Direccion">GUAYAS / GUAYAQUIL / TARQUI / AV. JUAN TANCA MARENGO 2-2 Y 2-3 Y JUSTINO CORNEJO</campoAdicional>
+    <campoAdicional nombre="Ubicacion">GUAYAQUIL -   (ECUADOR)</campoAdicional>
+    <campoAdicional nombre="Telefono">042284500</campoAdicional>
+    <campoAdicional nombre="Email">vgutierrez@apy.com.ec  ,  lroche@apy.com.ec ,  lflores@apy.com.ec,  jtci@apy.com.ec,  tencalada@apy.com.ec</campoAdicional>
+  </infoAdicional>
+<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Id="Signature256224">
+<ds:SignedInfo Id="Signature-SignedInfo461781">
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"></ds:CanonicalizationMethod>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"></ds:SignatureMethod>
+<ds:Reference Id="SignedPropertiesID567212" Type="http://uri.etsi.org/01903#SignedProperties" URI="#Signature256224-SignedProperties941280">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>l9UjRMEiuw4LeVDV2R6rt6r+uYM=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference URI="#Certificate1463098">
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>ZCGBfRhlaznq3lwD2faL1sRAoys=</ds:DigestValue>
+</ds:Reference>
+<ds:Reference Id="Reference-ID-437340" URI="#comprobante">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"></ds:Transform>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod>
+<ds:DigestValue>msaK0MPVp8BJ7nQagDuZqmbfeks=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue Id="SignatureValue962416">
+ssiiaGTWeDKVeXLcX/RZ6bXqRhD+cUNMHHfWWnRHHG7sgWZO1gNW5QcmDom5aWIaydpQwrXhYOR+
+5St+BR03MGyagokcSScwzMaGsunalMLtClzAJ1bMyfsMbT2auMUpL8/b48UnSsNmApA6y5BuE0x/
+W1U1I1mj8ic//5x3OSN4wFjf0pAHlJy9R+ll66x/TSJHJy7hjKZ4bwXZKtEeO5FX50mFlNLDDVhS
+OuDMjCHd1LA5c2FlewJRkOH3kmivd0hxJPlXsgRdVM/s700WLy4vsr97VFzH/5VuWjJjg71xSaOd
+BnoNUy7lYsggopxkGwpLtWgmVMxJsI0l6Y5RCw==
+</ds:SignatureValue>
+<ds:KeyInfo Id="Certificate1463098">
+<ds:X509Data>
+<ds:X509Certificate>
+MIIMATCCCemgAwIBAgIEDG0MaDANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMCRUMxHTAbBgNV
+BAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJ
+T04gREUgSU5GT1JNQUNJT04xOTA3BgNVBAMMMEFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNV
+QkNBLTIgU0VDVVJJVFkgREFUQTAeFw0yMzEyMTIxNTM3MzNaFw0yNTEyMTExNTM3MzNaMIGbMSQw
+IgYDVQQDDBtIRVJOQU4gUkFGQUVMIENBWkNPIEJBUlJJR0ExFTATBgNVBAUTDDEyMTIyMzEwNDcy
+MDEwMC4GA1UECwwnRU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERFIElORk9STUFDSU9OMR0wGwYD
+VQQKDBRTRUNVUklUWSBEQVRBIFMuQS4gMjELMAkGA1UEBhMCRUMwggEiMA0GCSqGSIb3DQEBAQUA
+A4IBDwAwggEKAoIBAQDJtr7p+hEsBDvOYyOucGj9YiTdXb1nzvYsIasTSgV8qbq0Zwqu473mfGBZ
+5aCup8Ni+uEpWmXXZ1hxj6JAx+wl7vHmiEgEcD5VVEq+o9IHziqhl2GeVVIvJ1TdYcepU8Jl+B20
+o36K2FJzkYYcdgByOKna8oU+r5fQWs1bWbgE6tPwwzXUFPG0VHuCWwdUoNt+J9hLQdQ9+2lmzc7t
+mLo/aUPv/Q+qdV1qfOieyIm8hKE/KA1vDeAZW64Fs/+69HzoP2gR3XO0KBJRjtHUicDTfp5JX+J/
+B0ekxCmOEKA7iD04C9hkWwvbv1QK+0hJo7Vg7NZGdr95ph+3IUKgffh5AgMBAAGjggdLMIIHRzAM
+BgNVHRMBAf8EAjAAMB8GA1UdIwQYMBaAFIy6yhFXeCWAHWsKS1W/ja5i3b2PMFkGCCsGAQUFBwEB
+BE0wSzBJBggrBgEFBQcwAYY9aHR0cDovL29jc3Bndy5zZWN1cml0eWRhdGEubmV0LmVjL2VqYmNh
+L3B1YmxpY3dlYi9zdGF0dXMvb2NzcDCBzwYDVR0uBIHHMIHEMIHBoIG+oIG7hoG4bGRhcDovL2xk
+YXBzZGNhMi5zZWN1cml0eWRhdGEubmV0LmVjL0NOPUFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9O
+IFNVQkNBLTIgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5G
+T1JNQUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMixDPUVDP2RlbHRhUmV2b2NhdGlvbkxpc3Q/
+YmFzZTAlBgNVHREEHjAcgRpjb250YWJpbGlkYWRAdHJhbnNjYWJhLmNvbTCCARUGA1UdIASCAQww
+ggEIMGIGCisGAQQBgqZyAgkwVDBSBggrBgEFBQcCAjBGHkQAQwBlAHIAdABpAGYAaQBjAGEAZABv
+ACAAZABlACAAUgBlAHAAcgBlAHMAZQBuAHQAYQBuAHQAZQAgAEwAZQBnAGEAbDCBoQYKKwYBBAGC
+pnICAzCBkjCBjwYIKwYBBQUHAgEWgYJodHRwczovL3d3dy5zZWN1cml0eWRhdGEubmV0LmVjL3dw
+LWNvbnRlbnQvZG93bmxvYWRzL05vcm1hdGl2YXMvUF9kZV9DZXJ0aWZpY2Fkb3MvUG9saXRpY2Fz
+IGRlIENlcnRpZmljYWRvIFJlcHJlc2VudGFudGUgTGVnYWwucGRmMIICogYDVR0fBIICmTCCApUw
+geWgQaA/hj1odHRwOi8vb2NzcGd3LnNlY3VyaXR5ZGF0YS5uZXQuZWMvZWpiY2EvcHVibGljd2Vi
+L3N0YXR1cy9vY3NwooGfpIGcMIGZMTkwNwYDVQQDDDBBVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lP
+TiBTVUJDQS0yIFNFQ1VSSVRZIERBVEExMDAuBgNVBAsMJ0VOVElEQUQgREUgQ0VSVElGSUNBQ0lP
+TiBERSBJTkZPUk1BQ0lPTjEdMBsGA1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDIxCzAJBgNVBAYT
+AkVDMIHHoIHEoIHBhoG+bGRhcDovL2xkYXBzZGNhMi5zZWN1cml0eWRhdGEubmV0LmVjL0NOPUFV
+VE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNVQkNBLTIgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFE
+IERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMixD
+PUVDP2NlcnRpZmljYXRlUmV2b2NhdGlvbkxpc3Q/YmFzZTCB4KCB3aCB2oaB12h0dHBzOi8vcG9y
+dGFsLW9wZXJhZG9yMi5zZWN1cml0eWRhdGEubmV0LmVjL2VqYmNhL3B1YmxpY3dlYi93ZWJkaXN0
+L2NlcnRkaXN0P2NtZD1jcmwmaXNzdWVyPUNOPUFVVE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNV
+QkNBLTIgU0VDVVJJVFkgREFUQSxPVT1FTlRJREFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JN
+QUNJT04sTz1TRUNVUklUWSBEQVRBIFMuQS4gMixDPUVDMB0GA1UdDgQWBBQW/lXDZLjhJ8dA50y8
+w9bi74+KyjArBgNVHRAEJDAigA8yMDIzMTIxMjE1MzczM1qBDzIwMjUxMjExMTUzNzMzWjALBgNV
+HQ8EBAMCBeAwHwYKKwYBBAGCpnIDBQQRDA9HRVJFTlRFIEdFTkVSQUwwGgYKKwYBBAGCpnIDAQQM
+DAowNjAyNDU3NzgwMBUGCisGAQQBgqZyAwkEBwwFUVVJVE8wEQYKKwYBBAGCpnIDIgQDDAEuMDcG
+CisGAQQBgqZyAwcEKQwnTUFSSUFOTyBDQVJERU5BTCBPRTEgODQgWSBKVUFOIERFIENFTElTMB0G
+CisGAQQBgqZyAwIEDwwNSEVSTkFOIFJBRkFFTDAfBgorBgEEAYKmcgMgBBEMDzAwMTAwMjAwMDQ5
+ODEwMjATBgorBgEEAYKmcgMhBAUMA1BGWDAXBgorBgEEAYKmcgMMBAkMB0VDVUFET1IwFQYKKwYB
+BAGCpnIDAwQHDAVDQVpDTzAdBgorBgEEAYKmcgMKBA8MDVRSQU5TQ0FCQSBTIEEwHQYKKwYBBAGC
+pnIDCwQPDA0xNzkxNzMxMzk1MDAxMBIGCisGAQQBgqZyAx0EBAwCTm8wFwYKKwYBBAGCpnIDBAQJ
+DAdCQVJSSUdBMBoGCisGAQQBgqZyAwgEDAwKMDk4MDA4NTIyMTANBgkqhkiG9w0BAQsFAAOCAgEA
+vjt7L5sPF6+sdt/LgufMjDH407JmwercWvRGj29J+4wB1Y9LXg54UmqBSwNb7d5KQt/X1tGmlmFF
+mTD3C1y0ADxFcrLXPK0709WjVPAEnLfhMEMuu80UZ6etATBGog4C9qv4WZEIlX8p+RQAfd8ntuBE
+pMyN2jlAFkC0sJlVf7bNUyEo34HEglvq1m48SOaI7zFByoqRw6XZLZK+5uQXkhhed5+ZciwDQQHU
+Euxw4bqaOqhmRC77YVqSoc7402xGXJM9W5aLcthOje5q0VrXIpjQB8FvwRaXKd/jFDPjfVdYVPfE
+nx4rrwjo0t/MwiuwEA1XvZ+yE+dPSxpBDDlNkRlAMxNjCdDfYRkgSNlp4T+bg/fwNGAiwRYwFJno
+GoORHN7Q7l9BKwHSeUkyE7SoojqvJMOn0OjLz/SLvQJCYfnMB9mW8MH1cjWroMOQ/yTzy42oTtgf
+eShoRCt2yd3xc5L/zWAb80UKMDeK7v+jKSW0Dh3LyLw8jvQkrWqB+mPsJvv+2rIvuMvSbhrD246S
+w5jl0eFK2JS5dCvM6BqlbZYlYiXxsfsWB4j/r7q9zCujnn/GZMcmHk2OgCyWYmBb/+r6Vkwy4tyS
+xXPDNQbafXC+YRbQMYIBAO4uUtrsQ/ciArzPINLnxhG/ZDvvKgdQvkWSl86W+KSQT5h7jRpzD0A=
+</ds:X509Certificate>
+</ds:X509Data>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+yba+6foRLAQ7zmMjrnBo/WIk3V29Z872LCGrE0oFfKm6tGcKruO95nxgWeWgrqfDYvrhKVpl12dY
+cY+iQMfsJe7x5ohIBHA+VVRKvqPSB84qoZdhnlVSLydU3WHHqVPCZfgdtKN+ithSc5GGHHYAcjip
+2vKFPq+X0FrNW1m4BOrT8MM11BTxtFR7glsHVKDbfifYS0HUPftpZs3O7Zi6P2lD7/0PqnVdanzo
+nsiJvIShPygNbw3gGVuuBbP/uvR86D9oEd1ztCgSUY7R1InA036eSV/ifwdHpMQpjhCgO4g9OAvY
+ZFsL279UCvtISaO1YOzWRna/eaYftyFCoH34eQ==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+</ds:KeyInfo>
+<ds:Object Id="Signature256224-Object138348"><etsi:QualifyingProperties Target="#Signature256224"><etsi:SignedProperties Id="Signature256224-SignedProperties941280"><etsi:SignedSignatureProperties><etsi:SigningTime>2025-09-01T15:23:22-05:00</etsi:SigningTime><etsi:SigningCertificate><etsi:Cert><etsi:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"></ds:DigestMethod><ds:DigestValue>Kc+CfZBqTMX/7vQ4nBfY2xks7Ao=</ds:DigestValue></etsi:CertDigest><etsi:IssuerSerial><ds:X509IssuerName>CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA,OU=ENTIDAD DE CERTIFICACION DE INFORMACION,O=SECURITY DATA S.A. 2,C=EC</ds:X509IssuerName><ds:X509SerialNumber>208473192</ds:X509SerialNumber></etsi:IssuerSerial></etsi:Cert></etsi:SigningCertificate></etsi:SignedSignatureProperties><etsi:SignedDataObjectProperties><etsi:DataObjectFormat ObjectReference="#Reference-ID-437340"><etsi:Description>contenido comprobante</etsi:Description><etsi:MimeType>text/xml</etsi:MimeType></etsi:DataObjectFormat></etsi:SignedDataObjectProperties></etsi:SignedProperties></etsi:QualifyingProperties></ds:Object></ds:Signature></notaCredito>]]></comprobante>
+<mensajes/>
+</autorizacion>
+

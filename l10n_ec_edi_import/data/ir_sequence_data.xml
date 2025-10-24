@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_account_edi_import_session" model="ir.sequence">
+        <field name="name">EDI Import Session</field>
+        <field name="code">account.edi.import.session</field>
+        <field name="prefix">EDI-%(y)s-</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

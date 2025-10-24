@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_l10n_ec_edi_import_wizard" model="ir.ui.view">
+        <field name="name">l10n.ec.edi.import.wizard.form</field>
+        <field name="model">l10n.ec.edi.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Ecuadorian EDI Documents" create="false" edit="false">
+                <sheet>
+                    <group invisible="state == 'done'" string="Files">
+                        <field name="file_ids">
+                            <list editable="bottom" create="true">
+                                <field name="filename" required="1"/>
+                                <field name="data" filename="filename" widget="binary" required="1"/>
+                            </list>
+                        </field>
+                    </group>
+                    <group invisible="state == 'done'">
+                        <field name="create_missing_partners"/>
+                        <field name="allow_duplicate"/>
+                        <field name="validate_with_sri"/>
+                    </group>
+                    <group invisible="state != 'done'">
+                        <field name="session_id" readonly="1"/>
+                        <field name="summary_message" readonly="1" widget="text"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+            <button name="action_start_import"
+                string="Import"
+                type="object"
+                class="btn-primary"
+                invisible="state == 'done'"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_l10n_ec_edi_import_wizard_file_tree" model="ir.ui.view">
+        <field name="name">l10n.ec.edi.import.wizard.file.tree</field>
+        <field name="model">l10n.ec.edi.import.wizard.file</field>
+        <field name="arch" type="xml">
+            <list string="Files">
+                <field name="filename"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_l10n_ec_edi_import_wizard" model="ir.actions.act_window">
+        <field name="name">Import EDI Documents</field>
+        <field name="res_model">l10n.ec.edi.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_l10n_ec_edi_import_wizard"/>
+        <field name="target">new</field>
+        <field name="context">{}</field>
+    </record>
+</odoo>

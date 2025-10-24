@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_edi_import_log_tree" model="ir.ui.view">
+        <field name="name">account.edi.import.log.tree</field>
+        <field name="model">account.edi.import.log</field>
+        <field name="arch" type="xml">
+                <list string="EDI Import Logs" decoration-danger="status == 'error'" decoration-muted="status == 'skipped'">
+                <field name="session_id"/>
+                <field name="status" widget="badge"/>
+                <field name="document_type"/>
+                <field name="document_number"/>
+                <field name="access_key"/>
+                <field name="partner_id"/>
+                <field name="amount_total"/>
+                <field name="issue_date"/>
+                <field name="message"/>
+                </list>
+        </field>
+    </record>
+
+    <record id="view_account_edi_import_log_form" model="ir.ui.view">
+        <field name="name">account.edi.import.log.form</field>
+        <field name="model">account.edi.import.log</field>
+        <field name="arch" type="xml">
+            <form string="EDI Import Log">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="session_id" readonly="1"/>
+                            <field name="status" readonly="1"/>
+                            <field name="document_type" readonly="1"/>
+                            <field name="document_number" readonly="1"/>
+                            <field name="access_key" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="partner_vat" readonly="1"/>
+                            <field name="issue_date" readonly="1"/>
+                            <field name="amount_total" readonly="1"/>
+                            <field name="processing_time" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="message" readonly="1" widget="html"/>
+                    </group>
+                    <group>
+                        <field name="payload" readonly="1" widget="text"/>
+                    </group>
+                    <group>
+                        <field name="target_model" readonly="1"/>
+                        <field name="target_res_id" readonly="1"/>
+                            <button name="action_open_target" string="Open Document" type="object" class="oe_link" invisible="not (target_model and target_res_id)"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_account_edi_import_log_search" model="ir.ui.view">
+        <field name="name">account.edi.import.log.search</field>
+        <field name="model">account.edi.import.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="document_number"/>
+                <field name="access_key"/>
+                <field name="status"/>
+                <field name="partner_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                    <filter string="Session" name="group_session" context="{'group_by': 'session_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_account_edi_import_log" model="ir.actions.act_window">
+        <field name="name">EDI Import Logs</field>
+        <field name="res_model">account.edi.import.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{"search_default_group_session": 1}</field>
+    </record>
+</odoo>

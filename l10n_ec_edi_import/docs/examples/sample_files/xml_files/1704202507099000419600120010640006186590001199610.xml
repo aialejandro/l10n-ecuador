@@ -1,0 +1,142 @@
+<autorizacion>
+  <estado>AUTORIZADO</estado>
+  <numeroAutorizacion>1704202507099000419600120010640006186590001199610</numeroAutorizacion>
+  <fechaAutorizacion>2025-04-17T14:58:49-05:00</fechaAutorizacion>
+  <ambiente>PRODUCCIÓN</ambiente>
+  <comprobante>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;comprobanteRetencion id="comprobante" version="2.0.0"&gt;&lt;infoTributaria&gt;&lt;ambiente&gt;2&lt;/ambiente&gt;&lt;tipoEmision&gt;1&lt;/tipoEmision&gt;&lt;razonSocial&gt;CORPORACION EL ROSADO S.A. &lt;/razonSocial&gt;&lt;nombreComercial&gt;CORPORACION EL ROSADO S.A. &lt;/nombreComercial&gt;&lt;ruc&gt;0990004196001&lt;/ruc&gt;&lt;claveAcceso&gt;1704202507099000419600120010640006186590001199610&lt;/claveAcceso&gt;&lt;codDoc&gt;07&lt;/codDoc&gt;&lt;estab&gt;001&lt;/estab&gt;&lt;ptoEmi&gt;064&lt;/ptoEmi&gt;&lt;secuencial&gt;000618659&lt;/secuencial&gt;&lt;dirMatriz&gt;Av. 9 de Octubre y Boyaca 729 Guayaquil&lt;/dirMatriz&gt;&lt;/infoTributaria&gt;&lt;infoCompRetencion&gt;&lt;fechaEmision&gt;17/04/2025&lt;/fechaEmision&gt;&lt;contribuyenteEspecial&gt;06925&lt;/contribuyenteEspecial&gt;&lt;obligadoContabilidad&gt;SI&lt;/obligadoContabilidad&gt;&lt;tipoIdentificacionSujetoRetenido&gt;04&lt;/tipoIdentificacionSujetoRetenido&gt;&lt;parteRel&gt;NO&lt;/parteRel&gt;&lt;razonSocialSujetoRetenido&gt;ANTONIO PINO YCAZA CIA.LTDA.&lt;/razonSocialSujetoRetenido&gt;&lt;identificacionSujetoRetenido&gt;0990032319001&lt;/identificacionSujetoRetenido&gt;&lt;periodoFiscal&gt;04/2025&lt;/periodoFiscal&gt;&lt;/infoCompRetencion&gt;&lt;docsSustento&gt;&lt;docSustento&gt;&lt;codSustento&gt;01&lt;/codSustento&gt;&lt;codDocSustento&gt;01&lt;/codDocSustento&gt;&lt;numDocSustento&gt;001051000008070&lt;/numDocSustento&gt;&lt;fechaEmisionDocSustento&gt;02/04/2025&lt;/fechaEmisionDocSustento&gt;&lt;pagoLocExt&gt;01&lt;/pagoLocExt&gt;&lt;totalComprobantesReembolso&gt;0.00&lt;/totalComprobantesReembolso&gt;&lt;totalBaseImponibleReembolso&gt;0.00&lt;/totalBaseImponibleReembolso&gt;&lt;totalImpuestoReembolso&gt;0.00&lt;/totalImpuestoReembolso&gt;&lt;totalSinImpuestos&gt;7.50&lt;/totalSinImpuestos&gt;&lt;importeTotal&gt;8.63&lt;/importeTotal&gt;&lt;impuestosDocSustento&gt;&lt;impuestoDocSustento&gt;&lt;codImpuestoDocSustento&gt;2&lt;/codImpuestoDocSustento&gt;&lt;codigoPorcentaje&gt;4&lt;/codigoPorcentaje&gt;&lt;baseImponible&gt;7.50&lt;/baseImponible&gt;&lt;tarifa&gt;15&lt;/tarifa&gt;&lt;valorImpuesto&gt;1.13 &lt;/valorImpuesto&gt;&lt;/impuestoDocSustento&gt;&lt;/impuestosDocSustento&gt;&lt;retenciones&gt;&lt;retencion&gt;&lt;codigo&gt;1&lt;/codigo&gt;&lt;codigoRetencion&gt;312&lt;/codigoRetencion&gt;&lt;baseImponible&gt;7.50&lt;/baseImponible&gt;&lt;porcentajeRetener&gt;1.75&lt;/porcentajeRetener&gt;&lt;valorRetenido&gt;0.13&lt;/valorRetenido&gt;&lt;/retencion&gt;&lt;retencion&gt;&lt;codigo&gt;2&lt;/codigo&gt;&lt;codigoRetencion&gt;9&lt;/codigoRetencion&gt;&lt;baseImponible&gt;1.13&lt;/baseImponible&gt;&lt;porcentajeRetener&gt;10.00&lt;/porcentajeRetener&gt;&lt;valorRetenido&gt;0.11&lt;/valorRetenido&gt;&lt;/retencion&gt;&lt;/retenciones&gt;&lt;pagos&gt;&lt;pago&gt;&lt;formaPago&gt;01&lt;/formaPago&gt;&lt;total&gt;8.63 &lt;/total&gt;&lt;/pago&gt;&lt;/pagos&gt;&lt;/docSustento&gt;&lt;docSustento&gt;&lt;codSustento&gt;01&lt;/codSustento&gt;&lt;codDocSustento&gt;01&lt;/codDocSustento&gt;&lt;numDocSustento&gt;001051000008082&lt;/numDocSustento&gt;&lt;fechaEmisionDocSustento&gt;03/04/2025&lt;/fechaEmisionDocSustento&gt;&lt;pagoLocExt&gt;01&lt;/pagoLocExt&gt;&lt;totalComprobantesReembolso&gt;0.00&lt;/totalComprobantesReembolso&gt;&lt;totalBaseImponibleReembolso&gt;0.00&lt;/totalBaseImponibleReembolso&gt;&lt;totalImpuestoReembolso&gt;0.00&lt;/totalImpuestoReembolso&gt;&lt;totalSinImpuestos&gt;7.50&lt;/totalSinImpuestos&gt;&lt;importeTotal&gt;8.63&lt;/importeTotal&gt;&lt;impuestosDocSustento&gt;&lt;impuestoDocSustento&gt;&lt;codImpuestoDocSustento&gt;2&lt;/codImpuestoDocSustento&gt;&lt;codigoPorcentaje&gt;4&lt;/codigoPorcentaje&gt;&lt;baseImponible&gt;7.50&lt;/baseImponible&gt;&lt;tarifa&gt;15&lt;/tarifa&gt;&lt;valorImpuesto&gt;1.13 &lt;/valorImpuesto&gt;&lt;/impuestoDocSustento&gt;&lt;/impuestosDocSustento&gt;&lt;retenciones&gt;&lt;retencion&gt;&lt;codigo&gt;1&lt;/codigo&gt;&lt;codigoRetencion&gt;312&lt;/codigoRetencion&gt;&lt;baseImponible&gt;7.50&lt;/baseImponible&gt;&lt;porcentajeRetener&gt;1.75&lt;/porcentajeRetener&gt;&lt;valorRetenido&gt;0.13&lt;/valorRetenido&gt;&lt;/retencion&gt;&lt;retencion&gt;&lt;codigo&gt;2&lt;/codigo&gt;&lt;codigoRetencion&gt;9&lt;/codigoRetencion&gt;&lt;baseImponible&gt;1.13&lt;/baseImponible&gt;&lt;porcentajeRetener&gt;10.00&lt;/porcentajeRetener&gt;&lt;valorRetenido&gt;0.11&lt;/valorRetenido&gt;&lt;/retencion&gt;&lt;/retenciones&gt;&lt;pagos&gt;&lt;pago&gt;&lt;formaPago&gt;01&lt;/formaPago&gt;&lt;total&gt;8.63 &lt;/total&gt;&lt;/pago&gt;&lt;/pagos&gt;&lt;/docSustento&gt;&lt;/docsSustento&gt;&lt;infoAdicional&gt;&lt;campoAdicional nombre="TotalRetencionesIVA"&gt;19.27&lt;/campoAdicional&gt;&lt;campoAdicional nombre="TotalRetencionesRENTA"&gt;18.35&lt;/campoAdicional&gt;&lt;campoAdicional nombre="EmailProveedor"&gt;msuarez@apy.com.ec,dlopez@apy.com.ec,mbarreto@apy.com.ec,cobranzasgye1@apy.com.ec&lt;/campoAdicional&gt;&lt;campoAdicional nombre="DocumentoSAP"&gt;2300011996&lt;/campoAdicional&gt;&lt;campoAdicional nombre="RESOLUCION"&gt;Gran Contribuyente Res.NAC-GCFOIOC21-00000876-E&lt;/campoAdicional&gt;&lt;campoAdicional nombre="CodSociedad"&gt;1001&lt;/campoAdicional&gt;&lt;/infoAdicional&gt;&lt;ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Id="Signature-1584237331"&gt;
+	&lt;ds:SignedInfo&gt;
+		&lt;ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/&gt;
+		&lt;ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/&gt;
+		&lt;ds:Reference URI="#comprobante"&gt;
+			&lt;ds:Transforms&gt;
+				&lt;ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/&gt;
+			&lt;/ds:Transforms&gt;
+			&lt;ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/&gt;
+			&lt;ds:DigestValue&gt;s3e/kNnC0q2q4t3a/pKTSzhBA3w=&lt;/ds:DigestValue&gt;
+		&lt;/ds:Reference&gt;
+		&lt;ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#SignedProperties-1298913795"&gt;
+			&lt;ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/&gt;
+			&lt;ds:DigestValue&gt;imjnyfTzw800JqzvVZnRsdelO7Q=&lt;/ds:DigestValue&gt;
+		&lt;/ds:Reference&gt;
+	&lt;/ds:SignedInfo&gt;
+	&lt;ds:SignatureValue&gt;
+H8OPGTj0y2YJZCffwYcsK+xNWBzzAyr3WY/JsqdKzvs/pGt7MUF6j85DNld2E6d+
+6eGAYvmjtkbbeID53BAWSwDSpbP1XE8tUIoUHc8ttiQJriUxUPUTkXiijhV8NJUb
+d2oafc2GMywqbjmJjvLDvmIpo/2hm+m+BreAnebE1Tu/o/qLYGCMKD7GbEXWw7NM
+eio5aL0eIRcDnkhqodyAcKHuyIKhaAC4v6rTR0OakRdy7MS3x8sjJLJu6SK/vLb+
+k0MQLbz9Ug7uwqBtWzON2d6y1R+ValQxBp15u9gz0qGRCQPwnsng2KFoR71NGdP2
+7GlRdGeb5BA4oH8SxqDILg==
+	&lt;/ds:SignatureValue&gt;
+	&lt;ds:KeyInfo&gt;
+		&lt;ds:KeyValue&gt;
+			&lt;ds:RSAKeyValue&gt;
+				&lt;ds:Modulus&gt;
+sIVTDP8s2rUw/JmIhwIf98Ml3ruSQP70WNVgVVt5zMJCu01Z9YuKROKJ4g+gl/nt
+868nScwtFLSuHlb+gbvuPy+OZz2upyiraY7UbRyHWBK4Hb4IsOxCd485PzQRfdSb
+rl0N/7Ak5TIA42eSSYMN7qnLm4/giozvpf9lWyMPi7HsoJb7BVkSd5SRENsJ4Do9
+UqhiaQuCOahTERVlZfjXvMJGFz3W6kir9WpHwxzcJGEQwLVYq8yem/OhhdjV96Eb
+0CdZ52IqmRdVAJipjl6P91dgHESd/M979AShIWhVbklFd/zhwOMw5e1S0qZEo/RD
+YezHqYuxkChbrHfcjb1v2w==
+				&lt;/ds:Modulus&gt;
+				&lt;ds:Exponent&gt;AQAB&lt;/ds:Exponent&gt;
+			&lt;/ds:RSAKeyValue&gt;
+		&lt;/ds:KeyValue&gt;
+		&lt;ds:X509Data&gt;
+			&lt;ds:X509IssuerSerial&gt;
+				&lt;ds:X509IssuerName&gt;CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA, OU=ENTIDAD DE CERTIFICACION DE INFORMACION, O=SECURITY DATA S.A. 2, C=EC&lt;/ds:X509IssuerName&gt;
+				&lt;ds:X509SerialNumber&gt;1172091537&lt;/ds:X509SerialNumber&gt;
+			&lt;/ds:X509IssuerSerial&gt;
+			&lt;ds:X509SubjectName&gt;C=EC, O=SECURITY DATA S.A. 2, OU=ENTIDAD DE CERTIFICACION DE INFORMACION, 2.5.4.5=070921232459, CN=IVONNE JUDITH FRANCO PAREDES&lt;/ds:X509SubjectName&gt;
+			&lt;ds:X509Certificate&gt;
+MIIMETCCCfmgAwIBAgIERdyykTANBgkqhkiG9w0BAQsFADCBmTELMAkGA1UEBhMC
+RUMxHTAbBgNVBAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMTAwLgYDVQQLDCdFTlRJ
+REFEIERFIENFUlRJRklDQUNJT04gREUgSU5GT1JNQUNJT04xOTA3BgNVBAMMMEFV
+VE9SSURBRCBERSBDRVJUSUZJQ0FDSU9OIFNVQkNBLTIgU0VDVVJJVFkgREFUQTAe
+Fw0yMTA5MDgwNDE1MDdaFw0yNjA5MDgwNDE1MDdaMIGcMSUwIwYDVQQDDBxJVk9O
+TkUgSlVESVRIIEZSQU5DTyBQQVJFREVTMRUwEwYDVQQFEwwwNzA5MjEyMzI0NTkx
+MDAuBgNVBAsMJ0VOVElEQUQgREUgQ0VSVElGSUNBQ0lPTiBERSBJTkZPUk1BQ0lP
+TjEdMBsGA1UECgwUU0VDVVJJVFkgREFUQSBTLkEuIDIxCzAJBgNVBAYTAkVDMIIB
+IjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsIVTDP8s2rUw/JmIhwIf98Ml
+3ruSQP70WNVgVVt5zMJCu01Z9YuKROKJ4g+gl/nt868nScwtFLSuHlb+gbvuPy+O
+Zz2upyiraY7UbRyHWBK4Hb4IsOxCd485PzQRfdSbrl0N/7Ak5TIA42eSSYMN7qnL
+m4/giozvpf9lWyMPi7HsoJb7BVkSd5SRENsJ4Do9UqhiaQuCOahTERVlZfjXvMJG
+Fz3W6kir9WpHwxzcJGEQwLVYq8yem/OhhdjV96Eb0CdZ52IqmRdVAJipjl6P91dg
+HESd/M979AShIWhVbklFd/zhwOMw5e1S0qZEo/RDYezHqYuxkChbrHfcjb1v2wID
+AQABo4IHWjCCB1YwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBSMusoRV3glgB1r
+CktVv42uYt29jzBZBggrBgEFBQcBAQRNMEswSQYIKwYBBQUHMAGGPWh0dHA6Ly9v
+Y3NwZ3cuc2VjdXJpdHlkYXRhLm5ldC5lYy9lamJjYS9wdWJsaWN3ZWIvc3RhdHVz
+L29jc3Awgc8GA1UdLgSBxzCBxDCBwaCBvqCBu4aBuGxkYXA6Ly9sZGFwc2RjYTIu
+c2VjdXJpdHlkYXRhLm5ldC5lYy9DTj1BVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lP
+TiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEsT1U9RU5USURBRCBERSBDRVJUSUZJQ0FD
+SU9OIERFIElORk9STUFDSU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1FQz9k
+ZWx0YVJldm9jYXRpb25MaXN0P2Jhc2UwHwYDVR0RBBgwFoEUaWZyYW5jb0BlbHJv
+c2Fkby5jb20wggESBgNVHSAEggEJMIIBBTBgBgorBgEEAYKmcgIKMFIwUAYIKwYB
+BQUHAgIwRB5CAEMAZQByAHQAaQBmAGkAYwBhAGQAbwAgAGQAZQAgAE0AaQBlAG0A
+YgByAG8AIABkAGUAIABFAG0AcAByAGUAcwBhMIGgBgorBgEEAYKmcgIEMIGRMIGO
+BggrBgEFBQcCARaBgWh0dHBzOi8vd3d3LnNlY3VyaXR5ZGF0YS5uZXQuZWMvd3At
+Y29udGVudC9kb3dubG9hZHMvTm9ybWF0aXZhcy9QX2RlX0NlcnRpZmljYWRvcy9Q
+b2xpdGljYXMgZGUgQ2VydGlmaWNhZG8gTWllbWJybyBkZSBFbXByZXNhLnBkZjCC
+AqIGA1UdHwSCApkwggKVMIHloEGgP4Y9aHR0cDovL29jc3Bndy5zZWN1cml0eWRh
+dGEubmV0LmVjL2VqYmNhL3B1YmxpY3dlYi9zdGF0dXMvb2NzcKKBn6SBnDCBmTE5
+MDcGA1UEAwwwQVVUT1JJREFEIERFIENFUlRJRklDQUNJT04gU1VCQ0EtMiBTRUNV
+UklUWSBEQVRBMTAwLgYDVQQLDCdFTlRJREFEIERFIENFUlRJRklDQUNJT04gREUg
+SU5GT1JNQUNJT04xHTAbBgNVBAoMFFNFQ1VSSVRZIERBVEEgUy5BLiAyMQswCQYD
+VQQGEwJFQzCBx6CBxKCBwYaBvmxkYXA6Ly9sZGFwc2RjYTIuc2VjdXJpdHlkYXRh
+Lm5ldC5lYy9DTj1BVVRPUklEQUQgREUgQ0VSVElGSUNBQ0lPTiBTVUJDQS0yIFNF
+Q1VSSVRZIERBVEEsT1U9RU5USURBRCBERSBDRVJUSUZJQ0FDSU9OIERFIElORk9S
+TUFDSU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIsQz1FQz9jZXJ0aWZpY2F0ZVJl
+dm9jYXRpb25MaXN0P2Jhc2UwgeCggd2ggdqGgddodHRwczovL3BvcnRhbC1vcGVy
+YWRvcjIuc2VjdXJpdHlkYXRhLm5ldC5lYy9lamJjYS9wdWJsaWN3ZWIvd2ViZGlz
+dC9jZXJ0ZGlzdD9jbWQ9Y3JsJmlzc3Vlcj1DTj1BVVRPUklEQUQgREUgQ0VSVElG
+SUNBQ0lPTiBTVUJDQS0yIFNFQ1VSSVRZIERBVEEsT1U9RU5USURBRCBERSBDRVJU
+SUZJQ0FDSU9OIERFIElORk9STUFDSU9OLE89U0VDVVJJVFkgREFUQSBTLkEuIDIs
+Qz1FQzAdBgNVHQ4EFgQUXxRN0nCb7ss/cXaNWPb75sgATpMwKwYDVR0QBCQwIoAP
+MjAyMTA5MDgwNDE1MDdagQ8yMDI2MDkwODA0MTUwN1owCwYDVR0PBAQDAgXgMB0G
+CisGAQQBgqZyAwUEDwwNQURNSU5JU1RSQURPUjAaBgorBgEEAYKmcgMBBAwMCjA5
+MTYwNjY4OTcwGQYKKwYBBAGCpnIDCQQLDAlHVUFZQVFVSUwwEQYKKwYBBAGCpnID
+IgQDDAEuMD0GCisGAQQBgqZyAwcELwwtQVYuIDkgREUgT0NUVUJSRSA3MjkgWSBC
+T1lBQ0EgLSBHQVJDSUEgQVZJTEVTMB0GCisGAQQBgqZyAwIEDwwNSVZPTk5FIEpV
+RElUSDAfBgorBgEEAYKmcgMgBBEMDzAwMTAwMjAwMDE0Njk5NDATBgorBgEEAYKm
+cgMhBAUMA1BGWDAXBgorBgEEAYKmcgMMBAkMB0VDVUFET1IwFgYKKwYBBAGCpnID
+AwQIDAZGUkFOQ08wKgYKKwYBBAGCpnIDCgQcDBpDT1JQT1JBQ0lPTiBFTCBST1NB
+RE8gUy5BLjAdBgorBgEEAYKmcgMLBA8MDTA5OTAwMDQxOTYwMDEwEgYKKwYBBAGC
+pnIDHQQEDAJObzAXBgorBgEEAYKmcgMEBAkMB1BBUkVERVMwHAYKKwYBBAGCpnID
+CAQODAw1OTM5Njg4MjA3NDEwDQYJKoZIhvcNAQELBQADggIBAHhdhAIM4IqdliV3
+RuaH3/fJlLUGpeUqBuwoYbsHFzryPo4wTBxiJl9Wu5KL5+Ud9tQ+SXNTPR2ORKhh
+nKnC2l1XcDUg2T4LG1qXHn0jCSpD/2omW+K56MCVeQT9QZXXJy2/jJPuM/alSFaB
+DpYJ6lbs7/cfrhP+FFy+eg6HMD8B2ADQqFKpWQHOar1mGhRLtCApxyKNHsymervf
+D2pdgrB7lDlOqkyGL+uGf4LivKEowDiGHa05MlDwn/uwPZDfZ4Wp3e8iak1LN+4l
+OIgxSCM66qscSlfAu07q94fzq9y2MXNljjwq0Km0dZqnc+wMF8qaEWkJyknmvWAy
+kw/cHGbbdVDZCP57JhbVIeN02J4JYc2wiIQGf1juRUjssZ2cJJP7Jh4pecFB0twz
+K9LpVNKPRC4rfryHBs1BuwNkGHrTTWzYspXTYkmEDbryM8jX6fMLV0pByVqahegN
+laXYZ6b0JGjUHwxwJMg8Vop7Z5qSggDGTGCgDq3lc+HRKZfQ2OHwt4coTzWzZyHd
+83JD8cIh15ssSXYLzScvj5ldIs9Sy9Sygf4gjLqetdNkluQ2rPDyW339uD2doDPV
+Uz4CZ4QN5JhXMWdE3m+cEun4iVV7MUI7x1/dtgIB3bFEhnzCpC7bMVEXECekqdHe
+ybP8oahATH+vtk8HV2ZJgCPhZgIs
+			&lt;/ds:X509Certificate&gt;
+		&lt;/ds:X509Data&gt;
+	&lt;/ds:KeyInfo&gt;
+	&lt;ds:Object&gt;
+		&lt;etsi:QualifyingProperties xmlns:etsi="http://uri.etsi.org/01903/v1.3.2#" Target="#Signature-1584237331"&gt;
+			&lt;etsi:SignedProperties Id="SignedProperties-1298913795"&gt;
+				&lt;etsi:SignedSignatureProperties&gt;
+					&lt;etsi:SigningTime&gt;2025-04-17T14:58:35.088Z&lt;/etsi:SigningTime&gt;
+					&lt;etsi:SigningCertificate&gt;
+						&lt;etsi:Cert&gt;
+							&lt;etsi:CertDigest&gt;
+								&lt;ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/&gt;
+								&lt;ds:DigestValue&gt;crmOKugWwK7oNaYKaQsMz0ywk5o=&lt;/ds:DigestValue&gt;
+							&lt;/etsi:CertDigest&gt;
+							&lt;etsi:IssuerSerial&gt;
+								&lt;ds:X509IssuerName&gt;CN=AUTORIDAD DE CERTIFICACION SUBCA-2 SECURITY DATA, OU=ENTIDAD DE CERTIFICACION DE INFORMACION, O=SECURITY DATA S.A. 2, C=EC&lt;/ds:X509IssuerName&gt;
+								&lt;ds:X509SerialNumber&gt;1172091537&lt;/ds:X509SerialNumber&gt;
+							&lt;/etsi:IssuerSerial&gt;
+						&lt;/etsi:Cert&gt;
+					&lt;/etsi:SigningCertificate&gt;
+				&lt;/etsi:SignedSignatureProperties&gt;
+			&lt;/etsi:SignedProperties&gt;
+		&lt;/etsi:QualifyingProperties&gt;
+	&lt;/ds:Object&gt;
+&lt;/ds:Signature&gt;&lt;/comprobanteRetencion&gt;</comprobante>
+  <mensajes />
+</autorizacion>
