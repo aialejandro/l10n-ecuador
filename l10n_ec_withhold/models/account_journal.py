@@ -12,15 +12,12 @@ class AccountJournal(models.Model):
         string="Withholding Type",
     )
 
-    @api.onchange("type")
-    def _onchange_type(self):
-        res = super()._onchange_type()
-        if self.type != "general":
-            self.l10n_ec_withholding_type = False
-        return res
-
     @api.onchange("type", "l10n_ec_withholding_type")
     def _onchange_l10n_ec_withholding_type(self):
+        # Reset withholding type if journal type is not 'general'
+        if self.type != "general":
+            self.l10n_ec_withholding_type = False
+        # Set use_documents for purchase withholdings
         if self.country_code == "EC" and self.type == "general":
             self.l10n_latam_use_documents = self.l10n_ec_withholding_type == "purchase"
 
