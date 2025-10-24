@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Definición del reporte de impresión de cheques -->
+    <record id="action_report_check_print" model="ir.actions.report">
+        <field name="name">Imprimir Cheques</field>
+        <field name="model">account.payment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_ec_check.report_check_print</field>
+        <field name="report_file">l10n_ec_check.report_check_print</field>
+        <field name="print_report_name">'Cheque - %s' % (object.name)</field>
+        <!-- NO usar binding para que no aparezca en el menú de impresión automáticamente -->
+    </record>
+    
+    <!-- Template del cheque -->
+    <template id="report_check_print">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="payment">
+                <t t-set="check_format" t-value="payment.l10n_ec_check_format_id"/>
+                
+                <div class="page" t-attf-style="width: {{check_format.paper_width or 215.9}}mm; height: {{check_format.paper_height or 279.4}}mm;">
+                    
+                    <!-- Aplicar orientación y márgenes -->
+                    <div t-attf-style="padding-top: {{check_format.margin_top or 0}}mm; padding-bottom: {{check_format.margin_bottom or 0}}mm; padding-left: {{check_format.margin_left or 0}}mm; padding-right: {{check_format.margin_right or 0}}mm; position: relative; height: 100%;">
+                        
+                        <!-- Renderizar cada campo del formato -->
+                        <t t-foreach="check_format.format_field_ids.sorted(key=lambda f: f.sequence)" t-as="field">
+                            <t t-set="field_value" t-value="field.get_field_value(payment)"/>
+                            
+                            <!-- Solo mostrar si tiene valor -->
+                            <t t-if="field_value and field.visible">
+                                <div t-attf-style="position: absolute; left: {{field.x_position or 0}}mm; top: {{field.y_position or 0}}mm; width: {{field.width or 50}}mm; height: {{field.height or 10}}mm; font-size: {{field.font_size or 12}}pt; text-align: {{field.text_align or 'left'}}; {{field.font_weight == 'bold' and 'font-weight: bold;' or ''}}">
+                                    <span t-esc="field_value"/>
+                                </div>
+                            </t>
+                        </t>
+                        
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+    
+</odoo>

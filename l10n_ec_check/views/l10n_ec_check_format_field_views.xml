@@ -13,6 +13,7 @@
                 <field name="label"/>
                 <field name="field_type"/>
                 <field name="data_source"/>
+                <field name="custom_value" optional="show"/>
                 <field name="x_position" string="X (mm)"/>
                 <field name="y_position" string="Y (mm)"/>
                 <field name="width" string="Ancho (mm)"/>
@@ -71,7 +72,8 @@
                     <group>
                         <group string="Configuraciones Específicas" invisible="field_type not in ['number', 'currency', 'date']">
                             <field name="decimal_places" invisible="field_type not in ['number', 'currency']"/>
-                            <field name="date_format" invisible="field_type != 'date'"/>
+                            <field name="show_currency_symbol" invisible="field_type != 'currency'" widget="boolean_toggle"/>
+                            <field name="date_format" invisible="field_type != 'date'" placeholder="ej: %Y %B %d"/>
                         </group>
                         <group string="Transformaciones">
                             <field name="uppercase" invisible="field_type != 'text'"/>

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Ecuador - Gestión e Impresión de Cheques por Formato Bancario',
-    'version': '18.0.1.0.0',
+    'version': '18.0.1.15.0',
     'category': 'Accounting/Localizations',
-    'summary': 'Gestión de formatos de cheques específicos por banco en Ecuador',
+    'summary': 'Gestión de cheques con numeración automática, control de duplicados y tracking completo - Ecuador',
     'description': """
 Gestión e Impresión de Cheques por Formato Bancario - Ecuador
 ==============================================================
@@ -60,7 +60,6 @@ Características Especiales
         'l10n_latam_check',
         'l10n_ec',  # Módulo base de Ecuador (si existe)
         'web',
-        'account_check_printing',
     ],
     'data': [
         # Security
@@ -74,16 +73,18 @@ Características Especiales
         'views/l10n_ec_check_format_field_views.xml',
         'views/l10n_ec_check_format_views.xml',
         'views/res_bank_views.xml',
+        'views/res_partner_bank_views.xml',
         'views/account_journal_views.xml',
         'views/account_payment_views.xml',
         'views/l10n_ec_check_menus.xml',
         
-        # Reports (comentadas temporalmente hasta crearlas)
-        # 'report/l10n_ec_check_report_views.xml',
-        # 'report/l10n_ec_check_templates.xml',
+        # Reports
+        'report/l10n_ec_check_report.xml',
+        'report/report_payment_receipt_templates.xml',
         
         # Wizards
         'wizards/l10n_ec_check_format_wizard_views.xml',
+        'wizards/reset_check_wizard_views.xml',
     ],
     # 'assets': {
     #     'web.assets_backend': [

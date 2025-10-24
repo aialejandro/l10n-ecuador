@@ -19,8 +19,8 @@ class L10nEcCheckFormat(models.Model):
     bank_id = fields.Many2one(
         'res.bank',
         string='Banco',
-        required=True,
-        help='Banco al que pertenece este formato'
+        required=False,
+        help='Banco al que pertenece este formato. Si no se especifica, el formato es genérico para todos los bancos.'
     )
     
     is_default = fields.Boolean(
@@ -257,7 +257,7 @@ class L10nEcCheckFormat(models.Model):
             'type': 'ir.actions.act_window',
             'name': _('Editar Campos del Formato: %s') % self.name,
             'res_model': 'l10n_ec.check.format.field',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('format_id', '=', self.id)],
             'context': {
                 'default_format_id': self.id,

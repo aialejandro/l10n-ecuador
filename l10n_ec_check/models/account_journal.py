@@ -26,11 +26,16 @@ class AccountJournal(models.Model):
         """Obtener el formato de cheque para este diario"""
         self.ensure_one()
         
-        # Primero intentar con el formato específico del diario
+        # Prioridad 1: Formato específico del diario
         if self.l10n_ec_check_format_id and self.l10n_ec_check_format_id.active:
             return self.l10n_ec_check_format_id
         
-        # Luego intentar con el formato por defecto del banco
+        # Prioridad 2: Formato de la cuenta bancaria asociada al diario
+        if self.bank_account_id and self.bank_account_id.l10n_ec_check_format_id:
+            if self.bank_account_id.l10n_ec_check_format_id.active:
+                return self.bank_account_id.l10n_ec_check_format_id
+        
+        # Prioridad 3: Formato por defecto del banco
         if self.bank_id and self.bank_id.default_check_format_id:
             return self.bank_id.default_check_format_id
         

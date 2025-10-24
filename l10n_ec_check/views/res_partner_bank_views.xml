@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Vista de formulario extendida para res.partner.bank -->
+    <record id="view_partner_bank_form_inherit_check_format" model="ir.ui.view">
+        <field name="name">res.partner.bank.form.inherit.check.format</field>
+        <field name="model">res.partner.bank</field>
+        <field name="inherit_id" ref="base.view_partner_bank_form"/>
+        <field name="arch" type="xml">
+            <!-- Agregar el campo después del campo bank_id -->
+            <field name="bank_id" position="after">
+                <field name="l10n_ec_check_format_id" 
+                       options="{'no_create': True, 'no_open': True}"/>
+                <field name="l10n_ec_check_next_number" 
+                       class="oe_inline"
+                       widget="integer"/>
+                <div class="alert alert-info" role="alert" 
+                     style="margin-top: 8px; margin-bottom: 8px;">
+                    <i class="fa fa-info-circle" title="Información"/> 
+                    <strong>Siguiente Número:</strong> Puede modificar este número si necesita saltar cheques o cambiar a un nuevo talonario. 
+                    El sistema <strong>verificará automáticamente</strong> que no haya duplicados al imprimir.
+                </div>
+                <field name="l10n_ec_check_last_number" readonly="1"/>
+                <field name="l10n_ec_total_checks_printed" readonly="1"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

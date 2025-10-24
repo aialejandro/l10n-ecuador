@@ -97,15 +97,15 @@
                                     <field name="label"/>
                                     <field name="field_type"/>
                                     <field name="data_source"/>
+                                    <field name="custom_value" optional="show"/>
                                     <field name="x_position"/>
                                     <field name="y_position"/>
                                     <field name="width"/>
                                     <field name="height"/>
                                     <field name="font_size"/>
                                     <field name="is_required" widget="boolean_toggle"/>
-                                    <button name="%(action_l10n_ec_check_format_field_form)d" type="action" 
-                                            string="Configurar" icon="fa-cog" class="btn-secondary"
-                                            context="{'default_format_id': parent.id}"/>
+                                    <button name="action_configure" type="object" 
+                                            string="Configurar" icon="fa-cog" class="btn-secondary"/>
                                 </list>
                             </field>
                         </page>

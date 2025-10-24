@@ -15,6 +15,11 @@
                 <button name="action_preview_check" type="object" string="Previsualizar Cheque" 
                         class="btn-secondary" icon="fa-eye"
                         invisible="can_print_check == False"/>
+                <button name="action_reset_check_printed" type="object" string="Resetear Impresión" 
+                        class="btn-warning" icon="fa-refresh"
+                        groups="base.group_system"
+                        invisible="check_printed == False or payment_method_code != 'check_printing'"
+                        confirm="¿Está seguro que desea resetear el estado de impresión? Esto permitirá reimprimir el cheque."/>
             </xpath>
             
             <!-- Mostrar información del formato de cheque -->
@@ -22,6 +27,18 @@
                 <field name="l10n_ec_check_format_id" readonly="1"
                        invisible="payment_method_code != 'check_printing'"/>
                 <field name="can_print_check" invisible="1"/>
+            </xpath>
+            
+            <!-- Agregar información de impresión de cheque -->
+            <xpath expr="//field[@name='payment_method_line_id']" position="after">
+                <field name="l10n_ec_check_number" readonly="1"
+                       invisible="payment_method_code != 'check_printing' or check_printed == False"/>
+                <field name="check_printed" readonly="1"
+                       invisible="payment_method_code != 'check_printing'"/>
+                <field name="check_print_date" readonly="1"
+                       invisible="check_printed == False or payment_method_code != 'check_printing'"/>
+                <field name="check_printed_by" readonly="1"
+                       invisible="check_printed == False or payment_method_code != 'check_printing'"/>
             </xpath>
         </field>
     </record>
@@ -33,7 +50,10 @@
         <field name="inherit_id" ref="account.view_account_payment_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='currency_id']" position="after">
+                <field name="l10n_ec_check_number" string="N° Cheque" optional="show"/>
                 <field name="l10n_ec_check_format_id" string="Formato de Cheque" optional="hide"/>
+                <field name="check_printed" string="Cheque Impreso" optional="hide"/>
+                <field name="check_print_date" string="Fecha Impresión" optional="hide"/>
                 <field name="can_print_check" invisible="1"/>
             </xpath>
         </field>

@@ -2,6 +2,7 @@
 
 from . import models
 from . import wizards
+from . import report
 
 # Función comentada temporalmente
 # def _post_init_hook(cr, registry):

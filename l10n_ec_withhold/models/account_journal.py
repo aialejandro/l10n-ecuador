@@ -12,6 +12,18 @@ class AccountJournal(models.Model):
         string="Withholding Type",
     )
 
+    @api.onchange("type")
+    def _onchange_type(self):
+        # Intentar llamar al padre si existe el método
+        if hasattr(super(), '_onchange_type'):
+            res = super()._onchange_type()
+        else:
+            res = {}
+        
+        if self.type != "general":
+            self.l10n_ec_withholding_type = False
+        return res
+
     @api.onchange("type", "l10n_ec_withholding_type")
     def _onchange_l10n_ec_withholding_type(self):
         # Reset withholding type if journal type is not 'general'

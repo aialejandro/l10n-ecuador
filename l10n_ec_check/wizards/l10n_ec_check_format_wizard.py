@@ -74,20 +74,36 @@ class L10nEcCheckFormatWizard(models.TransientModel):
                 for field in record.format_field_ids:
                     value = 'Valor de ejemplo'
                     if record.payment_id:
+                        # Usar el método get_field_value que respeta todas las configuraciones
                         value = field.get_field_value(record.payment_id) or 'Sin valor'
                     elif field.custom_value:
                         value = field.custom_value
-                    elif field.data_source == 'payment.partner_id.name':
-                        value = 'ACME Corporation S.A.'
-                    elif field.data_source == 'payment.amount':
-                        if field.field_type == 'currency':
-                            value = '$ 1,250.50'
-                        else:
-                            value = 'MIL DOSCIENTOS CINCUENTA CON 50/100'
-                    elif field.data_source == 'payment.date':
-                        value = '15/08/2025'
-                    elif field.data_source == 'payment.check_number':
-                        value = '001234'
+                    else:
+                        # Generar valores de ejemplo que respeten la configuración del campo
+                        if field.data_source == 'payment.partner_id.name':
+                            value = 'ACME Corporation S.A.'
+                        elif field.data_source == 'payment.amount':
+                            if field.field_type == 'currency':
+                                # Respetar la configuración de show_currency_symbol
+                                amount_value = f'{1250.50:.{field.decimal_places}f}'
+                                if field.show_currency_symbol:
+                                    value = f'$ {amount_value}'
+                                else:
+                                    value = amount_value
+                            else:
+                                value = 'MIL DOSCIENTOS CINCUENTA CON 50/100'
+                        elif field.data_source == 'payment.date':
+                            # Usar el formato de fecha configurado
+                            from datetime import datetime
+                            sample_date = datetime(2025, 9, 15)
+                            try:
+                                value = sample_date.strftime(field.date_format)
+                                # Capitalizar nombres de meses usando el método del campo
+                                value = field._capitalize_month_names(value)
+                            except:
+                                value = '15/09/2025'
+                        elif field.data_source == 'payment.check_number':
+                            value = '001234'
                     
                     # Crear div para cada campo
                     field_style = []

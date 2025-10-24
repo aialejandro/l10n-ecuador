@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Vista de formulario para el wizard de reseteo -->
+    <record id="view_l10n_ec_check_reset_wizard_form" model="ir.ui.view">
+        <field name="name">l10n_ec.check.reset.wizard.form</field>
+        <field name="model">l10n_ec.check.reset.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Confirmar Reseteo de Impresión de Cheque">
+                <group>
+                    <div class="alert alert-warning" role="alert" style="margin-bottom: 16px;">
+                        <i class="fa fa-exclamation-triangle"/> <strong>ADVERTENCIA:</strong>
+                        <p style="margin-top: 8px;">
+                            Está a punto de resetear el estado de impresión de <strong><field name="payment_count"/> pago(s)</strong>.
+                            Esta acción permitirá reimprimir los cheques.
+                        </p>
+                        <p style="margin-top: 8px; margin-bottom: 0;">
+                            Los números de cheque asignados se mantendrán para evitar duplicados.
+                            Toda la acción quedará registrada en el historial.
+                        </p>
+                    </div>
+                </group>
+                
+                <group>
+                    <field name="payment_details" nolabel="1" colspan="2"/>
+                </group>
+                
+                <separator string="Validación de Seguridad"/>
+                
+                <group>
+                    <div class="alert alert-info" role="alert" style="margin-bottom: 16px;">
+                        <i class="fa fa-lock"/> Por seguridad, debe ingresar su contraseña de administrador para confirmar esta acción.
+                    </div>
+                </group>
+                
+                <group>
+                    <field name="password" password="True" placeholder="Ingrese su contraseña" required="1"/>
+                    <field name="payment_ids" invisible="1"/>
+                </group>
+                
+                <footer>
+                    <button name="action_confirm_reset" 
+                            string="Confirmar Reseteo" 
+                            type="object" 
+                            class="btn-primary"
+                            icon="fa-check"/>
+                    <button string="Cancelar" 
+                            special="cancel" 
+                            class="btn-secondary"
+                            icon="fa-times"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+</odoo>
