@@ -54,6 +54,14 @@ class AccountPayment(models.Model):
         help='Número del cheque impreso'
     )
     
+    # Beneficiario del cheque (editable)
+    l10n_ec_check_beneficiary = fields.Char(
+        string='Beneficiario del Cheque',
+        tracking=True,
+        copy=True,
+        help='Nombre del beneficiario que aparecerá impreso en el cheque. Por defecto toma el nombre del contacto.'
+    )
+    
     @api.depends('journal_id', 'journal_id.l10n_ec_check_format_id',
                  'journal_id.bank_account_id', 'journal_id.bank_account_id.l10n_ec_check_format_id',
                  'journal_id.bank_id', 'journal_id.bank_id.default_check_format_id',
@@ -81,9 +89,25 @@ class AccountPayment(models.Model):
                 not payment.check_printed
             )
     
+    @api.onchange('partner_id', 'payment_method_code')
+    def _onchange_partner_set_beneficiary(self):
+        """Establecer el beneficiario automáticamente cuando se selecciona el contacto"""
+        for payment in self:
+            # Solo establecer si es método de cheque y hay un contacto
+            if payment.payment_method_code == 'check_printing' and payment.partner_id:
+                # Siempre actualizar el beneficiario con el nombre del nuevo partner
+                payment.l10n_ec_check_beneficiary = payment.partner_id.name
+    
     @api.model_create_multi
     def create(self, vals_list):
-        """Override create para asegurar que se asigne formato de cheque"""
+        """Override create para asegurar que se asigne formato de cheque y beneficiario"""
+        # Establecer beneficiario por defecto si no está presente
+        for vals in vals_list:
+            if vals.get('payment_method_code') == 'check_printing' and vals.get('partner_id'):
+                if not vals.get('l10n_ec_check_beneficiary'):
+                    partner = self.env['res.partner'].browse(vals['partner_id'])
+                    vals['l10n_ec_check_beneficiary'] = partner.name
+        
         payments = super().create(vals_list)
         # Forzar recálculo del formato para pagos con cheque
         check_payments = payments.filtered(lambda p: p.payment_method_code == 'check_printing')
@@ -93,6 +117,32 @@ class AccountPayment(models.Model):
     
     def write(self, vals):
         """Override write para recalcular formato si cambia el diario o método de pago"""
+        # Registrar cambio de beneficiario en el log
+        if 'l10n_ec_check_beneficiary' in vals:
+            for payment in self:
+                if payment.l10n_ec_check_beneficiary != vals['l10n_ec_check_beneficiary']:
+                    old_beneficiary = payment.l10n_ec_check_beneficiary or 'Sin beneficiario'
+                    new_beneficiary = vals['l10n_ec_check_beneficiary'] or 'Sin beneficiario'
+                    payment.message_post(
+                        body=_(
+                            '📝 CAMBIO DE BENEFICIARIO DEL CHEQUE\n'
+                            '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'
+                            'Modificado por: %s\n'
+                            'Fecha: %s\n'
+                            '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'
+                            'Beneficiario anterior: %s\n'
+                            'Beneficiario nuevo: %s\n'
+                            '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'
+                        ) % (
+                            self.env.user.name,
+                            fields.Datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                            old_beneficiary,
+                            new_beneficiary
+                        ),
+                        subject=_('Cambio de Beneficiario del Cheque'),
+                        message_type='notification',
+                    )
+        
         result = super().write(vals)
         # Si cambió el diario o el método de pago, recalcular formato
         if 'journal_id' in vals or 'payment_method_code' in vals or 'payment_method_line_id' in vals:

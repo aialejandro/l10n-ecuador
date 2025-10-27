@@ -26,6 +26,11 @@
             <xpath expr="//field[@name='payment_method_line_id']" position="after">
                 <field name="l10n_ec_check_format_id" readonly="1"
                        invisible="payment_method_code != 'check_printing'"/>
+                <field name="l10n_ec_check_beneficiary"
+                       invisible="payment_method_code != 'check_printing'"
+                       readonly="check_printed == True"
+                       placeholder="Nombre del beneficiario del cheque"
+                       required="payment_method_code == 'check_printing'"/>
                 <field name="can_print_check" invisible="1"/>
             </xpath>
             
@@ -50,12 +55,48 @@
         <field name="inherit_id" ref="account.view_account_payment_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='currency_id']" position="after">
+                <field name="l10n_ec_check_beneficiary" 
+                       string="Beneficiario" 
+                       optional="show"/>
                 <field name="l10n_ec_check_number" string="N° Cheque" optional="show"/>
                 <field name="l10n_ec_check_format_id" string="Formato de Cheque" optional="hide"/>
                 <field name="check_printed" string="Cheque Impreso" optional="hide"/>
                 <field name="check_print_date" string="Fecha Impresión" optional="hide"/>
-                <field name="can_print_check" invisible="1"/>
+                <field name="can_print_check" column_invisible="1"/>
             </xpath>
+        </field>
+    </record>
+
+    <!-- Heredar vista de búsqueda para agregar filtro por beneficiario -->
+    <record id="view_account_payment_search_check_beneficiary" model="ir.ui.view">
+        <field name="name">account.payment.search.check.beneficiary</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_search"/>
+        <field name="arch" type="xml">
+            <!-- Agregar campo de búsqueda por beneficiario -->
+            <field name="partner_id" position="after">
+                <field name="l10n_ec_check_beneficiary" string="Beneficiario"
+                       filter_domain="[('l10n_ec_check_beneficiary', 'ilike', self)]"/>
+            </field>
+            
+            <!-- Agregar filtro en el grupo de filtros -->
+            <filter name="outbound_filter" position="after">
+                <separator/>
+                <filter string="Cheques con Beneficiario" 
+                        name="filter_has_beneficiary"
+                        domain="[('l10n_ec_check_beneficiary', '!=', False), ('payment_method_code', '=', 'check_printing')]"/>
+                <filter string="Cheques Impresos" 
+                        name="filter_check_printed"
+                        domain="[('check_printed', '=', True), ('payment_method_code', '=', 'check_printing')]"/>
+            </filter>
+            
+            <!-- Agregar agrupación por beneficiario -->
+            <filter name="partner" position="after">
+                <filter string="Beneficiario" 
+                        name="group_by_beneficiary" 
+                        domain="[]" 
+                        context="{'group_by': 'l10n_ec_check_beneficiary'}"/>
+            </filter>
         </field>
     </record>
 

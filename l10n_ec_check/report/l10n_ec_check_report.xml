@@ -18,7 +18,7 @@
             <t t-foreach="docs" t-as="payment">
                 <t t-set="check_format" t-value="payment.l10n_ec_check_format_id"/>
                 
-                <div class="page" t-attf-style="width: {{check_format.paper_width or 215.9}}mm; height: {{check_format.paper_height or 279.4}}mm;">
+                <div class="page" t-attf-style="width: {{check_format.paper_width or 215.9}}mm; height: {{check_format.paper_height or 279.4}}mm; font-family: 'DejaVu Sans', Arial, sans-serif;">
                     
                     <!-- Aplicar orientación y márgenes -->
                     <div t-attf-style="padding-top: {{check_format.margin_top or 0}}mm; padding-bottom: {{check_format.margin_bottom or 0}}mm; padding-left: {{check_format.margin_left or 0}}mm; padding-right: {{check_format.margin_right or 0}}mm; position: relative; height: 100%;">
@@ -30,7 +30,7 @@
                             <!-- Solo mostrar si tiene valor -->
                             <t t-if="field_value and field.visible">
                                 <div t-attf-style="position: absolute; left: {{field.x_position or 0}}mm; top: {{field.y_position or 0}}mm; width: {{field.width or 50}}mm; height: {{field.height or 10}}mm; font-size: {{field.font_size or 12}}pt; text-align: {{field.text_align or 'left'}}; {{field.font_weight == 'bold' and 'font-weight: bold;' or ''}}">
-                                    <span t-esc="field_value"/>
+                                    <span t-out="field_value"/>
                                 </div>
                             </t>
                         </t>

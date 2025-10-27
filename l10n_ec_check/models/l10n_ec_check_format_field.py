@@ -296,6 +296,10 @@ class L10nEcCheckFormatField(models.Model):
             from .amount_to_text import number_to_text_es
             currency_name = payment.currency_id.name if payment.currency_id else 'DÓLARES'
             value = number_to_text_es(payment.amount, currency=currency_name)
+        # Manejar campo especial: beneficiario del cheque
+        elif self.data_source == 'payment.partner_id.name':
+            # Usar el beneficiario del cheque si está disponible, sino el partner
+            value = payment.l10n_ec_check_beneficiary or payment.partner_id.name or ''
         elif self.data_source == 'custom':
             value = self.custom_value or ''
         else:

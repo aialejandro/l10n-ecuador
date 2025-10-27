@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Ecuador - Gestión e Impresión de Cheques por Formato Bancario',
-    'version': '18.0.1.15.0',
+    'version': '18.0.1.20.0',
     'category': 'Accounting/Localizations',
     'summary': 'Gestión de cheques con numeración automática, control de duplicados y tracking completo - Ecuador',
     'description': """
