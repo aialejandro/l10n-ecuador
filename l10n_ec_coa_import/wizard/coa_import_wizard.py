@@ -143,7 +143,7 @@ class L10nEcCoaImportWizard(models.TransientModel):
                     "Detailed account preview is hidden. Download the template if you need to review the full data."
                 )
             )
-        summary = _("%s groups and %s accounts ready to import.") % (
+        summary = _("%s groups and %s leaf accounts ready to import. Parent accounts will be converted to groups automatically.") % (
             len(groups),
             len(accounts),
         )
@@ -460,11 +460,141 @@ class L10nEcCoaImportWizard(models.TransientModel):
                             account["group_code"],
                         )
                     )
-                account["reconcile"] = self._normalize_reconcile(account)
-                account["deprecated"] = bool(account.get("deprecated"))
+                # Note: reconcile and deprecated will be set after transformation
+                pass
 
+        # Transform accounts with children into groups
+        groups, accounts = self._transform_parent_accounts_to_groups(groups, accounts)
+        
+        # Now process account properties for the remaining leaf accounts
+        for account in accounts:
+            account["reconcile"] = self._normalize_reconcile(account)
+            account["deprecated"] = bool(account.get("deprecated"))
+        
         self._validate_duplicates(groups, accounts)
         return groups, accounts
+
+    def _transform_parent_accounts_to_groups(self, groups: List[Dict], accounts: List[Dict]) -> Tuple[List[Dict], List[Dict]]:
+        """
+        Transform accounts that have children into account groups, keeping only leaf accounts as actual accounts.
+        
+        Returns:
+            Tuple[List[Dict], List[Dict]]: Updated groups and accounts lists
+        """
+        if not accounts:
+            return groups, accounts
+            
+        # Build account hierarchy
+        account_index = {acc["code"]: acc for acc in accounts}
+        children_map = {}
+        parent_map = {}
+        
+        # Find parent-child relationships using a more sophisticated approach
+        sorted_codes = sorted(account_index.keys(), key=lambda x: (len(x), x))
+        
+        for account in accounts:
+            code = account["code"]
+            children_map[code] = []
+            parent_code = None
+            
+            # Try different strategies to find parent
+            # Strategy 1: Direct prefix match (most common)
+            for potential_parent_code in sorted_codes:
+                if (potential_parent_code != code 
+                    and code.startswith(potential_parent_code)
+                    and len(potential_parent_code) < len(code)):
+                    # Ensure it's a logical parent (not just any prefix)
+                    remaining = code[len(potential_parent_code):]
+                    if remaining.isdigit() or len(remaining) <= 3:  # Reasonable child suffix
+                        if not parent_code or len(potential_parent_code) > len(parent_code):
+                            parent_code = potential_parent_code
+            
+            # Strategy 2: For numeric codes, try progressive shortening
+            if not parent_code and code.isdigit():
+                for length in range(len(code) - 1, 0, -1):
+                    potential_parent = code[:length]
+                    if potential_parent in account_index:
+                        parent_code = potential_parent
+                        break
+            
+            if parent_code:
+                parent_map[code] = parent_code
+                children_map.setdefault(parent_code, []).append(code)
+        
+        # Identify accounts that have children (these become groups)
+        accounts_with_children = {code for code, children in children_map.items() if children}
+        
+        # Convert existing groups to a dict for easier manipulation
+        group_index = {group["code"]: group for group in groups}
+        
+        # Transform parent accounts into groups
+        accounts_to_remove = []
+        for account in accounts:
+            if account["code"] in accounts_with_children:
+                # This account has children, convert it to a group
+                parent_code = parent_map.get(account["code"])
+                group_parent = None
+                
+                # Find group parent (could be an existing group or another parent account)
+                if parent_code:
+                    if parent_code in group_index:
+                        group_parent = parent_code
+                    elif parent_code in accounts_with_children:
+                        group_parent = parent_code  # Will be converted to group too
+                
+                # Create the group
+                group_index[account["code"]] = {
+                    "code": account["code"],
+                    "name": account["name"],
+                    "parent_code": group_parent or False,
+                    "code_prefix_start": account["code"],
+                    "code_prefix_end": account["code"],
+                    "sequence": 10,
+                }
+                
+                # Mark account for removal
+                accounts_to_remove.append(account)
+        
+        # Remove converted accounts
+        remaining_accounts = [acc for acc in accounts if acc not in accounts_to_remove]
+        
+        # Update group references for remaining accounts
+        for account in remaining_accounts:
+            # Find the immediate parent group
+            parent_code = parent_map.get(account["code"])
+            while parent_code and parent_code not in group_index:
+                parent_code = parent_map.get(parent_code)
+            
+            if parent_code:
+                account["group_code"] = parent_code
+            elif account.get("group_code") and account["group_code"] not in group_index:
+                # Try to find a suitable group
+                account["group_code"] = self._match_group_code(account["code"], group_index) or False
+        
+        # Convert group_index back to list and assign sequences
+        updated_groups = list(group_index.values())
+        self._assign_group_sequences({g["code"]: g for g in updated_groups})
+        
+        # Validation: ensure we don't lose any codes
+        original_codes = {acc["code"] for acc in accounts}
+        remaining_codes = {acc["code"] for acc in remaining_accounts}
+        group_codes = {grp["code"] for grp in updated_groups}
+        transformed_codes = remaining_codes | group_codes
+        
+        if not original_codes.issubset(transformed_codes):
+            missing_codes = original_codes - transformed_codes
+            raise UserError(
+                _("Lost account codes during transformation: %s") % ", ".join(sorted(missing_codes))
+            )
+        
+        _logger.info(
+            "Account transformation completed: %d parent accounts → groups, %d leaf accounts → accounts, %d total groups",
+            len(accounts_to_remove),
+            len(remaining_accounts),
+            len(updated_groups)
+        )
+        
+        return updated_groups, remaining_accounts
 
     def _normalize_group_prefix_value(self, value):
         if value in (None, False):
