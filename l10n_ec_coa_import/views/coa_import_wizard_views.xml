@@ -29,9 +29,17 @@
                     <separator string="Configuration" invisible="state != 'configure'"/>
                     <group invisible="state != 'configure'" colspan="2">
                         <field name="summary_message" readonly="1"/>
+                        <field name="warning_message" nolabel="1" readonly="1" widget="text" modifiers="{'invisible': [['warning_message', '=', False]]}"/>
                         <field name="generated_template_id" readonly="1"/>
                         <field name="default_receivable_account_id"/>
                         <field name="default_payable_account_id"/>
+                        <field name="account_default_pos_receivable_account_id"/>
+                        <field name="income_currency_exchange_account_id"/>
+                        <field name="expense_currency_exchange_account_id"/>
+                        <field name="account_journal_early_pay_discount_loss_account_id"/>
+                        <field name="account_journal_early_pay_discount_gain_account_id"/>
+                        <field name="default_cash_difference_income_account_id"/>
+                        <field name="default_cash_difference_expense_account_id"/>
                         <field name="default_tax_sale_id"/>
                         <field name="default_tax_purchase_id"/>
                     </group>

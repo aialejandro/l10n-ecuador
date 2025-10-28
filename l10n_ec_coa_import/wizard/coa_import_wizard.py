@@ -82,6 +82,34 @@ class L10nEcCoaImportWizard(models.TransientModel):
         "account.tax",
         string="Default Sales Tax",
     )
+    account_default_pos_receivable_account_id = fields.Many2one(
+        "account.account",
+        string="POS Default Receivable",
+    )
+    income_currency_exchange_account_id = fields.Many2one(
+        "account.account",
+        string="Currency Exchange Gain",
+    )
+    expense_currency_exchange_account_id = fields.Many2one(
+        "account.account",
+        string="Currency Exchange Loss",
+    )
+    account_journal_early_pay_discount_loss_account_id = fields.Many2one(
+        "account.account",
+        string="Early Payment Discount Loss",
+    )
+    account_journal_early_pay_discount_gain_account_id = fields.Many2one(
+        "account.account",
+        string="Early Payment Discount Gain",
+    )
+    default_cash_difference_income_account_id = fields.Many2one(
+        "account.account",
+        string="Cash Difference Income",
+    )
+    default_cash_difference_expense_account_id = fields.Many2one(
+        "account.account",
+        string="Cash Difference Expense",
+    )
 
     def action_parse_file(self):
         self.ensure_one()
@@ -157,12 +185,13 @@ class L10nEcCoaImportWizard(models.TransientModel):
                 "Custom chart of accounts installed for %s. Review the suggested defaults below.",
                 company.display_name,
             )
-        defaults = self._suggest_company_defaults(company) or {}
+        defaults, warnings = self._suggest_company_defaults(company, template)
+        warning_message = "\n".join(warnings) if warnings else False
         self.write(
             {
                 "state": "configure",
                 "summary_message": summary,
-                "warning_message": False,
+                "warning_message": warning_message,
                 "generated_template_id": template.id,
                 "force_override": False,
                 "default_receivable_account_id": (
@@ -176,6 +205,27 @@ class L10nEcCoaImportWizard(models.TransientModel):
                 ),
                 "default_tax_purchase_id": (
                     defaults.get("purchase_tax").id if defaults.get("purchase_tax") else False
+                ),
+                "account_default_pos_receivable_account_id": (
+                    defaults.get("pos_receivable").id if defaults.get("pos_receivable") else False
+                ),
+                "income_currency_exchange_account_id": (
+                    defaults.get("income_exchange").id if defaults.get("income_exchange") else False
+                ),
+                "expense_currency_exchange_account_id": (
+                    defaults.get("expense_exchange").id if defaults.get("expense_exchange") else False
+                ),
+                "account_journal_early_pay_discount_loss_account_id": (
+                    defaults.get("early_pay_loss").id if defaults.get("early_pay_loss") else False
+                ),
+                "account_journal_early_pay_discount_gain_account_id": (
+                    defaults.get("early_pay_gain").id if defaults.get("early_pay_gain") else False
+                ),
+                "default_cash_difference_income_account_id": (
+                    defaults.get("cash_diff_income").id if defaults.get("cash_diff_income") else False
+                ),
+                "default_cash_difference_expense_account_id": (
+                    defaults.get("cash_diff_expense").id if defaults.get("cash_diff_expense") else False
                 ),
             }
         )
@@ -236,6 +286,12 @@ class L10nEcCoaImportWizard(models.TransientModel):
     # Parsing helpers
     # ------------------------------------------------------------------
     def _parse_template(self) -> Tuple[List[Dict], List[Dict]]:
+        """
+        Parse the uploaded XLSX COA template and extract account groups and accounts.
+
+        Returns:
+            Tuple[List[Dict], List[Dict]]: A tuple containing a list of group dictionaries and a list of account dictionaries.
+        """
         try:
             from openpyxl import load_workbook
         except ImportError as err:  # pragma: no cover
@@ -419,25 +475,92 @@ class L10nEcCoaImportWizard(models.TransientModel):
         text = text.replace(" ", "")
         return text
 
-    def _infer_groups_from_accounts(self, accounts: List[Dict]):
-        groups = {}
-        numeric_codes = [acc["code"] for acc in accounts if acc["code"].isdigit()]
-        numeric_levels = self._compute_numeric_levels(numeric_codes)
+    # ------------------------------------------------------------------
+    # Group inference helpers
+    # ------------------------------------------------------------------
 
+    def _infer_groups_from_accounts(self, accounts: List[Dict]):
+        if not accounts:
+            return {}
+        separator = self._detect_code_separator(accounts)
+        if separator:
+            return self._infer_groups_with_separator(accounts, separator)
+        return self._infer_groups_numeric(accounts)
+
+    def _detect_code_separator(self, accounts: List[Dict]):
+        separator_counts = Counter()
+        for account in accounts:
+            code = account.get("code") or ""
+            for candidate in (".", "-"):
+                if candidate in code:
+                    separator_counts[candidate] += 1
+        if not separator_counts:
+            return False
+        return separator_counts.most_common(1)[0][0]
+
+    def _infer_groups_with_separator(self, accounts: List[Dict], separator: str):
+        groups: Dict[str, Dict] = {}
         for account in sorted(accounts, key=lambda item: item["code"]):
-            prefixes = self._generate_prefixes(account["code"], numeric_levels)
-            if prefixes:
-                for current, parent in prefixes:
+            code = account["code"]
+            segments = [segment for segment in code.split(separator) if segment]
+            if len(segments) >= 2:
+                for depth in range(1, len(segments)):
+                    current = separator.join(segments[:depth])
+                    parent = separator.join(segments[: depth - 1]) if depth > 1 else False
                     self._ensure_group_entry(groups, current, parent)
-                group_code = prefixes[-1][0]
+                account["group_code"] = separator.join(segments[:-1])
             else:
-                group_code = account["code"]
-                self._ensure_group_entry(groups, group_code, False)
-            account["group_code"] = group_code
+                account["group_code"] = False
+            account["reconcile"] = self._normalize_reconcile(account)
+            account["deprecated"] = bool(account.get("deprecated"))
+        if groups:
+            self._assign_group_sequences(groups)
+        return groups
+
+    def _infer_groups_numeric(self, accounts: List[Dict]):
+        groups: Dict[str, Dict] = {}
+        codes = sorted({account["code"] for account in accounts if account.get("code")}, key=lambda code: (len(code), code))
+        if not codes:
+            return groups
+        children_map = {code: set() for code in codes}
+        parent_map = {}
+        for code in codes:
+            parent = False
+            for length in range(len(code) - 1, 0, -1):
+                prefix = code[:length]
+                if prefix in children_map:
+                    parent = prefix
+                    break
+            parent_map[code] = parent
+            if parent:
+                children_map[parent].add(code)
+
+        group_codes = {code for code, children in children_map.items() if children}
+
+        ensured = set()
+
+        def ensure_group_entry(code):
+            if code in ensured:
+                return
+            parent_code = parent_map.get(code)
+            parent_ref = parent_code if parent_code in group_codes else False
+            if parent_ref:
+                ensure_group_entry(parent_ref)
+            self._ensure_group_entry(groups, code, parent_ref)
+            ensured.add(code)
+
+        for group_code in sorted(group_codes, key=lambda value: (len(value), value)):
+            ensure_group_entry(group_code)
+
+        for account in accounts:
+            code = account["code"]
+            parent_code = parent_map.get(code)
+            account["group_code"] = parent_code if parent_code in group_codes else False
             account["reconcile"] = self._normalize_reconcile(account)
             account["deprecated"] = bool(account.get("deprecated"))
 
-        self._assign_group_sequences(groups)
+        if groups:
+            self._assign_group_sequences(groups)
         return groups
 
     def _match_group_code(self, account_code, group_index):
@@ -467,68 +590,6 @@ class L10nEcCoaImportWizard(models.TransientModel):
 
     def _should_reconcile(self, account_type: str) -> bool:
         return account_type in self.RECONCILABLE_TYPES
-
-    def _compute_numeric_levels(self, codes: List[str]) -> List[int]:
-        if not codes:
-            return []
-        max_len = max(len(code) for code in codes)
-        levels = []
-        for length in range(1, max_len):
-            prefix_count = {}
-            for code in codes:
-                if len(code) <= length:
-                    continue
-                prefix = code[:length]
-                prefix_count[prefix] = prefix_count.get(prefix, 0) + 1
-            if any(count > 1 for count in prefix_count.values()):
-                levels.append(length)
-        return levels
-
-    def _generate_prefixes(
-        self,
-        code: str,
-        numeric_levels: List[int],
-    ) -> List[Tuple[str, str]]:
-        for separator in (".", "-", " "):
-            if separator in code:
-                parts = [part for part in code.split(separator) if part]
-                if len(parts) <= 1:
-                    return []
-                prefixes = []
-                cumulative = []
-                for index, part in enumerate(parts[:-1]):
-                    cumulative.append(part)
-                    current = separator.join(cumulative)
-                    parent = separator.join(cumulative[:-1]) if index else False
-                    prefixes.append((current, parent or False))
-                return prefixes
-
-        if code.isdigit():
-            if len(code) <= 1:
-                return []
-            prefixes = []
-            first_level = code[:1]
-            prefixes.append((first_level, False))
-            parent = first_level
-            index = 1
-            while index < len(code):
-                chunk = min(2, len(code) - index)
-                index += chunk
-                current = code[:index]
-                prefixes.append((current, parent or False))
-                parent = current
-            return prefixes
-
-        if len(code) <= 1:
-            return []
-
-        prefixes = []
-        parent = False
-        for length in range(1, len(code)):
-            current = code[:length]
-            prefixes.append((current, parent or False))
-            parent = current
-        return prefixes
 
     def _ensure_group_entry(self, groups: Dict[str, Dict], code: str, parent_code):
         if code in groups:
@@ -716,17 +777,134 @@ class L10nEcCoaImportWizard(models.TransientModel):
         chart_template.try_loading(template.code, company, install_demo=False, force_create=True)
         self._restore_account_codes(company, template.payload.get("account.account"))
 
-    def _suggest_company_defaults(self, company):
+    def _suggest_company_defaults(self, company, _template):
         receivable = self._suggest_default_account(company, "asset_receivable")
         payable = self._suggest_default_account(company, "liability_payable")
         sale_tax = self._suggest_default_tax(company, "sale")
         purchase_tax = self._suggest_default_tax(company, "purchase")
-        return {
+        reference_data = self._get_reference_template_data(company)
+        reference_company_values = (reference_data or {}).get("res.company", {}).get(company.id, {}) or {}
+        reference_account_codes = self._extract_reference_account_codes(reference_data)
+        account_specs = [
+            (
+                "account_default_pos_receivable_account_id",
+                "pos_receivable",
+                _("POS default receivable account"),
+                ["asset_receivable"],
+            ),
+            (
+                "income_currency_exchange_account_id",
+                "income_exchange",
+                _("Currency exchange gain account"),
+                ["income_other"],
+            ),
+            (
+                "expense_currency_exchange_account_id",
+                "expense_exchange",
+                _("Currency exchange loss account"),
+                ["expense_other"],
+            ),
+            (
+                "account_journal_early_pay_discount_loss_account_id",
+                "early_pay_loss",
+                _("Early payment discount loss account"),
+                ["expense_other"],
+            ),
+            (
+                "account_journal_early_pay_discount_gain_account_id",
+                "early_pay_gain",
+                _("Early payment discount gain account"),
+                ["income_other"],
+            ),
+            (
+                "default_cash_difference_income_account_id",
+                "cash_diff_income",
+                _("Cash difference income account"),
+                ["income_other"],
+            ),
+            (
+                "default_cash_difference_expense_account_id",
+                "cash_diff_expense",
+                _("Cash difference expense account"),
+                ["expense_other"],
+            ),
+        ]
+        defaults = {
             "receivable": receivable,
             "payable": payable,
             "sale_tax": sale_tax,
             "purchase_tax": purchase_tax,
         }
+        for field_name, key, _label, fallback_types in account_specs:
+            defaults[key] = self._suggest_company_account_field(
+                company,
+                field_name,
+                reference_company_values.get(field_name),
+                reference_account_codes,
+                fallback_types,
+            )
+        warnings = self._build_configuration_warnings(defaults, account_specs)
+        return defaults, warnings
+
+    def _suggest_company_account_field(
+        self,
+        company,
+        field_name,
+        reference,
+        reference_account_codes,
+        fallback_types,
+    ):
+        current = getattr(company, field_name, False)
+        if current:
+            return current
+        code = self._resolve_reference_account_code(reference, reference_account_codes)
+        if code:
+            account = self._find_account_by_code(company, code)
+            if account:
+                return account
+        for account_type in fallback_types or []:
+            candidate = self._suggest_default_account(company, account_type)
+            if candidate:
+                return candidate
+        return self.env["account.account"]
+
+    def _resolve_reference_account_code(self, reference, reference_account_codes):
+        if isinstance(reference, str):
+            return reference_account_codes.get(reference)
+        if isinstance(reference, dict):
+            for key in ("xmlid", "xml_id", "id"):
+                value = reference.get(key)
+                if isinstance(value, str):
+                    code = reference_account_codes.get(value)
+                    if code:
+                        return code
+        return False
+
+    def _find_account_by_code(self, company, code):
+        if not code:
+            return self.env["account.account"]
+        Account = (
+            self.env["account.account"].sudo().with_company(company).with_context(active_test=False)
+        )
+        return Account.search([
+            ("company_ids", "in", company.ids),
+            ("code", "=", code),
+        ], limit=1)
+
+    def _build_configuration_warnings(self, defaults, account_specs):
+        warning_labels = {
+            "receivable": _("Default receivable account"),
+            "payable": _("Default payable account"),
+            "sale_tax": _("Default sales tax"),
+            "purchase_tax": _("Default purchase tax"),
+        }
+        for _field, key, label, _fallback in account_specs:
+            warning_labels[key] = label
+        missing = []
+        for key, label in warning_labels.items():
+            if not defaults.get(key):
+                missing.append(_("Review and set %s manually.") % label)
+        return missing
 
     def _suggest_default_account(self, company, account_type):
         account_model = (
@@ -757,10 +935,20 @@ class L10nEcCoaImportWizard(models.TransientModel):
 
     def _apply_company_defaults(self, company):
         values = {}
-        if "property_account_receivable_id" in company._fields:
-            values["property_account_receivable_id"] = self.default_receivable_account_id.id
-        if "property_account_payable_id" in company._fields:
-            values["property_account_payable_id"] = self.default_payable_account_id.id
+        account_field_values = {
+            "property_account_receivable_id": self.default_receivable_account_id.id,
+            "property_account_payable_id": self.default_payable_account_id.id,
+            "account_default_pos_receivable_account_id": self.account_default_pos_receivable_account_id.id,
+            "income_currency_exchange_account_id": self.income_currency_exchange_account_id.id,
+            "expense_currency_exchange_account_id": self.expense_currency_exchange_account_id.id,
+            "account_journal_early_pay_discount_loss_account_id": self.account_journal_early_pay_discount_loss_account_id.id,
+            "account_journal_early_pay_discount_gain_account_id": self.account_journal_early_pay_discount_gain_account_id.id,
+            "default_cash_difference_income_account_id": self.default_cash_difference_income_account_id.id,
+            "default_cash_difference_expense_account_id": self.default_cash_difference_expense_account_id.id,
+        }
+        for field_name, value in account_field_values.items():
+            if field_name in company._fields:
+                values[field_name] = value
         if values:
             company.sudo().write(values)
         tax_values = {}
@@ -970,15 +1158,15 @@ class L10nEcCoaImportWizard(models.TransientModel):
         account_map,
     ):
         values = copy.deepcopy(company_values or {})
-        for field in (
-            "property_account_receivable_id",
-            "property_account_payable_id",
-            "account_sale_tax_id",
-            "account_purchase_tax_id",
-        ):
-            if field in values:
+        for field, current in list(values.items()):
+            if not current:
+                continue
+            if field.endswith("_tax_id"):
+                values[field] = False
+                continue
+            if field.endswith("_account_id") or field.startswith("property_account_"):
                 values[field] = self._map_company_default(
-                    values[field],
+                    current,
                     base_account_codes,
                     account_map,
                 )
@@ -1297,7 +1485,7 @@ class L10nEcCoaImportWizard(models.TransientModel):
             if not record:
                 continue
             account = Account.browse(record.id)
-            if not account or account.company_id != company:
+            if not account or company not in account.company_ids:
                 continue
             if account.code != target_code:
                 _logger.info(
