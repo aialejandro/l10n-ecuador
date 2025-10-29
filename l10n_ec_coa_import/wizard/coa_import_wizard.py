@@ -36,6 +36,7 @@ class L10nEcCoaImportWizard(models.TransientModel):
             ("upload", "Upload"),
             ("review", "Review"),
             ("configure", "Configure"),
+            ("tax_mapping", "Tax Account Mapping"),
             ("done", "Done"),
         ],
         string="State",
@@ -110,6 +111,17 @@ class L10nEcCoaImportWizard(models.TransientModel):
         "account.account",
         string="Cash Difference Expense",
     )
+    
+    # Tax account mapping fields
+    tax_account_mapping_data = fields.Text(
+        string="Tax Account Mapping Data",
+        help="JSON data storing the mapping between original tax account codes and new imported account IDs",
+    )
+    tax_account_mapping_line_ids = fields.One2many(
+        "l10n.ec.tax.account.mapping.line",
+        "wizard_id",
+        string="Tax Account Mappings",
+    )
 
     def action_parse_file(self):
         self.ensure_one()
@@ -172,19 +184,27 @@ class L10nEcCoaImportWizard(models.TransientModel):
         force_override = bool(self.force_override)
         if force_override:
             self._validate_company_readiness(company, True)
+            
         template = self._create_chart_template(company, groups, accounts)
-        summary = _(
-            "Registered template '%s' with %s groups and %s accounts. Install it later from Accounting Settings when ready.",
-            template.name,
-            len(groups),
-            len(accounts),
-        )
+        
+        # Install the chart template immediately if force_override is enabled
+        # This creates accounts, groups, and taxes (with placeholder tax accounts)
         if force_override:
             self._install_chart_template(company, template)
             summary = _(
-                "Custom chart of accounts installed for %s. Review the suggested defaults below.",
+                "Chart of accounts installed for %s with %s groups and %s accounts. Review defaults below.",
                 company.display_name,
+                len(groups),
+                len(accounts),
             )
+        else:
+            summary = _(
+                "Registered template '%s' with %s groups and %s accounts. Install it later from Accounting Settings.",
+                template.name,
+                len(groups),
+                len(accounts),
+            )
+        
         defaults, warnings = self._suggest_company_defaults(company, template)
         warning_message = "\n".join(warnings) if warnings else False
         self.write(
@@ -252,15 +272,526 @@ class L10nEcCoaImportWizard(models.TransientModel):
             return self._reopen()
         company = self.company_id
         self._apply_company_defaults(company)
-        self.write(
-            {
+        
+        # Prepare tax account mapping
+        base_data = self._get_reference_template_data(company)
+        tax_accounts = self._extract_tax_accounts_from_template(base_data)
+        
+        if not tax_accounts:
+            # No tax accounts to map, skip to done
+            self.write({
                 "state": "done",
                 "summary_message": _(
-                    "Custom chart of accounts installed for %s.", company.display_name
+                    "Custom chart of accounts installed for %s. No tax accounts found to map.",
+                    company.display_name
                 ),
-            }
-        )
+            })
+        else:
+            # Create mapping lines with suggestions
+            mapping_lines = []
+            for code, name in sorted(tax_accounts.items()):
+                suggested_account = self._suggest_account_for_tax_mapping(company, code, name)
+                mapping_lines.append(Command.create({
+                    "original_code": code,
+                    "original_name": name,
+                    "new_account_id": suggested_account.id if suggested_account else False,
+                }))
+            
+            self.write({
+                "state": "tax_mapping",
+                "tax_account_mapping_line_ids": mapping_lines,
+                "summary_message": _(
+                    "Please review and adjust the %d suggested tax account mapping(s) below.",
+                    len(tax_accounts)
+                ),
+            })
+        
         return self._reopen()
+
+    def _suggest_account_for_tax_mapping(self, company, original_code, original_name):
+        """
+        Suggest a matching account from the imported COA for a tax account mapping.
+        
+        Tries multiple strategies:
+        1. Exact code match
+        2. Similar code match (numeric prefix)
+        3. Similar name match (fuzzy)
+        
+        Args:
+            company: res.company record
+            original_code: str - original account code
+            original_name: str - original account name
+            
+        Returns:
+            account.account record or empty recordset
+        """
+        Account = self.env["account.account"].sudo().with_company(company).with_context(active_test=False)
+        
+        # Strategy 1: Exact code match
+        account = Account.search([
+            ("company_ids", "in", company.ids),
+            ("code", "=", original_code),
+        ], limit=1)
+        
+        if account:
+            _logger.info(
+                "Tax account suggestion: exact code match for %s -> %s",
+                original_code,
+                account.code
+            )
+            return account
+        
+        # Strategy 2: Similar code match (try numeric prefix)
+        if original_code.isdigit() and len(original_code) > 2:
+            # Try progressively shorter prefixes
+            for length in range(len(original_code), 1, -1):
+                prefix = original_code[:length]
+                account = Account.search([
+                    ("company_ids", "in", company.ids),
+                    ("code", "=like", f"{prefix}%"),
+                ], limit=1, order="code")
+                
+                if account:
+                    _logger.info(
+                        "Tax account suggestion: prefix match for %s -> %s (prefix: %s)",
+                        original_code,
+                        account.code,
+                        prefix
+                    )
+                    return account
+        
+        # Strategy 3: Name similarity
+        if original_name:
+            # Normalize name for comparison
+            normalized_original = original_name.lower().strip()
+            
+            # Search for accounts with similar names
+            all_accounts = Account.search([
+                ("company_ids", "in", company.ids),
+            ])
+            
+            best_match = None
+            best_score = 0
+            
+            for acc in all_accounts:
+                normalized_acc_name = acc.name.lower().strip()
+                
+                # Simple word overlap scoring
+                original_words = set(normalized_original.split())
+                acc_words = set(normalized_acc_name.split())
+                
+                if original_words and acc_words:
+                    overlap = len(original_words & acc_words)
+                    score = overlap / max(len(original_words), len(acc_words))
+                    
+                    if score > best_score and score > 0.3:  # At least 30% match
+                        best_score = score
+                        best_match = acc
+            
+            if best_match:
+                _logger.info(
+                    "Tax account suggestion: name match for '%s' -> %s '%s' (score: %.2f)",
+                    original_name,
+                    best_match.code,
+                    best_match.name,
+                    best_score
+                )
+                return best_match
+        
+        _logger.warning(
+            "No suitable tax account suggestion found for %s (%s)",
+            original_code,
+            original_name
+        )
+        return Account  # Return empty recordset
+
+    def action_apply_tax_mapping(self):
+        """Apply tax account mappings and finalize the import."""
+        self.ensure_one()
+        if self.state != "tax_mapping":
+            return self._reopen()
+        
+        # Validate mappings from One2many lines
+        unmapped_lines = self.tax_account_mapping_line_ids.filtered(lambda line: not line.new_account_id)
+        
+        if unmapped_lines:
+            unmapped_list = "\n".join([
+                f"{line.original_code} ({line.original_name})"
+                for line in unmapped_lines
+            ])
+            raise UserError(
+                _("The following tax accounts must be mapped before proceeding:\n\n%s")
+                % unmapped_list
+            )
+        
+        # Build mappings dictionary from lines
+        mappings = {
+            line.original_code: line.new_account_id.id
+            for line in self.tax_account_mapping_line_ids
+            if line.new_account_id
+        }
+        
+        # Apply mappings to the generated template AND update installed taxes
+        company = self.company_id
+        
+        _logger.info(
+            "Starting tax account mapping for company %s with %d mappings",
+            company.display_name,
+            len(mappings)
+        )
+        
+        self._apply_tax_account_mappings_to_installed_taxes(company, mappings)
+        
+        self.write({
+            "state": "done",
+            "summary_message": _(
+                "Import completed successfully! Tax accounts updated with %d mappings.",
+                len(mappings)
+            ),
+        })
+        
+        return self._reopen()
+    
+    def _apply_tax_account_mappings_to_template(self, mappings):
+        """Update the generated template's tax records with new account mappings."""
+        if not self.generated_template_id or not mappings:
+            return
+        
+        template = self.generated_template_id
+        payload = copy.deepcopy(template.payload or {})
+        
+        # Get reference data to identify original account xmlids
+        company = self.company_id
+        base_data = self._get_reference_template_data(company)
+        reference_account_codes = self._extract_reference_account_codes(base_data)
+        
+        # Create reverse mapping: xmlid -> new account code
+        code_to_xmlid = {code: xmlid for xmlid, code in reference_account_codes.items()}
+        
+        # Get account map from payload
+        account_data = payload.get("account.account", {})
+        account_code_to_xmlid = {}
+        for xmlid, values in account_data.items():
+            if "code" in values:
+                account_code_to_xmlid[values["code"]] = xmlid
+        
+        # Build xmlid mapping
+        xmlid_mappings = {}
+        for orig_code, new_account_id in mappings.items():
+            orig_xmlid = code_to_xmlid.get(orig_code)
+            if orig_xmlid and new_account_id:
+                new_account = self.env["account.account"].browse(int(new_account_id))
+                new_code = new_account.code
+                new_xmlid = account_code_to_xmlid.get(new_code)
+                if new_xmlid:
+                    xmlid_mappings[orig_xmlid] = new_xmlid
+        
+        # Apply mappings to tax records
+        taxes = payload.get("account.tax", {})
+        for tax_xmlid, tax_values in (taxes or {}).items():
+            # Map cash basis accounts
+            for field in ("cash_basis_account_id", "cash_basis_base_account_id", "cash_basis_transition_account_id"):
+                if field in tax_values and tax_values[field]:
+                    orig_xmlid = tax_values[field]
+                    if orig_xmlid in xmlid_mappings:
+                        tax_values[field] = xmlid_mappings[orig_xmlid]
+            
+            # Map repartition line accounts
+            for rep_field in ("repartition_line_ids", "invoice_repartition_line_ids", "refund_repartition_line_ids"):
+                if rep_field in tax_values:
+                    updated_commands = []
+                    for command in tax_values[rep_field] or []:
+                        if isinstance(command, tuple) and len(command) >= 3 and isinstance(command[2], dict):
+                            line_values = dict(command[2])
+                            if "account_id" in line_values and line_values["account_id"]:
+                                orig_xmlid = line_values["account_id"]
+                                if orig_xmlid in xmlid_mappings:
+                                    line_values["account_id"] = xmlid_mappings[orig_xmlid]
+                            updated_commands.append((command[0], command[1], line_values))
+                        else:
+                            updated_commands.append(command)
+                    tax_values[rep_field] = updated_commands
+        
+        # Apply mappings to tax group records
+        tax_groups = payload.get("account.tax.group", {})
+        for group_xmlid, group_values in (tax_groups or {}).items():
+            for field in ("tax_payable_account_id", "tax_receivable_account_id"):
+                if field in group_values and group_values[field]:
+                    orig_xmlid = group_values[field]
+                    if orig_xmlid in xmlid_mappings:
+                        group_values[field] = xmlid_mappings[orig_xmlid]
+        
+        # Save updated payload
+        template.write({"payload": payload})
+        
+        _logger.info(
+            "Applied %d tax account mappings to template %s",
+            len(xmlid_mappings),
+            template.name
+        )
+
+    def _apply_tax_account_mappings_to_installed_taxes(self, company, mappings):
+        """
+        Update already-installed tax records with new account mappings.
+        This works by matching the template definition to find which taxes/lines 
+        should use which accounts, then applying the user's account selections.
+        
+        Args:
+            company: res.company record
+            mappings: dict {original_template_code: new_account_id}
+        """
+        if not mappings:
+            _logger.info("No tax account mappings to apply")
+            return
+        
+        _logger.info(
+            "Tax account mapping for company %s: processing %d account mappings",
+            company.display_name,
+            len(mappings)
+        )
+        
+        # Get the reference template to know which taxes should use which accounts
+        base_data = self._get_reference_template_data(company)
+        reference_account_codes = self._extract_reference_account_codes(base_data)
+        base_taxes = base_data.get("account.tax", {})
+        base_tax_groups = base_data.get("account.tax.group", {})
+        
+        # Build xmlid -> new_account_id mapping
+        xmlid_to_new_account_id = {}
+        for xmlid, code in reference_account_codes.items():
+            if code in mappings:
+                xmlid_to_new_account_id[xmlid] = mappings[code]
+        
+        _logger.info("Mapped %d xmlids to new accounts", len(xmlid_to_new_account_id))
+        
+        # Log sample of what we're looking for
+        _logger.info("Processing %d taxes from template", len(base_taxes))
+        sample_names = []
+        sample_xmlids = []
+        for i, (tax_xmlid, tax_data) in enumerate(base_taxes.items()):
+            if i < 5:
+                tax_name = tax_data.get("name")
+                if isinstance(tax_name, dict):
+                    tax_name = tax_name.get("en_US", list(tax_name.values())[0] if tax_name else "")
+                sample_names.append(tax_name)
+                sample_xmlids.append(tax_xmlid)
+        _logger.info("Sample tax names from template: %s", sample_names)
+        _logger.info("Sample tax xmlids from template: %s", sample_xmlids)
+        
+        # Check what taxes actually exist
+        all_taxes = self.env["account.tax"].search([("company_id", "=", company.id)])
+        _logger.info("Found %d installed taxes in company %s (id=%d)", len(all_taxes), company.name, company.id)
+        if all_taxes:
+            _logger.info("Sample installed tax names: %s", [t.name for t in all_taxes[:5]])
+        
+        updated_taxes = 0
+        updated_lines = 0
+        updated_tax_groups = 0
+        
+        taxes_found = 0
+        taxes_not_found = 0
+        
+        # Update taxes: match by xmlid from template
+        for tax_xmlid, tax_data in base_taxes.items():
+            # The template xmlids are like "tax_vat_15_412"
+            # But installed xmlids are like "account.1_tax_vat_15_412" (module: account, name: {company_id}_{xmlid})
+            
+            # Extract the bare xmlid (without module prefix if present)
+            bare_xmlid = tax_xmlid.split('.', 1)[1] if '.' in tax_xmlid else tax_xmlid
+            
+            # Try to find the tax by the installed format: account.{company_id}_{bare_xmlid}
+            installed_xmlid = f"account.{company.id}_{bare_xmlid}"
+            tax = self.env.ref(installed_xmlid, raise_if_not_found=False)
+            
+            if not tax:
+                # Try the original xmlid as-is
+                tax = self.env.ref(tax_xmlid, raise_if_not_found=False)
+            
+            if not tax:
+                # Try with l10n_ec_coa_import prefix as last resort
+                alternative_xmlid = f"l10n_ec_coa_import.{self.generated_template_id.code}_{bare_xmlid}" if self.generated_template_id else None
+                if alternative_xmlid:
+                    tax = self.env.ref(alternative_xmlid, raise_if_not_found=False)
+            
+            if not tax or tax.company_id != company:
+                taxes_not_found += 1
+                if taxes_not_found <= 3:
+                    _logger.info("Tax not found for xmlid: %s (tried: %s)", tax_xmlid, installed_xmlid)
+                continue
+            
+            taxes_found += 1
+            
+            # Debug: log first tax details
+            if taxes_found == 1:
+                _logger.info("First matched tax %s, data keys: %s", tax.name, list(tax_data.keys()))
+                for field in ("cash_basis_account_id", "cash_basis_base_account_id", "cash_basis_transition_account_id"):
+                    if field in tax_data:
+                        _logger.info("  %s: %s (in xmlid map: %s)", field, tax_data[field], tax_data[field] in xmlid_to_new_account_id if tax_data[field] else False)
+                
+                # Check repartition_line_ids structure
+                if "repartition_line_ids" in tax_data:
+                    rep_lines = tax_data["repartition_line_ids"]
+                    _logger.info("  repartition_line_ids: %d lines", len(rep_lines) if rep_lines else 0)
+                    if rep_lines and len(rep_lines) > 0:
+                        first_line = rep_lines[0]
+                        _logger.info("    First line type: %s, content: %s", type(first_line), first_line if isinstance(first_line, dict) else first_line[:3] if isinstance(first_line, (tuple, list)) else str(first_line)[:100])
+            
+            # Update cash basis accounts if defined in template
+            tax_values = {}
+            for field in ("cash_basis_account_id", "cash_basis_base_account_id", "cash_basis_transition_account_id"):
+                if field in tax_data and tax_data[field]:
+                    account_xmlid = tax_data[field]
+                    if account_xmlid in xmlid_to_new_account_id:
+                        tax_values[field] = xmlid_to_new_account_id[account_xmlid]
+            
+            if tax_values:
+                tax.write(tax_values)
+                updated_taxes += 1
+                _logger.info("Updated tax %s with accounts: %s", tax.name, list(tax_values.keys()))
+            
+            # Update repartition lines - handle both old and new formats
+            rep_fields_to_check = []
+            
+            # New format: separate invoice and refund fields
+            if "invoice_repartition_line_ids" in tax_data or "refund_repartition_line_ids" in tax_data:
+                rep_fields_to_check = [
+                    ("invoice_repartition_line_ids", tax.invoice_repartition_line_ids),
+                    ("refund_repartition_line_ids", tax.refund_repartition_line_ids)
+                ]
+            # Old format: combined repartition_line_ids
+            elif "repartition_line_ids" in tax_data:
+                # In the old format, all lines are in one field
+                # We need to split them by document_type or use_in_tax_closing
+                all_lines = tax.invoice_repartition_line_ids | tax.refund_repartition_line_ids
+                rep_fields_to_check = [("repartition_line_ids", all_lines)]
+            
+            for rep_field, actual_lines in rep_fields_to_check:
+                if rep_field not in tax_data:
+                    continue
+                
+                template_lines = tax_data[rep_field]
+                if not template_lines:
+                    continue
+                
+                # Debug: log first tax repartition details
+                if taxes_found == 1 and rep_field in ("invoice_repartition_line_ids", "repartition_line_ids"):
+                    _logger.info("  %s has %d template lines", rep_field, len(template_lines))
+                    for i, line_cmd in enumerate(template_lines[:2]):
+                        if isinstance(line_cmd, (tuple, list)) and len(line_cmd) >= 3:
+                            line_data = line_cmd[2]
+                            if isinstance(line_data, dict):
+                                _logger.info("    Line %d: account_id=%s, factor=%s, type=%s", 
+                                           i, line_data.get("account_id"), 
+                                           line_data.get("factor_percent"), 
+                                           line_data.get("repartition_type"))
+                
+                # Get the actual installed lines - they're already provided in rep_fields_to_check
+                
+                # Match template lines to actual lines by position and type
+                for i, line_cmd in enumerate(template_lines):
+                    if not isinstance(line_cmd, (tuple, list)) or len(line_cmd) < 3:
+                        continue
+                    
+                    line_data = line_cmd[2]
+                    if not isinstance(line_data, dict):
+                        continue
+                    
+                    # Find matching actual line by factor and type
+                    factor = line_data.get("factor_percent", 100.0)
+                    rep_type = line_data.get("repartition_type", "tax")
+                    doc_type = line_data.get("document_type")  # 'invoice' or 'refund' in the old format
+                    
+                    # Filter actual_lines by document_type if present
+                    lines_to_search = actual_lines
+                    if doc_type and rep_field == "repartition_line_ids":
+                        # In combined format, filter by document_type
+                        if doc_type == "invoice":
+                            lines_to_search = tax.invoice_repartition_line_ids
+                        elif doc_type == "refund":
+                            lines_to_search = tax.refund_repartition_line_ids
+                    
+                    # Try to find exact match
+                    matching = lines_to_search.filtered(
+                        lambda l: abs(l.factor_percent - factor) < 0.01 
+                        and l.repartition_type == rep_type
+                    )
+                    
+                    if not matching:
+                        _logger.warning(
+                            "No matching line found for tax %s (factor=%s, type=%s, doc=%s) - %d lines in search set",
+                            tax.name, factor, rep_type, doc_type or 'N/A', len(lines_to_search)
+                        )
+                        continue
+                    
+                    # Take first match (or match by position if multiple)
+                    actual_line = matching[0] if len(matching) == 1 else matching[min(i, len(matching) - 1)]
+                    
+                    # Check if this line should have an account
+                    if "account_id" in line_data and line_data["account_id"]:
+                        account_xmlid = line_data["account_id"]
+                        if account_xmlid in xmlid_to_new_account_id:
+                            new_account_id = xmlid_to_new_account_id[account_xmlid]
+                            if actual_line.account_id.id != new_account_id:
+                                actual_line.write({"account_id": new_account_id})
+                                updated_lines += 1
+                                _logger.info(
+                                    "Updated repartition line for tax %s (factor=%s, type=%s, doc=%s)",
+                                    tax.name, factor, rep_type, doc_type or 'N/A'
+                                )
+                        else:
+                            _logger.warning(
+                                "Account xmlid '%s' not found in mapping for tax %s (factor=%s, type=%s, doc=%s)",
+                                account_xmlid, tax.name, factor, rep_type, doc_type or 'N/A'
+                            )
+                    else:
+                        # Template doesn't define an account for this line (intentional for some taxes)
+                        if rep_type == "tax":  # Only log for tax lines, base lines normally don't have accounts
+                            _logger.debug(
+                                "Tax %s: template doesn't define account for %s line (type=%s, factor=%s, doc=%s). "
+                                "This is normal for certain tax types (e.g., 512 taxes).",
+                                tax.name, rep_field, rep_type, factor, doc_type or 'N/A'
+                            )
+        
+        # Update tax groups: match by xmlid
+        for group_xmlid, group_data in (base_tax_groups or {}).items():
+            # Extract bare xmlid and try the account.{company_id}_{bare_xmlid} format
+            bare_xmlid = group_xmlid.split('.', 1)[1] if '.' in group_xmlid else group_xmlid
+            installed_xmlid = f"account.{company.id}_{bare_xmlid}"
+            
+            tax_group = self.env.ref(installed_xmlid, raise_if_not_found=False)
+            
+            if not tax_group:
+                # Try original xmlid
+                tax_group = self.env.ref(group_xmlid, raise_if_not_found=False)
+            
+            if not tax_group:
+                # Try with l10n_ec_coa_import prefix
+                alternative_xmlid = f"l10n_ec_coa_import.{self.generated_template_id.code}_{bare_xmlid}" if self.generated_template_id else None
+                if alternative_xmlid:
+                    tax_group = self.env.ref(alternative_xmlid, raise_if_not_found=False)
+            
+            if not tax_group:
+                continue
+            
+            group_values = {}
+            for field in ("tax_payable_account_id", "tax_receivable_account_id"):
+                if field in group_data and group_data[field]:
+                    account_xmlid = group_data[field]
+                    if account_xmlid in xmlid_to_new_account_id:
+                        group_values[field] = xmlid_to_new_account_id[account_xmlid]
+            
+            if group_values:
+                tax_group.write(group_values)
+                updated_tax_groups += 1
+                _logger.info("Updated tax group %s with accounts", tax_group.name)
+        
+        _logger.info("Matched %d taxes, %d not found", taxes_found, taxes_not_found)
+        _logger.info(
+            "Tax account mapping completed: %d taxes, %d repartition lines, %d tax groups updated",
+            updated_taxes,
+            updated_lines,
+            updated_tax_groups
+        )
 
     def action_download_template(self):
         return {
@@ -1062,6 +1593,63 @@ class L10nEcCoaImportWizard(models.TransientModel):
             ("type_tax_use", "=", tax_use),
         ]
         return tax_model.search(domain, limit=1)
+
+    def _extract_tax_accounts_from_template(self, base_data):
+        """
+        Extract all unique account codes used in tax definitions from the reference template.
+        
+        Returns:
+            dict: {account_code: account_name} mapping
+        """
+        tax_accounts = {}
+        
+        # Get reference account codes from base data
+        reference_account_codes = self._extract_reference_account_codes(base_data)
+        base_accounts = (base_data or {}).get("account.account", {})
+        
+        # Extract accounts from tax records
+        taxes = (base_data or {}).get("account.tax", {})
+        for tax_xmlid, tax_values in (taxes or {}).items():
+            # Cash basis accounts
+            for field in ("cash_basis_account_id", "cash_basis_base_account_id", "cash_basis_transition_account_id"):
+                if field in tax_values and tax_values[field]:
+                    code = reference_account_codes.get(tax_values[field])
+                    if code:
+                        account_info = base_accounts.get(tax_values[field], {})
+                        name = account_info.get("name", code)
+                        if isinstance(name, dict):
+                            name = name.get("en_US", code)
+                        tax_accounts[code] = name
+            
+            # Repartition line accounts
+            for rep_field in ("repartition_line_ids", "invoice_repartition_line_ids", "refund_repartition_line_ids"):
+                if rep_field in tax_values:
+                    for command in tax_values[rep_field] or []:
+                        if isinstance(command, tuple) and len(command) >= 3 and isinstance(command[2], dict):
+                            line_values = command[2]
+                            if "account_id" in line_values and line_values["account_id"]:
+                                code = reference_account_codes.get(line_values["account_id"])
+                                if code:
+                                    account_info = base_accounts.get(line_values["account_id"], {})
+                                    name = account_info.get("name", code)
+                                    if isinstance(name, dict):
+                                        name = name.get("en_US", code)
+                                    tax_accounts[code] = name
+        
+        # Extract accounts from tax group records
+        tax_groups = (base_data or {}).get("account.tax.group", {})
+        for group_xmlid, group_values in (tax_groups or {}).items():
+            for field in ("tax_payable_account_id", "tax_receivable_account_id"):
+                if field in group_values and group_values[field]:
+                    code = reference_account_codes.get(group_values[field])
+                    if code:
+                        account_info = base_accounts.get(group_values[field], {})
+                        name = account_info.get("name", code)
+                        if isinstance(name, dict):
+                            name = name.get("en_US", code)
+                        tax_accounts[code] = name
+        
+        return tax_accounts
 
     def _apply_company_defaults(self, company):
         values = {}

@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <!-- Tax Account Mapping Line Tree View -->
+    <record id="view_l10n_ec_tax_account_mapping_line_tree" model="ir.ui.view">
+        <field name="name">l10n.ec.tax.account.mapping.line.tree</field>
+        <field name="model">l10n.ec.tax.account.mapping.line</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" create="0" delete="0">
+                <field name="original_code" readonly="1"/>
+                <field name="original_name" readonly="1"/>
+                <field name="new_account_id" required="1" class="text-danger" options="{'no_create': True, 'no_open': True}"/>
+                <field name="wizard_id" column_invisible="1"/>
+                <field name="company_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
     <record id="view_l10n_ec_coa_import_wizard" model="ir.ui.view">
         <field name="name">l10n.ec.coa.import.wizard.form</field>
         <field name="model">l10n.ec.coa.import.wizard</field>
@@ -8,7 +23,7 @@
                 <sheet>
                     <group>
                         <field name="company_id" readonly="state != 'upload'"/>
-                        <field name="state" readonly="1" widget="statusbar" statusbar_visible="upload,review,configure,done"/>
+                        <field name="state" readonly="1" widget="statusbar" statusbar_visible="upload,review,configure,tax_mapping,done"/>
                     </group>
                     <separator string="Upload Template" invisible="state != 'upload'"/>
                     <group invisible="state != 'upload'" colspan="2">
@@ -43,6 +58,11 @@
                         <field name="default_tax_sale_id"/>
                         <field name="default_tax_purchase_id"/>
                     </group>
+                    <separator string="Tax Account Mapping" invisible="state != 'tax_mapping'"/>
+                    <group invisible="state != 'tax_mapping'" colspan="2">
+                        <field name="summary_message" readonly="1" colspan="2"/>
+                        <field name="tax_account_mapping_line_ids" nolabel="1" colspan="2" context="{'default_wizard_id': id}"/>
+                    </group>
                     <group invisible="state != 'done'" colspan="2">
                         <field name="summary_message" readonly="1"/>
                         <field name="generated_template_id" readonly="1"/>
@@ -53,6 +73,7 @@
                     <button name="action_parse_file" string="Validate Template" type="object" class="btn-primary" invisible="state != 'upload'"></button>
                     <button name="action_import" string="Import Data" type="object" class="btn-primary" invisible="state != 'review'"></button>
                     <button name="action_apply_configuration" string="Apply Defaults" type="object" class="btn-primary" invisible="state != 'configure'"></button>
+                    <button name="action_apply_tax_mapping" string="Complete Import" type="object" class="btn-primary" invisible="state != 'tax_mapping'"></button>
                 </footer>
             </form>
         </field>
