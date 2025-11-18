@@ -109,15 +109,6 @@
                                 </list>
                             </field>
                         </page>
-                        <page string="Diarios que usan este formato" name="journals" invisible="id == False">
-                            <field name="journal_ids" readonly="1">
-                                <list>
-                                    <field name="name"/>
-                                    <field name="type"/>
-                                    <field name="company_id"/>
-                                </list>
-                            </field>
-                        </page>
                     </notebook>
                 </sheet>
             </form>

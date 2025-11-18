@@ -93,13 +93,6 @@ class L10nEcCheckFormat(models.Model):
         compute='_compute_field_count'
     )
     
-    journal_ids = fields.One2many(
-        'account.journal',
-        'l10n_ec_check_format_id',
-        string='Diarios que usan este formato',
-        readonly=True
-    )
-    
     @api.depends('format_field_ids')
     def _compute_field_count(self):
         for record in self:
@@ -181,6 +174,7 @@ class L10nEcCheckFormat(models.Model):
                 'height': 20,
                 'font_size': 12,
                 'is_required': True,
+                'data_source': 'beneficiary',
             },
             {
                 'name': 'amount_words',

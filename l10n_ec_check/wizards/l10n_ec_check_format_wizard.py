@@ -80,9 +80,9 @@ class L10nEcCheckFormatWizard(models.TransientModel):
                         value = field.custom_value
                     else:
                         # Generar valores de ejemplo que respeten la configuración del campo
-                        if field.data_source == 'payment.partner_id.name':
+                        if field.data_source == 'partner_id.name':
                             value = 'ACME Corporation S.A.'
-                        elif field.data_source == 'payment.amount':
+                        elif field.data_source == 'amount':
                             if field.field_type == 'currency':
                                 # Respetar la configuración de show_currency_symbol
                                 amount_value = f'{1250.50:.{field.decimal_places}f}'
@@ -90,9 +90,9 @@ class L10nEcCheckFormatWizard(models.TransientModel):
                                     value = f'$ {amount_value}'
                                 else:
                                     value = amount_value
-                            else:
+                        elif field.data_source == 'amount_in_words':
                                 value = 'MIL DOSCIENTOS CINCUENTA CON 50/100'
-                        elif field.data_source == 'payment.date':
+                        elif field.data_source == 'date':
                             # Usar el formato de fecha configurado
                             from datetime import datetime
                             sample_date = datetime(2025, 9, 15)
@@ -102,7 +102,7 @@ class L10nEcCheckFormatWizard(models.TransientModel):
                                 value = field._capitalize_month_names(value)
                             except:
                                 value = '15/09/2025'
-                        elif field.data_source == 'payment.check_number':
+                        elif field.data_source == 'check_number':
                             value = '001234'
                     
                     # Crear div para cada campo

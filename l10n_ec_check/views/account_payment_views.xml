@@ -7,111 +7,90 @@
         <field name="model">account.payment</field>
         <field name="inherit_id" ref="account.view_account_payment_form"/>
         <field name="arch" type="xml">
-            <!-- Agregar botones en el header para cheques -->
-            <xpath expr="//header" position="inside">
-                <button name="action_print_checks" type="object" string="Imprimir Cheque" 
-                        class="btn-primary" icon="fa-print"
-                        invisible="can_print_check == False"/>
-                <button name="action_preview_check" type="object" string="Previsualizar Cheque" 
-                        class="btn-secondary" icon="fa-eye"
-                        invisible="can_print_check == False"/>
-                <button name="action_reset_check_printed" type="object" string="Resetear Impresión" 
-                        class="btn-warning" icon="fa-refresh"
-                        groups="base.group_system"
-                        invisible="check_printed == False or payment_method_code != 'check_printing'"
-                        confirm="¿Está seguro que desea resetear el estado de impresión? Esto permitirá reimprimir el cheque."/>
+        <!-- Agregar botones en el header para cheques -->
+        <xpath expr="//header" position="inside">
+        <button name="action_print_check" type="object" string="Imprimir Cheque"
+            class="btn-primary" icon="fa-print"
+            invisible="payment_method_code != 'own_checks' or state not in ('in_process', 'paid') or not l10n_ec_single_check_available or l10n_ec_single_check_printed"
+            help="Imprimir el cheque asociado a este pago."/>
+        <button name="action_reset_check_printed" type="object" string="Resetear Impresión" 
+            class="btn-warning" icon="fa-refresh"
+            groups="base.group_system"
+            invisible="payment_method_code != 'own_checks' or state not in ('in_process', 'paid') or not l10n_ec_single_check_available or not l10n_ec_single_check_printed"
+            confirm="¿Está seguro que desea resetear el estado de impresión? Esto permitirá reimprimir los cheques."/>
+        </xpath>
+            <!-- Agregar botón de impresión por cheque y columnas de seguimiento -->
+            <xpath expr="//list[@name='new_checks']/field[@name='name']" position="after">
+                <field name="beneficiary" string="Beneficiario" optional="show"/>
             </xpath>
-            
-            <!-- Mostrar información del formato de cheque -->
-            <xpath expr="//field[@name='payment_method_line_id']" position="after">
-                <field name="l10n_ec_check_format_id" readonly="1"
-                       invisible="payment_method_code != 'check_printing'"/>
-                <field name="l10n_ec_check_beneficiary"
-                       invisible="payment_method_code != 'check_printing'"
-                       readonly="check_printed == True"
-                       placeholder="Nombre del beneficiario del cheque"
-                       required="payment_method_code == 'check_printing'"/>
-                <field name="can_print_check" invisible="1"/>
-            </xpath>
-            
-            <!-- Agregar información de impresión de cheque -->
-            <xpath expr="//field[@name='payment_method_line_id']" position="after">
-                <field name="l10n_ec_check_number" readonly="1"
-                       invisible="payment_method_code != 'check_printing' or check_printed == False"/>
-                <field name="check_printed" readonly="1"
-                       invisible="payment_method_code != 'check_printing'"/>
-                <field name="check_print_date" readonly="1"
-                       invisible="check_printed == False or payment_method_code != 'check_printing'"/>
-                <field name="check_printed_by" readonly="1"
-                       invisible="check_printed == False or payment_method_code != 'check_printing'"/>
+            <xpath expr="//list[@name='new_checks']/field[@name='amount']" position="after">
+                <field name="check_printed" optional="hide"/>
+                <field name="check_print_date" optional="hide"/>
+                <field name="check_printed_by" optional="hide"/>
+                <button name="action_l10n_ec_print_check"
+                        type="object"
+                        string="Imprimir"
+                        icon="fa-print"
+                        column_invisible="parent.payment_method_code != 'own_checks' or parent.state not in ('in_process', 'paid')"
+                        help="Imprimir este cheque utilizando el formato configurado."/>
             </xpath>
         </field>
     </record>
 
-    <!-- Heredar vista de lista de pagos para agregar información de formato -->
-    <record id="view_account_payment_tree_check_format" model="ir.ui.view">
-        <field name="name">account.payment.tree.check.format</field>
-        <field name="model">account.payment</field>
-        <field name="inherit_id" ref="account.view_account_payment_tree"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='currency_id']" position="after">
-                <field name="l10n_ec_check_beneficiary" 
-                       string="Beneficiario" 
-                       optional="show"/>
-                <field name="l10n_ec_check_number" string="N° Cheque" optional="show"/>
-                <field name="l10n_ec_check_format_id" string="Formato de Cheque" optional="hide"/>
-                <field name="check_printed" string="Cheque Impreso" optional="hide"/>
-                <field name="check_print_date" string="Fecha Impresión" optional="hide"/>
-                <field name="can_print_check" column_invisible="1"/>
-            </xpath>
-        </field>
-    </record>
-
-    <!-- Heredar vista de búsqueda para agregar filtro por beneficiario -->
+    <!-- Heredar vista de búsqueda para agregar filtros relacionados con cheques -->
     <record id="view_account_payment_search_check_beneficiary" model="ir.ui.view">
         <field name="name">account.payment.search.check.beneficiary</field>
         <field name="model">account.payment</field>
         <field name="inherit_id" ref="account.view_account_payment_search"/>
         <field name="arch" type="xml">
-            <!-- Agregar campo de búsqueda por beneficiario -->
-            <field name="partner_id" position="after">
-                <field name="l10n_ec_check_beneficiary" string="Beneficiario"
-                       filter_domain="[('l10n_ec_check_beneficiary', 'ilike', self)]"/>
-            </field>
-            
             <!-- Agregar filtro en el grupo de filtros -->
             <filter name="outbound_filter" position="after">
                 <separator/>
-                <filter string="Cheques con Beneficiario" 
-                        name="filter_has_beneficiary"
-                        domain="[('l10n_ec_check_beneficiary', '!=', False), ('payment_method_code', '=', 'check_printing')]"/>
-                <filter string="Cheques Impresos" 
-                        name="filter_check_printed"
-                        domain="[('check_printed', '=', True), ('payment_method_code', '=', 'check_printing')]"/>
-            </filter>
-            
-            <!-- Agregar agrupación por beneficiario -->
-            <filter name="partner" position="after">
-                <filter string="Beneficiario" 
-                        name="group_by_beneficiary" 
-                        domain="[]" 
-                        context="{'group_by': 'l10n_ec_check_beneficiary'}"/>
+        <filter string="Cheques Impresos" 
+            name="filter_check_printed"
+            domain="[('l10n_latam_new_check_ids.check_printed', '=', True), ('payment_method_code', '=', 'own_checks')]"/>
             </filter>
         </field>
     </record>
 
-    <!-- Agregar acción del servidor para impresión masiva (comentada temporalmente) -->
-    <!-- 
-    <record id="action_print_checks_multi" model="ir.actions.server">
-        <field name="name">Imprimir Cheques Seleccionados</field>
-        <field name="model_id" ref="model_account_payment"/>
-        <field name="binding_model_id" ref="model_account_payment"/>
-        <field name="state">code</field>
-        <field name="code">
-if records:
-    action = records.action_print_checks()
+    <record id="l10n_ec_check_view_check_form_beneficiary" model="ir.ui.view">
+        <field name="name">l10n_latam_check.view.form.beneficiary</field>
+        <field name="model">l10n_latam.check</field>
+        <field name="inherit_id" ref="l10n_latam_check.l10n_latam_check_view_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="partner_id"/>
+                <field name="beneficiary" string="Beneficiary"/>
+                  <field name="check_reprinted" string="Check Reprinted" readonly="1"
+                      modifiers="{'invisible': [['check_reprinted', '=', False]]}"/>
+            </field>
+            <field name="payment_date" position="before">
+                <field name="date" string="Issue Date"/>
+            </field>
+            <field name="amount" position="before">
+                <field name="payment_id" optional="show"/>
+                <field name="payment_ref" optional="show"/>
+            </field>
         </field>
     </record>
-    -->
+
+    <record id="l10n_ec_check_view_check_tree_beneficiary" model="ir.ui.view">
+        <field name="name">l10n_latam_check.view.tree.beneficiary</field>
+        <field name="model">l10n_latam.check</field>
+        <field name="inherit_id" ref="l10n_latam_check.view_account_own_check_tree"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="beneficiary" string="Beneficiary" optional="show"/>
+            </field>
+            <field name="payment_date" position="before">
+                <field name="date" string="Issue Date" optional="show"/>
+            </field>
+            <field name="original_journal_id" position="after">
+                <field name="payment_id" optional="show"/>
+                <field name="payment_ref" optional="show"/>
+            </field>
+        </field>
+    </record>
+
 
 </odoo>

@@ -40,27 +40,28 @@ class ResPartnerBank(models.Model):
     @api.depends('acc_number')
     def _compute_last_check_number(self):
         """Obtener el último número de cheque impreso"""
+        Check = self.env['l10n_latam.check']
         for bank_account in self:
-            # Buscar el último pago con cheque de esta cuenta
-            last_payment = self.env['account.payment'].search([
-                ('journal_id.bank_account_id', '=', bank_account.id),
-                ('payment_method_code', '=', 'check_printing'),
-                ('l10n_ec_check_number', '!=', False),
-                ('check_printed', '=', True)
+            last_check = Check.search([
+                ('payment_id.journal_id.bank_account_id', '=', bank_account.id),
+                ('payment_id.payment_method_code', '=', 'own_checks'),
+                ('check_printed', '=', True),
+                ('name', '!=', False),
             ], order='check_print_date desc', limit=1)
-            
-            bank_account.l10n_ec_check_last_number = last_payment.l10n_ec_check_number if last_payment else ''
+
+            bank_account.l10n_ec_check_last_number = last_check.name if last_check else ''
     
     @api.depends('acc_number')
     def _compute_checks_statistics(self):
         """Calcular estadísticas de cheques"""
+        Check = self.env['l10n_latam.check']
         for bank_account in self:
-            payments = self.env['account.payment'].search_count([
-                ('journal_id.bank_account_id', '=', bank_account.id),
-                ('payment_method_code', '=', 'check_printing'),
+            checks_count = Check.search_count([
+                ('payment_id.journal_id.bank_account_id', '=', bank_account.id),
+                ('payment_id.payment_method_code', '=', 'own_checks'),
                 ('check_printed', '=', True)
             ])
-            bank_account.l10n_ec_total_checks_printed = payments
+            bank_account.l10n_ec_total_checks_printed = checks_count
     
     @api.onchange('bank_id')
     def _onchange_bank_id(self):
@@ -95,20 +96,21 @@ class ResPartnerBank(models.Model):
         self.ensure_one()
         
         # Buscar pagos con este número de cheque en esta cuenta
-        existing_payment = self.env['account.payment'].search([
-            ('journal_id.bank_account_id', '=', self.id),
-            ('payment_method_code', '=', 'check_printing'),
-            ('l10n_ec_check_number', '=', check_number),
+        existing_check = self.env['l10n_latam.check'].search([
+            ('payment_id.journal_id.bank_account_id', '=', self.id),
+            ('payment_id.payment_method_code', '=', 'own_checks'),
+            ('name', '=', check_number),
             ('check_printed', '=', True)
         ], limit=1)
         
-        if existing_payment:
+        if existing_check:
+            payment = existing_check.payment_id
             return {
-                'payment_id': existing_payment.id,
-                'payment_name': existing_payment.name,
-                'partner_name': existing_payment.partner_id.name,
-                'amount': existing_payment.amount,
-                'date': existing_payment.payment_date,
+                'payment_id': payment.id,
+                'payment_name': payment.name,
+                'partner_name': payment.partner_id.name,
+                'amount': payment.amount,
+                'date': payment.payment_date,
                 'check_number': check_number
             }
         

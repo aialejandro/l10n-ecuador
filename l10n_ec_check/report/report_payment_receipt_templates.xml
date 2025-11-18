@@ -7,20 +7,21 @@
         <!-- Agregar información del cheque después de la fila que contiene el método de pago -->
         <xpath expr="//div[@name='payment_method']/.." position="after">
             <!-- Nueva fila para información del cheque -->
-            <div class="row" t-if="o.payment_method_code == 'check_printing'">
+            <div class="row" t-if="o.payment_method_code == 'own_checks'">
+                <t t-set="first_check" t-value="o.l10n_latam_new_check_ids[:1]"/>
                 <!-- Banco -->
                 <div class="col-6" t-if="o.journal_id.bank_id">
                     <strong>Banco:</strong> <span t-field="o.journal_id.bank_id.name"/>
                 </div>
                 
                 <!-- Número de cheque -->
-                <div class="col-6" t-if="o.l10n_ec_check_number">
-                    <strong>Cheque No.:</strong> <span t-field="o.l10n_ec_check_number"/>
+                <div class="col-6" t-if="first_check">
+                    <strong>Cheque No.:</strong> <span t-esc="first_check.name"/>
                 </div>
             </div>
             
             <!-- Segunda fila para cuenta bancaria -->
-            <div class="row" t-if="o.payment_method_code == 'check_printing' and o.journal_id.bank_account_id">
+            <div class="row" t-if="o.payment_method_code == 'own_checks' and o.journal_id.bank_account_id">
                 <div class="col-6">
                     <strong>Cuenta Bancaria:</strong> <span t-field="o.journal_id.bank_account_id.acc_number"/>
                 </div>

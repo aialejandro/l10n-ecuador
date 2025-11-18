@@ -60,6 +60,7 @@ Características Especiales
         'l10n_latam_check',
         'l10n_ec',  # Módulo base de Ecuador (si existe)
         'web',
+        'contacts'
     ],
     'data': [
         # Security
@@ -74,8 +75,8 @@ Características Especiales
         'views/l10n_ec_check_format_views.xml',
         'views/res_bank_views.xml',
         'views/res_partner_bank_views.xml',
-        'views/account_journal_views.xml',
         'views/account_payment_views.xml',
+        'views/account_payment_register_views.xml',
         'views/l10n_ec_check_menus.xml',
         
         # Reports

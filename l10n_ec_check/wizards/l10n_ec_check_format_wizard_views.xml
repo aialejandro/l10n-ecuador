@@ -26,8 +26,8 @@
                     <group>
                         <group>
                             <field name="preview_mode" invisible="1"/>
-                            <field name="payment_id" readonly="preview_mode == True" 
-                                   options="{'no_create': True}" domain="[('payment_method_code', '=', 'check_printing')]"/>
+                <field name="payment_id" readonly="preview_mode == True" 
+                    options="{'no_create': True}" domain="[('payment_method_code', '=', 'own_checks')]"/>
                         </group>
                         <group>
                             <label for="format_field_ids" string="Campos Configurados"/>

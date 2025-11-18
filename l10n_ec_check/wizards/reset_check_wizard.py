@@ -1,94 +1,108 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import ValidationError
 from passlib.context import CryptContext
 
 
 class L10nEcCheckResetWizard(models.TransientModel):
     _name = 'l10n_ec.check.reset.wizard'
-    _description = 'Wizard para Resetear Impresión de Cheques'
+    _description = 'Check Print Reset Wizard'
 
-    payment_ids = fields.Many2many(
-        'account.payment',
-        string='Pagos a Resetear',
+    check_ids = fields.Many2many(
+        'l10n_latam.check',
+        string='Checks to Reset',
         required=True,
-        readonly=True
+        readonly=True,
+        domain="[('check_printed', '=', True)]"
     )
-    
+
     password = fields.Char(
-        string='Contraseña de Administrador',
-        help='Ingrese la contraseña del usuario actual para confirmar el reseteo'
+        string='Administrator Password',
+        help='Enter your current password to confirm the reset.'
+    )
+
+    check_count = fields.Integer(
+        string='Check Count',
+        compute='_compute_check_count'
+    )
+
+    check_details = fields.Html(
+        string='Check Details',
+        compute='_compute_check_details'
+    )
+    reset_warning_html = fields.Html(
+        string='Warning Details',
+        compute='_compute_reset_warning_html'
     )
     
-    payment_count = fields.Integer(
-        string='Cantidad de Pagos',
-        compute='_compute_payment_count'
-    )
-    
-    payment_details = fields.Html(
-        string='Detalles de Pagos',
-        compute='_compute_payment_details'
-    )
-    
-    @api.depends('payment_ids')
-    def _compute_payment_count(self):
+    @api.depends('check_ids')
+    def _compute_check_count(self):
         for wizard in self:
-            wizard.payment_count = len(wizard.payment_ids)
+            wizard.check_count = len(wizard.check_ids)
     
-    @api.depends('payment_ids')
-    def _compute_payment_details(self):
+    @api.depends('check_ids')
+    def _compute_check_details(self):
         for wizard in self:
-            if not wizard.payment_ids:
-                wizard.payment_details = '<p>No hay pagos seleccionados</p>'
+            if not wizard.check_ids:
+                wizard.check_details = '<p>%s</p>' % _('No checks selected')
                 continue
             
+            headers = [
+                _('Check'),
+                _('Payment'),
+                _('Amount'),
+                _('Printed On'),
+                _('Printed By'),
+            ]
+
             html = '<table class="table table-sm table-striped">'
-            html += '<thead><tr>'
-            html += '<th>Pago</th>'
-            html += '<th>Número de Cheque</th>'
-            html += '<th>Monto</th>'
-            html += '<th>Impreso el</th>'
-            html += '<th>Impreso por</th>'
-            html += '</tr></thead><tbody>'
-            
-            for payment in wizard.payment_ids:
+            html += '<thead><tr>' + ''.join('<th>%s</th>' % header for header in headers) + '</tr></thead><tbody>'
+
+            for check in wizard.check_ids:
+                payment = check.payment_id
+                currency = check.currency_id or (payment.currency_id if payment else False)
+                symbol = currency.symbol if currency else ''
+                amount_value = check.amount or (payment.amount if payment else 0.0)
+                payment_name = payment.name if payment else _('N/A')
+                check_name = check.name or _('N/A')
+                printed_on = check.check_print_date.strftime('%Y-%m-%d %H:%M') if check.check_print_date else _('N/A')
+                printed_by = check.check_printed_by.name if check.check_printed_by else _('Unknown user')
                 html += '<tr>'
-                html += f'<td>{payment.name}</td>'
-                html += f'<td><strong>{payment.l10n_ec_check_number or "N/A"}</strong></td>'
-                html += f'<td>{payment.currency_id.symbol} {payment.amount:,.2f}</td>'
-                html += f'<td>{payment.check_print_date.strftime("%Y-%m-%d %H:%M") if payment.check_print_date else "N/A"}</td>'
-                html += f'<td>{payment.check_printed_by.name if payment.check_printed_by else "Desconocido"}</td>'
+                html += f'<td><strong>{check_name}</strong></td>'
+                html += f'<td>{payment_name}</td>'
+                html += f'<td>{symbol} {amount_value:,.2f}</td>'
+                html += f'<td>{printed_on}</td>'
+                html += f'<td>{printed_by}</td>'
                 html += '</tr>'
             
             html += '</tbody></table>'
-            wizard.payment_details = html
+            wizard.check_details = html
+
+    @api.depends('check_ids')
+    def _compute_reset_warning_html(self):
+        for wizard in self:
+            warning_text = _("You are about to reset the print status of <strong>%(count)s checks</strong>. This action allows the checks to be reprinted.") % {'count': wizard.check_count}
+            wizard.reset_warning_html = '<p style="margin-top: 8px;">%s</p>' % warning_text
     
     def action_confirm_reset(self):
-        """
-        Validar la contraseña y ejecutar el reseteo.
-        """
+        """Validate the password and trigger the reset on selected checks."""
         self.ensure_one()
         
-        # Validar que haya contraseña
         if not self.password:
-            raise ValidationError(_('Debe ingresar su contraseña para continuar.'))
-        
-        # Obtener el usuario actual
+            raise ValidationError(_('You must enter your password to continue.'))
+
         current_user = self.env.user
-        
-        # Intentar autenticar con la contraseña
+
         try:
-            # Validar usando sudo() con nueva conexión
             uid = self.env['res.users'].sudo().with_context(no_reset_password=True).search([
                 ('id', '=', current_user.id),
                 ('login', '=', current_user.login)
             ], limit=1)
             
             if not uid:
-                raise ValidationError(_('Usuario no encontrado.'))
-            
-            # Verificar la contraseña directamente con la BD
+                raise ValidationError(_('User not found.'))
+
             self.env.cr.execute(
                 "SELECT password FROM res_users WHERE id = %s",
                 (current_user.id,)
@@ -96,7 +110,6 @@ class L10nEcCheckResetWizard(models.TransientModel):
             result = self.env.cr.fetchone()
             stored_password = result[0] if result else None
             
-            # Si hay contraseña guardada en BD, validar con passlib
             if stored_password:
                 crypt_context = CryptContext(
                     schemes=['pbkdf2_sha512', 'plaintext'],
@@ -104,11 +117,8 @@ class L10nEcCheckResetWizard(models.TransientModel):
                 )
                 valid = crypt_context.verify(self.password, stored_password)
                 if not valid:
-                    raise ValidationError(_('Contraseña incorrecta.'))
+                    raise ValidationError(_('Incorrect password.'))
             else:
-                # Si no hay contraseña en BD, intentar con authenticate del http
-                # (útil para usuarios con autenticación externa)
-                from odoo.http import db_monodb
                 try:
                     authenticated_uid = self.env['res.users']._authenticate(
                         self.env.cr.dbname,
@@ -116,33 +126,35 @@ class L10nEcCheckResetWizard(models.TransientModel):
                         self.password
                     )
                     if authenticated_uid != current_user.id:
-                        raise ValidationError(_('Contraseña incorrecta.'))
+                        raise ValidationError(_('Incorrect password.'))
                 except Exception:
                     raise ValidationError(_(
-                        'No se pudo validar la contraseña. '
-                        'El usuario puede no tener contraseña configurada.'
+                        'The password could not be validated. '
+                        'The user might not have a password configured.'
                     ))
                     
         except ValidationError:
             raise
         except Exception as e:
             raise ValidationError(_(
-                'Error al validar la contraseña: %s'
+                'Error validating the password: %s'
             ) % str(e))
         
-        # Si la validación es exitosa, ejecutar el reseteo
-        self.payment_ids.confirm_reset_check_printed()
-        
-        # Retornar acción para recargar la vista
+        checks_to_reset = self.check_ids.filtered('check_printed')
+        if not checks_to_reset:
+            raise ValidationError(_('No printed checks were selected.'))
+
+        checks_to_reset.action_l10n_ec_reset_print_state()
+
         return {
             'type': 'ir.actions.client',
             'tag': 'display_notification',
             'params': {
-                'title': _('Éxito'),
+                'title': _('Success'),
                 'message': _(
-                    'Se ha reseteado el estado de impresión de %d pago(s). '
-                    'Los cheques pueden ser reimpresos.'
-                ) % len(self.payment_ids),
+                    'The print status of %d check(s) was reset. '
+                    'They can now be reprinted.'
+                ) % len(checks_to_reset),
                 'type': 'success',
                 'sticky': False,
                 'next': {
@@ -153,7 +165,5 @@ class L10nEcCheckResetWizard(models.TransientModel):
         }
     
     def action_cancel(self):
-        """
-        Cancelar el wizard sin hacer cambios.
-        """
+        """Close the wizard without applying changes."""
         return {'type': 'ir.actions.act_window_close'}

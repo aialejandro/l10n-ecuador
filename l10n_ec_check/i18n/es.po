@@ -1,0 +1,376 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * l10n_ec_check
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-14 00:00+0000\n"
+"PO-Revision-Date: 2025-11-14 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,field_description:l10n_ec_check.field_l10n_latam_check__beneficiary
+#: model_terms:ir.ui.view,arch_db:l10n_ec_check.l10n_ec_check_view_check_form_beneficiary
+#: model_terms:ir.ui.view,arch_db:l10n_ec_check.l10n_ec_check_view_check_tree_beneficiary
+msgid "Beneficiary"
+msgstr "Beneficiario"
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,field_description:l10n_ec_check.field_l10n_latam_check__payment_ref
+msgid "Payment Reference"
+msgstr "Referencia de pago"
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,help:l10n_ec_check.field_l10n_latam_check__beneficiary
+msgid "Name of the beneficiary displayed on the check."
+msgstr "Nombre del beneficiario que se mostrará en el cheque."
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,field_description:l10n_ec_check.field_l10n_latam_check__date
+#: model_terms:ir.ui.view,arch_db:l10n_ec_check.l10n_ec_check_view_check_form_beneficiary
+#: model_terms:ir.ui.view,arch_db:l10n_ec_check.l10n_ec_check_view_check_tree_beneficiary
+msgid "Issue Date"
+msgstr "Fecha de emisión"
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,field_description:l10n_ec_check.field_l10n_latam_check__check_printed
+msgid "Check Printed"
+msgstr "Cheque impreso"
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,help:l10n_ec_check.field_l10n_latam_check__check_printed
+msgid "Indicates whether the check has already been printed."
+msgstr "Indica si el cheque ya fue impreso."
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,field_description:l10n_ec_check.field_l10n_latam_check__check_print_date
+msgid "Check Print Date"
+msgstr "Fecha de impresión del cheque"
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,help:l10n_ec_check.field_l10n_latam_check__check_print_date
+msgid "Date and time when the check was printed."
+msgstr "Fecha y hora en que se imprimió el cheque."
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,field_description:l10n_ec_check.field_l10n_latam_check__check_printed_by
+msgid "Printed By"
+msgstr "Impreso por"
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,field_description:l10n_ec_check.field_l10n_latam_check__check_reprinted
+#: model_terms:ir.ui.view,arch_db:l10n_ec_check.l10n_ec_check_view_check_form_beneficiary
+msgid "Check Reprinted"
+msgstr "Cheque reimpreso"
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,help:l10n_ec_check.field_l10n_latam_check__check_reprinted
+msgid "Indicates whether the check was reset to allow reprinting."
+msgstr "Indica si el cheque fue reseteado para permitir su reimpresión."
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,help:l10n_ec_check.field_l10n_latam_check__check_printed_by
+msgid "User who printed the check."
+msgstr "Usuario que imprimió el cheque."
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/models/l10n_latam_check.py:77
+msgid "The check is not linked to a payment."
+msgstr "El cheque no está vinculado a un pago."
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/models/l10n_latam_check.py:82
+#, python-format
+msgid "The check %(payment)s (%(number)s) was already printed.\n\nTo reprint it, use the \"Reset Print\" button (requires administrator permissions)."
+msgstr "El cheque %(payment)s (%(number)s) ya fue impreso.\n\nPara reimprimirlo, use el botón \"Resetear Impresión\" (requiere permisos de administrador)."
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/models/l10n_latam_check.py:86
+msgid "No number"
+msgstr "Sin número"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/models/l10n_latam_check.py:157
+msgid "Unknown user"
+msgstr "Usuario desconocido"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/models/l10n_latam_check.py:93
+#, python-format
+msgid "The journal %(journal)s does not have a check format on bank account %(account)s and bank %(bank)s does not define a default check format."
+msgstr "El diario %(journal)s no tiene formato de cheque en la cuenta bancaria %(account)s y el banco %(bank)s no define un formato de cheque por defecto."
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/models/l10n_latam_check.py:97
+msgid "No journal"
+msgstr "Sin diario"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/models/l10n_latam_check.py:98
+msgid "No bank account"
+msgstr "Sin cuenta bancaria"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/models/l10n_latam_check.py:99
+msgid "No bank"
+msgstr "Sin banco"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/models/l10n_latam_check.py:109
+#, python-format
+msgid "The check %(number)s has mandatory fields missing:\n%(fields)s"
+msgstr "El cheque %(number)s tiene campos obligatorios sin completar:\n%(fields)s"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/models/l10n_latam_check.py:172
+msgid "No information"
+msgstr "Sin información"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/models/l10n_latam_check.py:150
+#, python-format
+msgid "⚠️ CHECK PRINT STATUS RESET\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nReset by: %s\nReset on: %s\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nOriginal check data:\n%s\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n⚠️ Checks can now be reprinted"
+msgstr "⚠️ RESETEO DE IMPRESIÓN DE CHEQUE\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nReseteado por: %s\nFecha de reseteo: %s\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nDatos originales del cheque:\n%s\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n⚠️ Los cheques pueden volver a imprimirse"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/models/l10n_latam_check.py:164
+msgid "🔓 Check Print Status Reset"
+msgstr "🔓 Reseteo de estado de impresión de cheque"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/models/l10n_latam_check.py:0
+#, python-format
+msgid "Check %(check_name)s was printed on %(date)s by %(user)s."
+msgstr "El cheque %(check_name)s fue impreso el %(date)s por %(user)s."
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,field_description:l10n_ec_check.field_account_payment__l10n_ec_check_format_id
+msgid "Check Format"
+msgstr "Formato de cheque"
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,help:l10n_ec_check.field_account_payment__l10n_ec_check_format_id
+msgid "Check format used to print this payment."
+msgstr "Formato de cheque que se usará para imprimir este pago."
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,field_description:l10n_ec_check.field_account_payment__l10n_ec_single_check_available
+msgid "Single Check Available"
+msgstr "Cheque único disponible"
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,help:l10n_ec_check.field_account_payment__l10n_ec_single_check_available
+msgid "Indicates if there is exactly one check to allow direct printing from the payment."
+msgstr "Indica si existe exactamente un cheque para permitir la impresión directa desde el pago."
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/models/account_payment.py:110
+msgid "Only system administrators can reset the check print status."
+msgstr "Solo los administradores del sistema pueden resetear el estado de impresión de cheques."
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/models/account_payment.py:114
+msgid "The selected payments do not have printed checks."
+msgstr "Los pagos seleccionados no tienen cheques impresos."
+
+#. module: l10n_ec_check
+#: model_terms:ir.ui.view,arch_db:account.view_account_reconcile_model_form
+msgid "Reset Checks Print Status"
+msgstr "Restablecer estado de impresión de cheques"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/models/account_payment.py:0
+msgid "Reset Checks Print Status"
+msgstr "Restablecer estado de impresión de cheques"
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,field_description:l10n_ec_check.field_l10n_ec_check_reset_wizard__check_ids
+msgid "Checks to Reset"
+msgstr "Cheques a resetear"
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,field_description:l10n_ec_check.field_l10n_ec_check_reset_wizard__password
+msgid "Administrator Password"
+msgstr "Contraseña de administrador"
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,help:l10n_ec_check.field_l10n_ec_check_reset_wizard__password
+msgid "Enter your current password to confirm the reset."
+msgstr "Ingrese su contraseña actual para confirmar el reseteo."
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,field_description:l10n_ec_check.field_l10n_ec_check_reset_wizard__check_count
+msgid "Check Count"
+msgstr "Cantidad de cheques"
+
+#. module: l10n_ec_check
+#: model:ir.model.fields,field_description:l10n_ec_check.field_l10n_ec_check_reset_wizard__check_details
+msgid "Check Details"
+msgstr "Detalles de cheques"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:38
+msgid "No checks selected"
+msgstr "No hay cheques seleccionados"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:42
+msgid "Check"
+msgstr "Cheque"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:43
+msgid "Payment"
+msgstr "Pago"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:44
+msgid "Amount"
+msgstr "Monto"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:45
+msgid "Printed On"
+msgstr "Impreso el"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:46
+msgid "Printed By"
+msgstr "Impreso por"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:53
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:55
+msgid "N/A"
+msgstr "N/A"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:70
+msgid "You must enter your password to continue."
+msgstr "Debe ingresar su contraseña para continuar."
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:79
+msgid "User not found."
+msgstr "Usuario no encontrado."
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:93
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:102
+msgid "Incorrect password."
+msgstr "Contraseña incorrecta."
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:105
+msgid "The password could not be validated. The user might not have a password configured."
+msgstr "No se pudo validar la contraseña. Es posible que el usuario no tenga una contraseña configurada."
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:111
+msgid "Error validating the password: %s"
+msgstr "Error al validar la contraseña: %s"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:115
+msgid "No printed checks were selected."
+msgstr "No se seleccionaron cheques impresos."
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:120
+msgid "The print status of %d check(s) was reset. They can now be reprinted."
+msgstr "Se reseteó el estado de impresión de %d cheque(s). Ahora pueden reimprimirse."
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:121
+msgid "Success"
+msgstr "Éxito"
+
+#. module: l10n_ec_check
+#: model_terms:ir.ui.view,arch_db:l10n_ec_check.view_l10n_ec_check_reset_wizard_form
+msgid "<strong>Warning</strong>"
+msgstr "<strong>Advertencia</strong>"
+
+#. module: l10n_ec_check
+#: model_terms:ir.ui.view,arch_db:l10n_ec_check.view_l10n_ec_check_reset_wizard_form
+msgid "You are about to reset the print status for <strong><field name=\"check_count\"/> check(s)</strong>. This action allows the checks to be reprinted."
+msgstr "Está a punto de resetear el estado de impresión de <strong><field name=\"check_count\"/> cheque(s)</strong>. Esta acción permite reimprimir los cheques."
+
+#. module: l10n_ec_check
+#: model_terms:ir.ui.view,arch_db:l10n_ec_check.view_l10n_ec_check_reset_wizard_form
+msgid "This action allows the checks to be reprinted."
+msgstr "Esta acción permite reimprimir los cheques."
+
+#. module: l10n_ec_check
+#: model_terms:ir.ui.view,arch_db:l10n_ec_check.view_l10n_ec_check_reset_wizard_form
+msgid "Assigned check numbers are kept to avoid duplicates and the action is logged in the chatter."
+msgstr "Los números de cheque asignados se mantienen para evitar duplicados y la acción queda registrada en el historial."
+
+#. module: l10n_ec_check
+#: model_terms:ir.ui.view,arch_db:l10n_ec_check.view_l10n_ec_check_reset_wizard_form
+msgid "Security Validation"
+msgstr "Validación de seguridad"
+
+#. module: l10n_ec_check
+#: model_terms:ir.ui.view,arch_db:l10n_ec_check.view_l10n_ec_check_reset_wizard_form
+msgid "Enter your password to confirm this action."
+msgstr "Ingrese su contraseña para confirmar esta acción."
+
+#. module: l10n_ec_check
+#: model_terms:ir.ui.view,arch_db:l10n_ec_check.view_l10n_ec_check_reset_wizard_form
+msgid "Enter your password"
+msgstr "Ingrese su contraseña"
+
+#. module: l10n_ec_check
+#: model_terms:ir.ui.view,arch_db:l10n_ec_check.view_l10n_ec_check_reset_wizard_form
+msgid "Confirm Reset"
+msgstr "Confirmar reseteo"
+
+#. module: l10n_ec_check
+#: model_terms:ir.ui.view,arch_db:l10n_ec_check.view_l10n_ec_check_reset_wizard_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: l10n_ec_check
+#. odoo-python
+#: code:addons/l10n_ec_check/wizards/reset_check_wizard.py:85
+msgid "You are about to reset the print status of <strong>%(count)s checks</strong>. This action allows the checks to be reprinted."
+msgstr "Está a punto de resetear el estado de impresión de <strong>%(count)s cheques</strong>. Esta acción permite reimprimir los cheques."

@@ -70,7 +70,7 @@
             <field name="height">15</field>
             <field name="font_size">11</field>
             <field name="is_required" eval="True"/>
-            <field name="data_source">payment.partner_id.name</field>
+            <field name="data_source">beneficiary</field>
             <field name="sequence">10</field>
         </record>
         
@@ -85,7 +85,7 @@
             <field name="height">15</field>
             <field name="font_size">10</field>
             <field name="is_required" eval="True"/>
-            <field name="data_source">payment.amount</field>
+            <field name="data_source">amount</field>
             <field name="uppercase" eval="True"/>
             <field name="sequence">20</field>
         </record>
@@ -101,7 +101,7 @@
             <field name="height">15</field>
             <field name="font_size">11</field>
             <field name="is_required" eval="True"/>
-            <field name="data_source">payment.amount</field>
+            <field name="data_source">amount</field>
             <field name="text_align">right</field>
             <field name="sequence">30</field>
         </record>
@@ -117,7 +117,7 @@
             <field name="height">12</field>
             <field name="font_size">9</field>
             <field name="is_required" eval="True"/>
-            <field name="data_source">payment.date</field>
+            <field name="data_source">date</field>
             <field name="date_format">%d/%m/%Y</field>
             <field name="sequence">40</field>
         </record>
@@ -148,7 +148,7 @@
             <field name="height">14</field>
             <field name="font_size">10</field>
             <field name="is_required" eval="True"/>
-            <field name="data_source">payment.partner_id.name</field>
+            <field name="data_source">beneficiary</field>
             <field name="sequence">10</field>
         </record>
         
@@ -163,7 +163,7 @@
             <field name="height">14</field>
             <field name="font_size">9</field>
             <field name="is_required" eval="True"/>
-            <field name="data_source">payment.amount</field>
+            <field name="data_source">amount</field>
             <field name="uppercase" eval="True"/>
             <field name="sequence">20</field>
         </record>
@@ -179,7 +179,7 @@
             <field name="height">14</field>
             <field name="font_size">10</field>
             <field name="is_required" eval="True"/>
-            <field name="data_source">payment.amount</field>
+            <field name="data_source">amount</field>
             <field name="text_align">right</field>
             <field name="sequence">30</field>
         </record>
@@ -195,7 +195,7 @@
             <field name="height">12</field>
             <field name="font_size">9</field>
             <field name="is_required" eval="True"/>
-            <field name="data_source">payment.date</field>
+            <field name="data_source">date</field>
             <field name="date_format">%d/%m/%Y</field>
             <field name="sequence">40</field>
         </record>

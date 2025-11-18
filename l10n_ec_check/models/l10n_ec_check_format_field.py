@@ -145,19 +145,21 @@ class L10nEcCheckFormatField(models.Model):
     
     # Campo de origen de datos
     data_source = fields.Selection([
-        ('payment.partner_id.name', 'Nombre del Beneficiario'),
-        ('payment.amount', 'Monto del Pago'),
-        ('payment.amount_in_words', 'Monto en Letras'),
-        ('payment.date', 'Fecha del Pago'),
-        ('payment.check_number', 'Número de Cheque'),
-        ('payment.communication', 'Referencia/Memo'),
-        ('payment.company_id.name', 'Nombre de la Empresa'),
-        ('payment.journal_id.name', 'Nombre del Diario'),
-        ('payment.journal_id.bank_account_id.acc_number', 'Número de Cuenta'),
-        ('payment.currency_id.name', 'Moneda'),
+        ('beneficiary', 'Beneficiario del Cheque'),
+        ('partner_id.name', 'Nombre del Beneficiario'),
+        ('amount', 'Monto del Pago'),
+        ('amount_in_words', 'Monto en Letras'),
+        ('payment_date', 'Fecha de Pago'),
+        ('date', 'Fecha de Emisión'),
+        ('name', 'Número de Cheque'),
+        ('communication', 'Referencia/Memo'),
+        ('company_id.name', 'Nombre de la Empresa'),
+        ('journal_id.name', 'Nombre del Diario'),
+        ('journal_id.bank_account_id.acc_number', 'Número de Cuenta'),
+        ('currency_id.name', 'Moneda'),
         ('custom', 'Personalizado'),
     ], string='Origen de Datos', required=True)
-    
+
     custom_value = fields.Char(
         string='Valor Personalizado',
         help='Valor fijo para campos personalizados'
@@ -287,26 +289,22 @@ class L10nEcCheckFormatField(models.Model):
         
         return result
     
-    def get_field_value(self, payment):
+    def get_field_value(self, check):
         """Obtener el valor del campo para un pago específico"""
         self.ensure_one()
         
         # Manejar campo especial: amount_in_words
-        if self.data_source == 'payment.amount_in_words':
+        if self.data_source == 'amount_in_words':
             from .amount_to_text import number_to_text_es
-            currency_name = payment.currency_id.name if payment.currency_id else 'DÓLARES'
-            value = number_to_text_es(payment.amount, currency=currency_name)
-        # Manejar campo especial: beneficiario del cheque
-        elif self.data_source == 'payment.partner_id.name':
-            # Usar el beneficiario del cheque si está disponible, sino el partner
-            value = payment.l10n_ec_check_beneficiary or payment.partner_id.name or ''
+            currency_name = check.currency_id.name if check.currency_id else 'DÓLARES'
+            value = number_to_text_es(check.amount, currency=currency_name)
         elif self.data_source == 'custom':
             value = self.custom_value or ''
         else:
             # Obtener valor del pago usando la ruta del campo
             try:
-                value = payment
-                for attr in self.data_source.split('.')[1:]:  # Saltar 'payment'
+                value = check
+                for attr in self.data_source.split('.'):
                     value = getattr(value, attr, '') if value else ''
             except (AttributeError, KeyError):
                 value = ''
@@ -321,7 +319,7 @@ class L10nEcCheckFormatField(models.Model):
         elif self.field_type == 'currency' and isinstance(value, (int, float)):
             # Solo agregar símbolo si show_currency_symbol está activado
             if self.show_currency_symbol:
-                currency_symbol = payment.currency_id.symbol if payment.currency_id else '$'
+                currency_symbol = check.currency_id.symbol if check.currency_id else '$'
                 value = f'{currency_symbol} {value:.{self.decimal_places}f}'
             else:
                 value = f'{value:.{self.decimal_places}f}'

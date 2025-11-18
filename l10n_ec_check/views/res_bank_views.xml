@@ -16,7 +16,7 @@
                 </div>
             </xpath>
             
-            <xpath expr="//field[@name='city']" position="after">
+            <xpath expr="//field[@name='bic']" position="after">
                 <field name="default_check_format_id" 
                        invisible="check_format_count == 0"
                        options="{'no_create': True}"/>

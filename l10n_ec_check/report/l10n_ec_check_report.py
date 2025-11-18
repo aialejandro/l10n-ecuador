@@ -12,11 +12,11 @@ class ReportCheckPrint(models.AbstractModel):
         """
         Obtener valores para el reporte de cheques
         """
-        payments = self.env['account.payment'].browse(docids)
-        
+        checks = self.env['l10n_latam.check'].browse(docids)
+
         return {
             'doc_ids': docids,
-            'doc_model': 'account.payment',
-            'docs': payments,
+            'doc_model': 'l10n_latam.check',
+            'docs': checks,
             'data': data,
         }

@@ -4,7 +4,7 @@
     <!-- Definición del reporte de impresión de cheques -->
     <record id="action_report_check_print" model="ir.actions.report">
         <field name="name">Imprimir Cheques</field>
-        <field name="model">account.payment</field>
+        <field name="model">l10n_latam.check</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">l10n_ec_check.report_check_print</field>
         <field name="report_file">l10n_ec_check.report_check_print</field>
@@ -15,8 +15,8 @@
     <!-- Template del cheque -->
     <template id="report_check_print">
         <t t-call="web.html_container">
-            <t t-foreach="docs" t-as="payment">
-                <t t-set="check_format" t-value="payment.l10n_ec_check_format_id"/>
+        <t t-foreach="docs" t-as="check">
+            <t t-set="check_format" t-value="check.payment_id.l10n_ec_check_format_id"/>
                 
                 <div class="page" t-attf-style="width: {{check_format.paper_width or 215.9}}mm; height: {{check_format.paper_height or 279.4}}mm; font-family: 'DejaVu Sans', Arial, sans-serif;">
                     
@@ -25,7 +25,7 @@
                         
                         <!-- Renderizar cada campo del formato -->
                         <t t-foreach="check_format.format_field_ids.sorted(key=lambda f: f.sequence)" t-as="field">
-                            <t t-set="field_value" t-value="field.get_field_value(payment)"/>
+                            <t t-set="field_value" t-value="field.get_field_value(check)"/>
                             
                             <!-- Solo mostrar si tiene valor -->
                             <t t-if="field_value and field.visible">
