@@ -83,6 +83,82 @@ class ResPartnerBank(models.Model):
                     _('El siguiente número de cheque debe ser mayor a cero.')
                 )
     
+    def _l10n_ec_reserve_next_check_number(self):
+        """Reservar y devolver el siguiente número de cheque."""
+        self.ensure_one()
+        if not self.id:
+            return False
+
+        self.env.cr.execute(
+            """
+                SELECT COALESCE(l10n_ec_check_next_number, 1)
+                  FROM res_partner_bank
+                 WHERE id = %s
+                 FOR UPDATE
+            """,
+            (self.id,)
+        )
+        result = self.env.cr.fetchone()
+        current_number = max(1, result[0] if result else 1)
+
+        self.env.cr.execute(
+            """
+                UPDATE res_partner_bank
+                   SET l10n_ec_check_next_number = %s
+                 WHERE id = %s
+            """,
+            (current_number + 1, self.id)
+        )
+        self.invalidate_recordset(['l10n_ec_check_next_number'])
+        return str(current_number).zfill(8)
+
+    def _l10n_ec_peek_next_check_number(self, taken_numbers=None):
+        """Obtener un número tentativo sin comprometer la numeración."""
+        self.ensure_one()
+        if not self.id:
+            return False
+
+        taken_set = {str(num) for num in (taken_numbers or []) if num}
+        candidate = max(1, self.l10n_ec_check_next_number or 1)
+        candidate_str = str(candidate).zfill(8)
+        while candidate_str in taken_set:
+            candidate += 1
+            candidate_str = str(candidate).zfill(8)
+        return candidate_str
+
+    def _l10n_ec_sync_next_number(self, last_number):
+        """Alinear el siguiente número cuando se ingresa manualmente un cheque."""
+        self.ensure_one()
+        if not self.id or not last_number:
+            return
+
+        last_number = str(last_number)
+        if not last_number.isdigit():
+            return
+
+        next_candidate = int(last_number) + 1
+        self.env.cr.execute(
+            """
+                SELECT COALESCE(l10n_ec_check_next_number, 1)
+                  FROM res_partner_bank
+                 WHERE id = %s
+                 FOR UPDATE
+            """,
+            (self.id,)
+        )
+        result = self.env.cr.fetchone()
+        current_number = max(1, result[0] if result else 1)
+        if next_candidate > current_number:
+            self.env.cr.execute(
+                """
+                    UPDATE res_partner_bank
+                       SET l10n_ec_check_next_number = %s
+                     WHERE id = %s
+                """,
+                (next_candidate, self.id)
+            )
+            self.invalidate_recordset(['l10n_ec_check_next_number'])
+
     def check_duplicate_check_number(self, check_number):
         """
         Verificar si un número de cheque ya existe para esta cuenta bancaria.

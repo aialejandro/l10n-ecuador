@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_report_expense_voucher" model="ir.actions.report">
+        <field name="name">Comprobante de Egreso</field>
+        <field name="model">l10n_latam.check</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_ec_check.report_expense_voucher</field>
+        <field name="report_file">l10n_ec_check.report_expense_voucher</field>
+        <field name="print_report_name">'(Comp. Egreso) %s' % (object.name or object.payment_id.name)</field>
+    </record>
+
+    <template id="report_expense_voucher">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="check">
+                <t t-set="data" t-value="report_data.get(check.id)"/>
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <style>
+                        .voucher-box {
+                            font-family: 'DejaVu Sans', Arial, sans-serif;
+                            font-size: 11px;
+                            color: #222;
+                        }
+                        .voucher-header {
+                            display: flex;
+                            justify-content: space-between;
+                            margin-bottom: 16px;
+                            border-bottom: 1px solid #666;
+                            padding-bottom: 8px;
+                        }
+                        .voucher-header .company-name {
+                            font-size: 16px;
+                            font-weight: bold;
+                            text-transform: uppercase;
+                        }
+                        .voucher-title {
+                            text-align: right;
+                        }
+                        .voucher-title span {
+                            display: block;
+                        }
+                        .voucher-title .title {
+                            font-size: 18px;
+                            font-weight: bold;
+                            text-transform: uppercase;
+                        }
+                        .voucher-info table,
+                        .voucher-lines table {
+                            width: 100%;
+                            border-collapse: collapse;
+                        }
+                        .voucher-info td {
+                            padding: 3px 6px;
+                            vertical-align: top;
+                        }
+                        .voucher-lines th {
+                            background-color: #f0f0f0;
+                            border: 1px solid #999;
+                            padding: 6px;
+                            text-align: left;
+                        }
+                        .voucher-lines td {
+                            border: 1px solid #999;
+                            padding: 6px;
+                        }
+                        .text-right {
+                            text-align: right;
+                        }
+                        .signature-zone {
+                            margin-top: 32px;
+                            display: grid;
+                            grid-template-columns: repeat(4, 1fr);
+                            gap: 20px;
+                        }
+                        .signature-slot {
+                            text-align: center;
+                        }
+                        .signature-line {
+                            border-top: 1px solid #000;
+                            margin-top: 40px;
+                            padding-top: 4px;
+                            font-size: 10px;
+                        }
+                        .voucher-section-title {
+                            font-weight: bold;
+                            text-transform: uppercase;
+                            margin: 18px 0 8px 0;
+                            border-bottom: 1px solid #444;
+                            padding-bottom: 4px;
+                        }
+                    </style>
+
+                    <div class="voucher-box">
+                        <div class="voucher-header">
+                            <div>
+                                <div class="company-name" t-if="data.get('company')" t-esc="data['company'].name"/>
+                                <t t-if="data.get('company') and data['company'].partner_id">
+                                    <span t-esc="data['company'].partner_id.contact_address"/>
+                                </t>
+                            </div>
+                            <div class="voucher-title">
+                                <span class="title">Comprobante de Egreso</span>
+                                <span t-esc="data.get('move_name')"/>
+                                <span t-if="data.get('payment_date')" t-esc="format_date(data.get('payment_date'))"/>
+                            </div>
+                        </div>
+
+                        <div class="voucher-info">
+                            <table>
+                                <tr>
+                                    <td><strong>Beneficiario:</strong></td>
+                                    <td t-esc="data.get('partner_name')"/>
+                                    <td><strong>Identificación:</strong></td>
+                                    <td t-esc="data.get('partner_vat')"/>
+                                </tr>
+                                <tr>
+                                    <td><strong>N° Cheque:</strong></td>
+                                    <td t-esc="data.get('check_number')"/>
+                                    <td><strong>Monto:</strong></td>
+                                    <td t-esc="data.get('amount_formatted')"/>
+                                </tr>
+                                <tr>
+                                    <td><strong>En letras:</strong></td>
+                                    <td colspan="3" t-esc="data.get('amount_in_words')"/>
+                                </tr>
+                                <tr>
+                                    <td><strong>Concepto:</strong></td>
+                                    <td colspan="3" t-esc="data.get('payment_memo') or data.get('payment_ref')"/>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="voucher-section-title">Detalle del Asiento</div>
+                        <div class="voucher-lines">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 13%;">Código</th>
+                                        <th style="width: 27%;">Cuenta</th>
+                                        <th>Detalle</th>
+                                        <th style="width: 10%;" class="text-right">Débito</th>
+                                        <th style="width: 10%;" class="text-right">Crédito</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-if="data.get('move_lines')">
+                                        <t t-foreach="data.get('move_lines')" t-as="line">
+                                            <tr>
+                                                <td t-esc="line.account_id.code"/>
+                                                <td t-esc="line.account_id.name"/>
+                                                <td>
+                                                    <t t-esc="line.name or line.ref or ''"/>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-esc="formatLang(line.debit, currency_obj=data.get('currency'))"/>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-esc="formatLang(line.credit, currency_obj=data.get('currency'))"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                    <tr t-if="not data.get('move_lines')">
+                                        <td colspan="5" style="text-align:center;">No existen líneas contables para mostrar.</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot t-if="data.get('move_lines')">
+                                    <tr>
+                                        <th colspan="3" class="text-right">Totales</th>
+                                        <th class="text-right" t-esc="formatLang(data.get('total_debit'), currency_obj=data.get('currency'))"/>
+                                        <th class="text-right" t-esc="formatLang(data.get('total_credit'), currency_obj=data.get('currency'))"/>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+
+                        <div class="voucher-section-title">Firmas</div>
+                        <div class="signature-zone">
+                            <div class="signature-slot">
+                                <div class="signature-line">Elaborado por: <t t-esc="data.get('payment_creator')"/></div>
+                            </div>
+                            <div class="signature-slot">
+                                <div class="signature-line">Revisado</div>
+                            </div>
+                            <div class="signature-slot">
+                                <div class="signature-line">Autorizado</div>
+                            </div>
+                            <div class="signature-slot">
+                                <div class="signature-line">Recibí - C.I.: ____________________</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

@@ -33,6 +33,12 @@
                         icon="fa-print"
                         column_invisible="parent.payment_method_code != 'own_checks' or parent.state not in ('in_process', 'paid')"
                         help="Imprimir este cheque utilizando el formato configurado."/>
+                <button name="action_l10n_ec_print_expense_voucher"
+                    type="object"
+                    string="Comp. de Egreso"
+                    icon="fa-file-text-o"
+                    column_invisible="parent.state not in ('posted', 'in_process', 'paid') or not parent.move_id"
+                    help="Generar el comprobante de egreso para este cheque."/>
             </xpath>
         </field>
     </record>

@@ -59,3 +59,36 @@ class TestL10nMail(TestL10nECEdiCommon, MailCommon):
         self.assertEqual(invoice.state, "posted")
         self.assertTrue(edi_doc.l10n_ec_xml_access_key)
         self.assertTrue(invoice.is_move_sent)
+
+    @patch_service_sri
+    def test_l10n_ec_send_mail(self):
+        """Ensure cron in production env does not send emails when partners lack address."""
+
+        def mock_l10n_ec_edi_send_xml_with_auth(edi_doc_instance, client_ws):
+            return self._get_response_with_auth(edi_doc_instance)
+
+        partner = self.partner_cf
+        self._setup_edi_company_ec()
+        invoice = self._l10n_ec_prepare_edi_out_invoice(
+            partner=partner, auto_post=False
+        )
+        invoice.action_post()
+        edi_doc = invoice._get_edi_document(self.edi_format)
+
+        with patch.object(
+            AccountEdiDocument,
+            "_l10n_ec_edi_send_xml_auth",
+            mock_l10n_ec_edi_send_xml_with_auth,
+        ):
+            edi_doc._process_documents_web_services(with_commit=False)
+
+        cron_tasks = self.env.ref(
+            "l10n_ec_account_edi.ir_cron_send_email_electronic_documents", False
+        )
+        self.assertTrue(cron_tasks)
+
+        result = cron_tasks.method_direct_trigger()
+        self.assertTrue(result)
+        self.assertEqual(invoice.state, "posted")
+        self.assertTrue(edi_doc.l10n_ec_xml_access_key)
+        self.assertFalse(invoice.is_move_sent)

@@ -119,3 +119,10 @@ class AccountPayment(models.Model):
                 'default_check_ids': [(6, 0, printed_checks.ids)],
             }
         }
+
+    def _l10n_ec_get_check_bank_account(self):
+        """Return the bank account that controls numbering for own checks."""
+        self.ensure_one()
+        if self.payment_method_code != 'own_checks' or not self.journal_id:
+            return self.env['res.partner.bank']
+        return self.journal_id.bank_account_id

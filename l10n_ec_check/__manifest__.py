@@ -81,6 +81,7 @@ Características Especiales
         
         # Reports
         'report/l10n_ec_check_report.xml',
+        'report/l10n_ec_expense_voucher_report.xml',
         'report/report_payment_receipt_templates.xml',
         
         # Wizards

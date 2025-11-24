@@ -8,6 +8,21 @@ class L10nEcPaymentRegisterCheck(models.TransientModel):
 
     beneficiary = fields.Char(string='Beneficiario')
 
+    @api.model
+    def default_get(self, fields_list):
+        defaults = super().default_get(fields_list)
+        if 'name' in fields_list and not defaults.get('name'):
+            wizard_id = self.env.context.get('default_payment_register_id')
+            wizard = self.env['account.payment.register'].browse(wizard_id) if wizard_id else False
+            if wizard and wizard.payment_method_code == 'own_checks':
+                bank_account = wizard.journal_id.bank_account_id
+                if bank_account:
+                    taken_numbers = [name for name in wizard.l10n_latam_new_check_ids.mapped('name') if name]
+                    next_number = bank_account._l10n_ec_peek_next_check_number(taken_numbers)
+                    if next_number:
+                        defaults['name'] = next_number
+        return defaults
+
     @api.onchange('payment_register_id.partner_id')
     def _onchange_partner_id(self):
         for record in self:
