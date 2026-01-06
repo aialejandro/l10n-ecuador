@@ -417,12 +417,15 @@ class AccountMove(models.Model):
     def action_send_and_print(self):
         if any(x._is_l10n_ec_is_purchase_liquidation() for x in self):
             template = self.env.ref(self._get_mail_template(), raise_if_not_found=False)
+            wizard_model = (
+                "account.move.send.batch.wizard" if len(self) > 1 else "account.move.send.wizard"
+            )
             return {
                 "name": _("Send"),
                 "type": "ir.actions.act_window",
                 "view_type": "form",
                 "view_mode": "form",
-                "res_model": "account.move.send",
+                "res_model": wizard_model,
                 "target": "new",
                 "context": {
                     "active_ids": self.ids,
@@ -432,11 +435,11 @@ class AccountMove(models.Model):
         return super().action_send_and_print()
 
     def l10n_ec_send_email(self):
-        WizardInvoiceSent = self.env["account.move.send"]
         self.ensure_one()
         res = self.with_context(discard_logo_check=True).action_invoice_sent()
-        context = res["context"]
-        send_mail = WizardInvoiceSent.with_context(**context).create({})
+        context = res.get("context", {})
+        wizard_model = res.get("res_model") or "account.move.send.wizard"
+        send_mail = self.env[wizard_model].with_context(**context).create({})
         # enviar factura automaticamente por correo
         send_mail.action_send_and_print()
 

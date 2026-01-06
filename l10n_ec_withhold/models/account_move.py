@@ -187,12 +187,15 @@ class AccountMove(models.Model):
     def action_send_and_print(self):
         if any(move.is_purchase_withhold() for move in self):
             template = self.env.ref(self._get_mail_template(), raise_if_not_found=False)
+            wizard_model = (
+                "account.move.send.batch.wizard" if len(self) > 1 else "account.move.send.wizard"
+            )
             return {
                 "name": _("Send"),
                 "type": "ir.actions.act_window",
                 "view_type": "form",
                 "view_mode": "form",
-                "res_model": "account.move.send",
+                "res_model": wizard_model,
                 "target": "new",
                 "context": {
                     "active_ids": self.ids,
