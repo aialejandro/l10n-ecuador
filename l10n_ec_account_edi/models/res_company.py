@@ -4,6 +4,15 @@ from odoo import api, fields, models
 class ResCompany(models.Model):
     _inherit = "res.company"
 
+    l10n_ec_hide_invoice_line_product_code = fields.Boolean(
+        string="Hide Product Code on Customer Invoice Lines",
+        help="When enabled, customer invoice line labels won't include the product internal reference (code).",
+    )
+    l10n_ec_hide_invoice_line_product_name = fields.Boolean(
+        string="Hide Product Name on Customer Invoice Lines",
+        help="When enabled, customer invoice line labels won't include the product name.",
+    )
+
     l10n_ec_type_environment = fields.Selection(
         [
             ("test", "Test"),

@@ -30,3 +30,12 @@ class ResConfigSettings(models.TransientModel):
         default=50.0,
         readonly=False,
     )
+
+    l10n_ec_hide_invoice_line_product_code = fields.Boolean(
+        related="company_id.l10n_ec_hide_invoice_line_product_code",
+        readonly=False,
+    )
+    l10n_ec_hide_invoice_line_product_name = fields.Boolean(
+        related="company_id.l10n_ec_hide_invoice_line_product_name",
+        readonly=False,
+    )

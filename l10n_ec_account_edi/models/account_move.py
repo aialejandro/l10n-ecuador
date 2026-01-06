@@ -163,7 +163,30 @@ class AccountMove(models.Model):
         for move in self:
             if move.company_id.account_fiscal_country_id.code == "EC":
                 move._l10n_ec_validate_quantity_move_line()
+                move._l10n_ec_fill_invoice_report_line_names()
         return super().action_post()
+
+    def _l10n_ec_fill_invoice_report_line_names(self):
+        """Fill report-only description for Ecuadorian customer invoices.
+
+        This is done before posting so it works for invoices created from any flow and avoids
+        post/lock constraints.
+        """
+        for move in self:
+            if move.company_id.account_fiscal_country_id.code != "EC":
+                continue
+            if move.move_type != 'out_invoice':
+                continue
+            if not (
+                move.company_id.l10n_ec_hide_invoice_line_product_code
+                or move.company_id.l10n_ec_hide_invoice_line_product_name
+            ):
+                continue
+
+            for line in move.invoice_line_ids.filtered(lambda l: l.display_type == 'product' and l.product_id):
+                if line.l10n_ec_report_line_name is not False:
+                    continue
+                line.l10n_ec_report_line_name = line._l10n_ec_prepare_report_line_name()
 
     def _is_l10n_ec_is_purchase_liquidation(self):
         self.ensure_one()

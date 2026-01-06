@@ -135,6 +135,27 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-12 col-lg-6 o_setting_box" title="Invoice line label">
+                        <div class="o_setting_left_pane" />
+                        <div class="o_setting_right_pane">
+                            <span class="o_form_label">Customer Invoice Line Label</span>
+                            <div class="text-muted">
+                                Control whether product code/name are auto-filled on customer invoice line labels.
+                                If both are enabled, the line will only show what the user typed.
+                            </div>
+                            <div class="content-group">
+                                <div class="row">
+                                    <label for="l10n_ec_hide_invoice_line_product_code" class="col-lg-8 o_light_label" />
+                                    <field name="l10n_ec_hide_invoice_line_product_code" />
+                                </div>
+                                <div class="row">
+                                    <label for="l10n_ec_hide_invoice_line_product_name" class="col-lg-8 o_light_label" />
+                                    <field name="l10n_ec_hide_invoice_line_product_name" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </xpath>
         </field>

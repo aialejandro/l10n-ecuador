@@ -44,14 +44,14 @@
                     <tr style="font-size: 9px;" t-if="line.display_type=='product'">
                         <td>
                             <span
-                                t-out="line.product_id and line.product_id.default_code or 'S/N'"
+                                t-out="line.product_id and line.product_id.default_code or ''"
                             />
                         </td>
                         <td class="text-right">
                             <span t-field="line.quantity" />
                         </td>
                         <td>
-                            <span t-field="line.name" />
+                            <span t-out="line.l10n_ec_report_line_name if line.l10n_ec_report_line_name is not False else line.name" />
                         </td>
                         <td class="text-right">
                             <span
