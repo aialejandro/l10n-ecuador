@@ -93,6 +93,11 @@
                                 t-if="o.move_type in ('out_invoice', 'in_invoice')"
                                 t-call="l10n_ec_account_edi.electronic_report_common_payment_info"
                             />
+                            <t t-if="o.narration">
+                                <div class="mt-2 border p-2">
+                                    <div t-field="o.narration" />
+                                </div>
+                            </t>
                         </td>
                         <td style="width: 40%">
                             <t
