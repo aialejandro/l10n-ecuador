@@ -52,7 +52,8 @@ class WizardAbstractWithhold(models.AbstractModel):
             move = self.env["account.move"].new(wizard._prepare_withholding_vals())
             last_sequence = move._get_last_sequence()
             if not last_sequence:
-                wizard.document_number = False  # leave manual when there is no prior numbering
+                # keep a manually-entered number if present; otherwise leave empty
+                wizard.document_number = wizard.document_number or False
                 wizard.document_number_manual_allowed = True
                 continue
 
@@ -64,13 +65,22 @@ class WizardAbstractWithhold(models.AbstractModel):
             wizard.document_number_manual_allowed = False
 
     def _prepare_withholding_vals(self):
+        doc_type = self.env.ref("l10n_ec.ec_dt_07")
+        formatted_number = ""
+        if self.document_number:
+            formatted_number = doc_type._format_document_number(self.document_number)
+        name_value = False
+        if formatted_number:
+            name_value = f"{doc_type.doc_code_prefix} {formatted_number}"
         return {
             "journal_id": self.journal_id.id,
-            "ref": self.document_number,
+            "ref": formatted_number or self.document_number or False,
             "date": self.issue_date,
             "l10n_ec_electronic_authorization": self.electronic_authorization,
             "move_type": "entry",
-            "l10n_latam_document_type_id": self.env.ref("l10n_ec.ec_dt_07").id,
+            "l10n_latam_document_type_id": doc_type.id,
+            "l10n_latam_document_number": formatted_number or False,
+            "name": name_value,
             "partner_id": self.partner_id.id,
         }
 

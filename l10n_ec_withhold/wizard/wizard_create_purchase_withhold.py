@@ -35,6 +35,8 @@ class WizardCreatePurchaseWithhold(models.TransientModel):
         Create a purchase Withholding and try reconcile with invoice
         """
         self.ensure_one()
+        if self.document_number_manual_allowed and not self.document_number:
+            raise UserError(_("Please set a document number before validating."))
         if not self.withhold_line_ids:
             raise UserError(_("Please add some withholding lines before continue"))
         tax_support_string = dict(
