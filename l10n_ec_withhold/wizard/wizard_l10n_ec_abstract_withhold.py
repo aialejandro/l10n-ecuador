@@ -19,11 +19,13 @@ class WizardAbstractWithhold(models.AbstractModel):
         size=17,
         compute="_compute_document_number",
         store=True,
+        compute_sudo=True,
         readonly=False,
     )
     document_number_manual_allowed = fields.Boolean(
         compute="_compute_document_number",
-        store=False,
+        store=True,
+        compute_sudo=True,
     )
     electronic_authorization = fields.Char(
         size=49,
