@@ -21,6 +21,10 @@ class WizardAbstractWithhold(models.AbstractModel):
         store=True,
         readonly=False,
     )
+    document_number_manual_allowed = fields.Boolean(
+        compute="_compute_document_number",
+        store=False,
+    )
     electronic_authorization = fields.Char(
         size=49,
         required=False,
@@ -38,17 +42,26 @@ class WizardAbstractWithhold(models.AbstractModel):
                 wizard.journal_id.l10n_ec_withholding_type != "purchase"
             ):
                 wizard.document_number = False
+                wizard.document_number_manual_allowed = False
                 continue
             if not wizard.issue_date:
                 wizard.document_number = False
+                wizard.document_number_manual_allowed = False
                 continue
 
             move = self.env["account.move"].new(wizard._prepare_withholding_vals())
+            last_sequence = move._get_last_sequence()
+            if not last_sequence:
+                wizard.document_number = False  # leave manual when there is no prior numbering
+                wizard.document_number_manual_allowed = True
+                continue
+
             format_string, format_values = move._get_next_sequence_format()
             seq_value = format_values.get("seq", 0) + 1
             move.name = format_string.format(**{**format_values, "seq": seq_value})
             move._compute_split_sequence()
             wizard.document_number = move.l10n_latam_document_number
+            wizard.document_number_manual_allowed = False
 
     def _prepare_withholding_vals(self):
         return {

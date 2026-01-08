@@ -15,7 +15,11 @@
                             domain="[('type', '=', 'general'), ('l10n_ec_withholding_type', '=', 'purchase')]"
                             options="{'no_create': True}"
                         />
-                        <field name="document_number" readonly="True" />
+                        <field
+                            name="document_number"
+                            readonly="not document_number_manual_allowed"
+                        />
+                        <field name="document_number_manual_allowed" invisible="1" />
                         <field name="invoice_id" invisible="True" />
                     </group>
                 </group>
