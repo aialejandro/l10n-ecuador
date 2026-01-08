@@ -31,18 +31,24 @@ class WizardAbstractWithhold(models.AbstractModel):
         readonly=True,
     )
 
-    @api.depends("journal_id")
+    @api.depends("journal_id", "issue_date")
     def _compute_document_number(self):
         for wizard in self:
-            if (
-                wizard.journal_id
-                and wizard.journal_id.l10n_ec_withholding_type == "purchase"
+            if not wizard.journal_id or (
+                wizard.journal_id.l10n_ec_withholding_type != "purchase"
             ):
-                move = self.env["account.move"].new(self._prepare_withholding_vals())
-                move._set_next_sequence()
-                wizard.document_number = move.l10n_latam_document_number
-            else:
                 wizard.document_number = False
+                continue
+            if not wizard.issue_date:
+                wizard.document_number = False
+                continue
+
+            move = self.env["account.move"].new(wizard._prepare_withholding_vals())
+            format_string, format_values = move._get_next_sequence_format()
+            seq_value = format_values.get("seq", 0) + 1
+            move.name = format_string.format(**{**format_values, "seq": seq_value})
+            move._compute_split_sequence()
+            wizard.document_number = move.l10n_latam_document_number
 
     def _prepare_withholding_vals(self):
         return {
