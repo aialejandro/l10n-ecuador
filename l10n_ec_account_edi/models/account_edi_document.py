@@ -372,6 +372,15 @@ class AccountEdiDocument(models.Model):
         additional_information = self.move_id.l10n_ec_additional_information_move_ids
         info_data = []
 
+        if self.move_id.company_id.l10n_ec_retention_agent:
+            info_data.append(
+                {
+                    "name": "Regimen",
+                    "description": self.move_id.company_id.l10n_ec_retention_agent_caption
+                    or "",
+                }
+            )
+
         for line in additional_information:
             info_data.append(
                 {

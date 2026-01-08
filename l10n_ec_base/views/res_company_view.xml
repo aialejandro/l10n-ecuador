@@ -25,6 +25,11 @@
                     placeholder="Empty if Not"
                     invisible="country_code != 'EC'"
                 />
+                <field
+                    name="l10n_ec_retention_agent_caption"
+                    placeholder=""
+                    invisible="country_code != 'EC'"
+                />
                 <field name="l10n_ec_regimen" invisible="country_code != 'EC'" />
             </xpath>
         </field>

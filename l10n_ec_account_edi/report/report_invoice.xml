@@ -79,7 +79,13 @@
             >
                 <t t-call="l10n_ec_account_edi.e_debit_note_document_body" />
             </t>
-
+            <t t-if="o.company_id.l10n_ec_retention_agent_caption">
+                <div
+                    class="mt-1"
+                    style="font-size: 8px;"
+                    t-esc="o.company_id.l10n_ec_retention_agent_caption"
+                />
+            </t>
             <!-- TODO: agregar logica para demas tipos de documento -->
             <table class="table table-sm table-no-border">
                 <tbody>
@@ -96,6 +102,7 @@
                             <t t-if="o.narration">
                                 <div class="mt-2 border p-2">
                                     <div t-field="o.narration" />
+                                    
                                 </div>
                             </t>
                         </td>
