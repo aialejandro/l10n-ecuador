@@ -11,6 +11,7 @@
     "data": [
         "security/ir.model.access.csv",
         "data/edi_withhold.xml",
+        "data/mail_template_data.xml",
         "wizard/wizard_create_sale_withhold_view.xml",
         "wizard/wizard_create_purchase_withhold_view.xml",
         "views/res_partner_view.xml",

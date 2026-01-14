@@ -186,7 +186,8 @@ class AccountMove(models.Model):
 
     def action_send_and_print(self):
         if any(move.is_purchase_withhold() for move in self):
-            template = self.env.ref(self._get_mail_template(), raise_if_not_found=False)
+            #template = self.env.ref(self._get_mail_template(), raise_if_not_found=False)
+            template = self._get_mail_template()
             wizard_model = (
                 "account.move.send.batch.wizard" if len(self) > 1 else "account.move.send.wizard"
             )
@@ -199,7 +200,8 @@ class AccountMove(models.Model):
                 "target": "new",
                 "context": {
                     "active_ids": self.ids,
-                    "default_mail_template_id": template.id,
+                    #"default_mail_template_id": template.id,
+                    "default_mail_template_id": template.id if template else None,
                 },
             }
         return super().action_send_and_print()
@@ -392,6 +394,21 @@ class AccountMove(models.Model):
     def _get_l10n_ec_tax_support(self):
         self.ensure_one()
         return self.partner_id.l10n_ec_tax_support
+
+    def _get_mail_template(self):
+        """
+        Return the appropriate mail template for withholds,
+        otherwise fallback to the parent implementation for invoices/credit notes.
+        """
+        # Check if any move in the recordset is a withhold
+        if any(move.is_withhold() for move in self):
+            template = self.env.ref(
+                'l10n_ec_withhold.email_template_edi_withhold',
+                raise_if_not_found=False
+            )
+            if template:
+                return template
+        return super()._get_mail_template()
 
 
 class AccountMoveLine(models.Model):

@@ -1,8 +1,50 @@
-from odoo import api, models
+from odoo import _, api, models
+from odoo.exceptions import UserError
 
 
 class AccountMoveSend(models.AbstractModel):
     _inherit = "account.move.send"
+
+    @api.model
+    def _l10n_ec_is_withhold_move(self, move):
+        """Return True if this move is an Ecuadorian withholding document."""
+        # Prefer the helper from l10n_ec_withhold if present.
+        is_withhold = getattr(move, "is_withhold", None)
+        if callable(is_withhold):
+            try:
+                return bool(is_withhold())
+            except Exception:
+                return False
+
+        # Fallback: infer from LATAM document type.
+        doc_type = getattr(move, "l10n_latam_document_type_id", None)
+        internal_type = getattr(doc_type, "internal_type", None)
+        return internal_type == "withhold" and getattr(move, "country_code", None) == "EC"
+
+    @api.model
+    def _check_move_constrains(self, moves):
+        """Allow generating documents for withholds as well as sales documents."""
+        if any(move.state != "posted" for move in moves):
+            raise UserError(_("You can't generate invoices that are not posted."))
+
+        invalid_moves = moves.filtered(
+            lambda m: not m.is_sale_document(include_receipts=True) and not self._l10n_ec_is_withhold_move(m)
+        )
+        if invalid_moves:
+            raise UserError(_("You can only generate sales documents."))
+
+    @api.model
+    def _get_placeholder_mail_template_dynamic_attachments_data(self, move, mail_template, pdf_report=None):
+        """Prevent duplicate withhold PDFs.
+
+        When the mail template contains report templates, the send wizard will create extra placeholders
+        like "withholding ec_<filename>.pdf". For withholds, the PDF is already produced by the wizard
+        (see `_prepare_invoice_pdf_report` override), so we remove those extra placeholders.
+        """
+        withhold_template = self.env.ref('l10n_ec_withhold.email_template_edi_withhold', raise_if_not_found=False)
+        if withhold_template and mail_template and mail_template.id == withhold_template.id and self._l10n_ec_is_withhold_move(move):
+            return []
+        return super()._get_placeholder_mail_template_dynamic_attachments_data(move, mail_template, pdf_report=pdf_report)
 
     def _prepare_invoice_pdf_report(self, invoices_data):
         """Prepare the pdf report for the invoices passed as parameter.
