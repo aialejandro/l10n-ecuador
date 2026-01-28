@@ -12,7 +12,7 @@ class L10nEcPaymentBatch(models.Model):
     _description = 'Payment Batch'
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
-    name = fields.Char('Batch Name', required=True, help='Name of the payment batch')
+    name = fields.Char('Batch Name', required=True, default='/', help='Name of the payment batch')
     state = fields.Selection(
         selection=[
             ('draft', 'Draft'),
@@ -66,6 +66,14 @@ class L10nEcPaymentBatch(models.Model):
         
     def action_cancel(self):
         self.write({'state': 'cancelled'})
+
+    @api.model
+    def create(self, vals):
+        if not vals.get('name') or vals.get('name') == '/':
+            partner_type = vals.get('partner_type') or self.env.context.get('default_partner_type') or 'supplier'
+            sequence_code = 'l10n_ec.payment.batch.customer' if partner_type == 'customer' else 'l10n_ec.payment.batch.supplier'
+            vals['name'] = self.env['ir.sequence'].next_by_code(sequence_code) or '/'
+        return super().create(vals)
 
     def action_download_txt(self):
         self.ensure_one()

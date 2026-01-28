@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_l10n_ec_payment_batch_customer" model="ir.sequence">
+            <field name="name">Payment Batch Customer</field>
+            <field name="code">l10n_ec.payment.batch.customer</field>
+            <field name="prefix">PCL</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_l10n_ec_payment_batch_supplier" model="ir.sequence">
+            <field name="name">Payment Batch Supplier</field>
+            <field name="code">l10n_ec.payment.batch.supplier</field>
+            <field name="prefix">PPL</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>
