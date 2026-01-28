@@ -76,6 +76,8 @@ class L10nEcCheck(models.Model):
     def create(self, vals_list):
         payment_cache = {}
         default_payment_id = self.env.context.get('default_payment_id')
+        skip_reserve = self.env.context.get('l10n_ec_skip_check_reserve')
+        taken_by_payment = {}
         for vals in vals_list:
             payment_id = vals.get('payment_id') or default_payment_id
             payment = payment_cache.get(payment_id)
@@ -87,22 +89,36 @@ class L10nEcCheck(models.Model):
 
             bank_account = payment._l10n_ec_get_check_bank_account() if payment else self.env['res.partner.bank']
             if bank_account and payment and payment.payment_method_code == 'own_checks':
-                reserved_number = bank_account._l10n_ec_reserve_next_check_number()
                 manual_number = vals.get('name')
-                if manual_number and str(manual_number).isdigit():
-                    manual_int = int(str(manual_number))
-                    reserved_int = int(reserved_number)
-                    if manual_int > reserved_int:
-                        bank_account._l10n_ec_sync_next_number(manual_number)
-                        vals['name'] = str(manual_number).zfill(8)
-                    elif manual_int == reserved_int:
+                if skip_reserve or payment.state == 'draft':
+                    if manual_number:
+                        vals['name'] = str(manual_number).zfill(8) if str(manual_number).isdigit() else manual_number
+                    else:
+                        taken = taken_by_payment.get(payment_id)
+                        if taken is None:
+                            taken = {name for name in payment.l10n_latam_new_check_ids.mapped('name') if name}
+                            taken_by_payment[payment_id] = taken
+                        peek_number = bank_account._l10n_ec_peek_next_check_number(taken)
+                        if peek_number:
+                            vals['name'] = peek_number
+                    if vals.get('name'):
+                        taken_by_payment.setdefault(payment_id, set()).add(vals['name'])
+                else:
+                    reserved_number = bank_account._l10n_ec_reserve_next_check_number()
+                    if manual_number and str(manual_number).isdigit():
+                        manual_int = int(str(manual_number))
+                        reserved_int = int(reserved_number)
+                        if manual_int > reserved_int:
+                            bank_account._l10n_ec_sync_next_number(manual_number)
+                            vals['name'] = str(manual_number).zfill(8)
+                        elif manual_int == reserved_int:
+                            vals['name'] = reserved_number
+                        else:
+                            vals['name'] = reserved_number
+                    elif manual_number:
                         vals['name'] = reserved_number
                     else:
                         vals['name'] = reserved_number
-                elif manual_number:
-                    vals['name'] = reserved_number
-                else:
-                    vals['name'] = reserved_number
             elif bank_account and vals.get('name'):
                 bank_account._l10n_ec_sync_next_number(vals['name'])
         checks = super().create(vals_list)

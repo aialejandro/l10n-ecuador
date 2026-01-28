@@ -76,6 +76,37 @@ class AccountPayment(models.Model):
                 check_payments._compute_l10n_ec_check_format_id()
         return result
 
+    def action_post(self):
+        Check = self.env['l10n_latam.check']
+        for payment in self.filtered(lambda p: p.payment_method_code == 'own_checks' and p.journal_id.bank_account_id):
+            bank_account = payment.journal_id.bank_account_id
+            if not bank_account:
+                continue
+
+            taken_numbers = set(
+                Check.search([
+                    ('payment_method_line_id', '=', payment.payment_method_line_id.id),
+                    ('outstanding_line_id', '!=', False),
+                    ('name', '!=', False),
+                    ('id', 'not in', payment.l10n_latam_new_check_ids.ids),
+                ]).mapped('name')
+            )
+
+            for check in payment.l10n_latam_new_check_ids:
+                if not check.name or check.name in taken_numbers:
+                    check.name = bank_account._l10n_ec_peek_next_check_number(taken_numbers)
+                if check.name:
+                    taken_numbers.add(check.name)
+
+        result = super().action_post()
+
+        for payment in self.filtered(lambda p: p.payment_method_code == 'own_checks' and p.journal_id.bank_account_id):
+            bank_account = payment.journal_id.bank_account_id
+            for check in payment.l10n_latam_new_check_ids:
+                if check.name and str(check.name).isdigit():
+                    bank_account._l10n_ec_sync_next_number(check.name)
+        return result
+
     @api.onchange('partner_id', 'l10n_latam_new_check_ids')
     def _onchange_l10n_ec_check_beneficiary(self):
          for payment in self:
