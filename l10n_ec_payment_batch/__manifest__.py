@@ -29,6 +29,7 @@ Features:
     'data': [
         'security/ir.model.access.csv',
         'data/l10n_ec_payment_batch_sequences.xml',
+        'report/l10n_ec_payment_batch_report.xml',
         'views/l10n_ec_payment_batch_views.xml',
         'views/account_payment_views.xml',
         'wizard/l10n_ec_payment_batch_reconcile_wizard_views.xml',

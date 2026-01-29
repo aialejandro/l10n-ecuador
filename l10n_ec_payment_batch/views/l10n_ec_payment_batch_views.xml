@@ -49,6 +49,9 @@
                     <group>
                         <field name="partner_ids" widget="many2many_tags"/>
                     </group>
+                    <group>
+                        <field name="description" placeholder="This description will be used as memo in created payments..."/>
+                    </group>
                     <div class="oe_button_box" invisible="not partner_ids">
                         <button name="action_update_lines" string="Update Lines" type="object" class="btn-primary" invisible="state != 'draft'"/>
                     </div>
@@ -118,16 +121,52 @@
         </field>
     </record>
 
+    <!-- Action for Supplier Payments -->
+    <record id="action_l10n_ec_payment_batch_supplier" model="ir.actions.act_window">
+        <field name="name">Supplier Payment Batches</field>
+        <field name="res_model">l10n_ec.payment.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_draft': 1, 'default_partner_type': 'supplier'}</field>
+        <field name="domain">[('partner_type', '=', 'supplier')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new supplier payment batch
+            </p>
+            <p>
+                Payment batches allow you to group multiple supplier payments together for processing.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action for Customer Payments -->
+    <record id="action_l10n_ec_payment_batch_customer" model="ir.actions.act_window">
+        <field name="name">Customer Payment Batches</field>
+        <field name="res_model">l10n_ec.payment.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_draft': 1, 'default_partner_type': 'customer'}</field>
+        <field name="domain">[('partner_type', '=', 'customer')]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new customer payment batch
+            </p>
+            <p>
+                Payment batches allow you to group multiple customer payments together for processing.
+            </p>
+        </field>
+    </record>
+
     <!-- Menu Items -->
-    <menuitem id="menu_l10n_ec_payment_batch_root"
-        name="Payment Batches"
+
+    <menuitem id="menu_l10n_ec_payment_batch_supplier"
+        name="Batch Payments"
         parent="account.menu_finance_payables"
+        action="action_l10n_ec_payment_batch_supplier"
         sequence="50"/>
 
-    <menuitem id="menu_l10n_ec_payment_batch"
-        name="Payment Batches"
-        parent="menu_l10n_ec_payment_batch_root"
-        action="action_l10n_ec_payment_batch"
-        sequence="10"/>
+    <menuitem id="menu_l10n_ec_payment_batch_customer"
+        name="Batch Payments"
+        parent="account.menu_finance_receivables"
+        action="action_l10n_ec_payment_batch_customer"
+        sequence="39"/>
 
 </odoo>

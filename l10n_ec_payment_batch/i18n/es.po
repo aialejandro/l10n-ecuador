@@ -1,0 +1,584 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ec_payment_batch
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-29 00:00+0000\n"
+"PO-Revision-Date: 2026-01-29 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model,name:l10n_ec_payment_batch.model_l10n_ec_payment_batch
+#: model:ir.actions.report,name:l10n_ec_payment_batch.action_report_l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_form
+msgid "Payment Batch"
+msgstr "Lote de pagos"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model,name:l10n_ec_payment_batch.model_l10n_ec_payment_batch_line
+msgid "Payment Batch Line"
+msgstr "Línea de lote de pagos"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model,name:l10n_ec_payment_batch.model_l10n_ec_payment_batch_line_reconcile
+msgid "Payment Batch Line Reconciliation"
+msgstr "Conciliación de línea de lote de pagos"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model,name:l10n_ec_payment_batch.model_l10n_ec_payment_batch_reconcile_wizard
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_reconcile_wizard_form
+msgid "Select Invoices to Reconcile"
+msgstr "Seleccionar facturas a conciliar"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model,name:l10n_ec_payment_batch.model_l10n_ec_payment_batch_reconcile_wizard_line
+msgid "Invoice Line Selection"
+msgstr "Selección de líneas de factura"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch__name
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_form
+msgid "Batch Name"
+msgstr "Nombre del lote"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,help:l10n_ec_payment_batch.field_l10n_ec_payment_batch__name
+msgid "Name of the payment batch"
+msgstr "Nombre del lote de pagos"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch__description
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Description"
+msgstr "Descripción"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,help:l10n_ec_payment_batch.field_l10n_ec_payment_batch__description
+msgid "Description to be used as memo in created payments"
+msgstr "Descripción que se usará como memo en los pagos creados"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch__state
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_search
+msgid "State"
+msgstr "Estado"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch__company_id
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_search
+msgid "Company"
+msgstr "Compañía"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch__currency_id
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line__currency_id
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line_reconcile__currency_id
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch__batch_date
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_search
+msgid "Batch Date"
+msgstr "Fecha del lote"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch__partner_type
+msgid "Partner Type"
+msgstr "Tipo de contacto"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch__payment_method_line_id
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line__payment_method_line_id
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_search
+msgid "Payment Method"
+msgstr "Método de pago"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch__partner_ids
+msgid "Partners"
+msgstr "Contactos"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch__line_ids
+msgid "Batch Lines"
+msgstr "Líneas del lote"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch__total_amount
+msgid "Total Amount"
+msgstr "Importe total"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch__has_own_checks
+msgid "Has Own Checks"
+msgstr "Usa cheques propios"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,help:l10n_ec_payment_batch.field_l10n_ec_payment_batch__has_own_checks
+msgid "Technical field to control check columns visibility."
+msgstr "Campo técnico para controlar la visibilidad de las columnas de cheques."
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line__batch_id
+msgid "Payment Batch"
+msgstr "Lote de pagos"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line__partner_id
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_reconcile_wizard__partner_id
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Partner"
+msgstr "Contacto"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line__is_own_checks
+msgid "Own Checks Method"
+msgstr "Método de cheques propios"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,help:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line__is_own_checks
+msgid "Indicates this line uses the own checks payment method."
+msgstr "Indica que esta línea usa el método de cheques propios."
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line__check_number
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Check Number"
+msgstr "Número de cheque"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,help:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line__check_number
+msgid "Check number reserved for this payment line when using own checks."
+msgstr "Número de cheque reservado para esta línea de pago cuando se usan cheques propios."
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line__check_beneficiary
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Check Beneficiary"
+msgstr "Beneficiario del cheque"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,help:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line__check_beneficiary
+msgid "Beneficiary to print on the check."
+msgstr "Beneficiario a imprimir en el cheque."
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line__check_payment_date
+msgid "Check Payment Date"
+msgstr "Fecha de pago del cheque"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,help:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line__check_payment_date
+msgid "Payment date to print on the check."
+msgstr "Fecha de pago que se imprimirá en el cheque."
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line__amount
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Amount"
+msgstr "Importe"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line__reconcile_line_ids
+msgid "Reconcile Lines"
+msgstr "Líneas de conciliación"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line__payment_id
+msgid "Payment"
+msgstr "Pago"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line__payment_state
+msgid "Payment Status"
+msgstr "Estado del pago"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line__full_residual
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_reconcile_wizard_line__full_residual
+msgid "Full Residual"
+msgstr "Residual total"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line_reconcile__batch_line_id
+msgid "Batch Line"
+msgstr "Línea del lote"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line_reconcile__batch_id
+msgid "Batch"
+msgstr "Lote"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line_reconcile__move_line_id
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_reconcile_wizard_line__move_line_id
+msgid "Invoice Line"
+msgstr "Línea de factura"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line_reconcile__move_id
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_reconcile_wizard_line__move_id
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line_reconcile__amount
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_reconcile_wizard_line__amount
+msgid "Amount to Pay"
+msgstr "Importe a pagar"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line_reconcile__allocated_in_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_reconcile_wizard_line__allocated_in_batch
+msgid "Allocated in Batch"
+msgstr "Asignado en el lote"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_line_reconcile__available_residual
+msgid "Available Residual"
+msgstr "Residual disponible"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_reconcile_wizard__batch_line_id
+msgid "Payment Line"
+msgstr "Línea de pago"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_reconcile_wizard__line_ids
+msgid "Invoice Lines"
+msgstr "Líneas de factura"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_reconcile_wizard__total_selected
+msgid "Total Selected"
+msgstr "Total seleccionado"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_reconcile_wizard_line__selected
+msgid "Select"
+msgstr "Seleccionar"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_reconcile_wizard_line__date_maturity
+msgid "Due Date"
+msgstr "Fecha de vencimiento"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields,field_description:l10n_ec_payment_batch.field_l10n_ec_payment_batch_reconcile_wizard_line__available_residual
+msgid "Available"
+msgstr "Disponible"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields.selection,name:l10n_ec_payment_batch.selection__l10n_ec_payment_batch__state__draft
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_search
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields.selection,name:l10n_ec_payment_batch.selection__l10n_ec_payment_batch__state__confirmed
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_search
+msgid "Confirmed"
+msgstr "Confirmado"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields.selection,name:l10n_ec_payment_batch.selection__l10n_ec_payment_batch__state__cancelled
+msgid "Cancelled"
+msgstr "Cancelado"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields.selection,name:l10n_ec_payment_batch.selection__l10n_ec_payment_batch__partner_type__customer
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.model.fields.selection,name:l10n_ec_payment_batch.selection__l10n_ec_payment_batch__partner_type__supplier
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Supplier"
+msgstr "Proveedor"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.actions.act_window,name:l10n_ec_payment_batch.action_l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_tree
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_search
+msgid "Payment Batches"
+msgstr "Lotes de pagos"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.actions.act_window,name:l10n_ec_payment_batch.action_l10n_ec_payment_batch_supplier
+msgid "Supplier Payment Batches"
+msgstr "Lotes de pagos a proveedores"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.actions.act_window,name:l10n_ec_payment_batch.action_l10n_ec_payment_batch_customer
+msgid "Customer Payment Batches"
+msgstr "Lotes de pagos de clientes"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.ui.menu,name:l10n_ec_payment_batch.menu_l10n_ec_payment_batch_supplier
+#: model:ir.ui.menu,name:l10n_ec_payment_batch.menu_l10n_ec_payment_batch_customer
+msgid "Batch Payments"
+msgstr "Lotes de pagos"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_form
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_reconcile_wizard_form
+msgid "Confirm"
+msgstr "Confirmar"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_form
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_reconcile_wizard_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_form
+msgid "Download TXT"
+msgstr "Descargar TXT"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_form
+msgid "This description will be used as memo in created payments..."
+msgstr "Esta descripción se usará como memo en los pagos creados..."
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_form
+msgid "Update Lines"
+msgstr "Actualizar líneas"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_form
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Payment Lines"
+msgstr "Líneas de pago"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_form
+#: model:ir.actions.act_window,name:l10n_ec_payment_batch.action_l10n_ec_payment_batch_reconcile_wizard
+msgid "Select Invoices"
+msgstr "Seleccionar facturas"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_search
+msgid "Batch"
+msgstr "Lote"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_search
+msgid "Group By"
+msgstr "Agrupar por"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_tree
+msgid "Total"
+msgstr "Total"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Payment Batch: "
+msgstr "Lote de pagos: "
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Status:"
+msgstr "Estado:"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Partner Type:"
+msgstr "Tipo de contacto:"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Payment Method:"
+msgstr "Método de pago:"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Description:"
+msgstr "Descripción:"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Beneficiary"
+msgstr "Beneficiario"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Check Date"
+msgstr "Fecha del cheque"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Invoices"
+msgstr "Facturas"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "No invoices allocated"
+msgstr "Sin facturas asignadas"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Total:"
+msgstr "Total:"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.actions.act_window,help:l10n_ec_payment_batch.action_l10n_ec_payment_batch
+msgid "Create a new payment batch"
+msgstr "Crear un nuevo lote de pagos"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.actions.act_window,help:l10n_ec_payment_batch.action_l10n_ec_payment_batch
+msgid "Payment batches allow you to group multiple payments together for processing."
+msgstr "Los lotes de pagos le permiten agrupar múltiples pagos para su procesamiento."
+
+#. module: l10n_ec_payment_batch
+#: model:ir.actions.act_window,help:l10n_ec_payment_batch.action_l10n_ec_payment_batch_supplier
+msgid "Create a new supplier payment batch"
+msgstr "Crear un nuevo lote de pagos a proveedores"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.actions.act_window,help:l10n_ec_payment_batch.action_l10n_ec_payment_batch_supplier
+msgid "Payment batches allow you to group multiple supplier payments together for processing."
+msgstr "Los lotes de pagos le permiten agrupar múltiples pagos a proveedores para su procesamiento."
+
+#. module: l10n_ec_payment_batch
+#: model:ir.actions.act_window,help:l10n_ec_payment_batch.action_l10n_ec_payment_batch_customer
+msgid "Create a new customer payment batch"
+msgstr "Crear un nuevo lote de pagos de clientes"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.actions.act_window,help:l10n_ec_payment_batch.action_l10n_ec_payment_batch_customer
+msgid "Payment batches allow you to group multiple customer payments together for processing."
+msgstr "Los lotes de pagos le permiten agrupar múltiples pagos de clientes para su procesamiento."
+
+#. module: l10n_ec_payment_batch
+#: model:ir.sequence,name:l10n_ec_payment_batch.seq_l10n_ec_payment_batch_customer
+msgid "Payment Batch Customer"
+msgstr "Lote de pagos de clientes"
+
+#. module: l10n_ec_payment_batch
+#: model:ir.sequence,name:l10n_ec_payment_batch.seq_l10n_ec_payment_batch_supplier
+msgid "Payment Batch Supplier"
+msgstr "Lote de pagos a proveedores"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_reconcile_wizard_form
+msgid "Select All"
+msgstr "Seleccionar todo"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.view_l10n_ec_payment_batch_reconcile_wizard_form
+msgid "Deselect All"
+msgstr "Deseleccionar todo"
+
+#. module: l10n_ec_payment_batch
+#: model_terms:ir.ui.view,arch_db:l10n_ec_payment_batch.report_payment_batch_document
+msgid "Batch Date:"
+msgstr "Fecha del lote:"
+
+#. module: l10n_ec_payment_batch
+#. odoo-python
+#: code:addons/l10n_ec_payment_batch/models/l10n_ec_payment_batch.py:0
+msgid "Please select a payment method with a journal."
+msgstr "Seleccione un método de pago con diario."
+
+#. module: l10n_ec_payment_batch
+#. odoo-python
+#: code:addons/l10n_ec_payment_batch/models/l10n_ec_payment_batch.py:0
+msgid "The selected journal has no bank account."
+msgstr "El diario seleccionado no tiene cuenta bancaria."
+
+#. module: l10n_ec_payment_batch
+#. odoo-python
+#: code:addons/l10n_ec_payment_batch/models/l10n_ec_payment_batch.py:0
+msgid "The bank account BIC must be 10 to download this TXT file."
+msgstr "El BIC de la cuenta bancaria debe ser 10 para descargar este archivo TXT."
+
+#. module: l10n_ec_payment_batch
+#. odoo-python
+#: code:addons/l10n_ec_payment_batch/models/l10n_ec_payment_batch.py:0
+msgid "Please add at least one batch line."
+msgstr "Agregue al menos una línea del lote."
+
+#. module: l10n_ec_payment_batch
+#. odoo-python
+#: code:addons/l10n_ec_payment_batch/models/l10n_ec_payment_batch.py:0
+msgid "Please select a payment method on the batch."
+msgstr "Seleccione un método de pago en el lote."
+
+#. module: l10n_ec_payment_batch
+#. odoo-python
+#: code:addons/l10n_ec_payment_batch/models/l10n_ec_payment_batch.py:0
+msgid "The selected payment method has no journal assigned."
+msgstr "El método de pago seleccionado no tiene diario asignado."
+
+#. module: l10n_ec_payment_batch
+#. odoo-python
+#: code:addons/l10n_ec_payment_batch/models/l10n_ec_payment_batch.py:0
+msgid "Please set a check number for partner %s."
+msgstr "Defina un número de cheque para el contacto %s."
+
+#. module: l10n_ec_payment_batch
+#. odoo-python
+#: code:addons/l10n_ec_payment_batch/models/l10n_ec_payment_batch.py:0
+msgid "No counterpart line found to reconcile payment %s."
+msgstr "No se encontró una línea de contrapartida para conciliar el pago %s."
+
+#. module: l10n_ec_payment_batch
+#. odoo-python
+#: code:addons/l10n_ec_payment_batch/models/l10n_ec_payment_batch.py:0
+msgid "Payment %s cannot be reconciled with line %s because accounts do not match."
+msgstr "El pago %s no se puede conciliar con la línea %s porque las cuentas no coinciden."
+
+#. module: l10n_ec_payment_batch
+#. odoo-python
+#: code:addons/l10n_ec_payment_batch/models/l10n_ec_payment_batch.py:0
+msgid "Amount to pay cannot be negative."
+msgstr "El importe a pagar no puede ser negativo."
+
+#. module: l10n_ec_payment_batch
+#. odoo-python
+#: code:addons/l10n_ec_payment_batch/models/l10n_ec_payment_batch.py:0
+msgid "Line"
+msgstr "Línea"
+
+#. module: l10n_ec_payment_batch
+#. odoo-python
+#: code:addons/l10n_ec_payment_batch/models/l10n_ec_payment_batch.py:0
+#, python-format
+msgid "Line #%s"
+msgstr "Línea #%s"
+
+#. module: l10n_ec_payment_batch
+#. odoo-python
+#: code:addons/l10n_ec_payment_batch/models/l10n_ec_payment_batch.py:0
+msgid "Move Line"
+msgstr "Línea de asiento"
+
+#. module: l10n_ec_payment_batch
+#. odoo-python
+#: code:addons/l10n_ec_payment_batch/wizard/l10n_ec_payment_batch_reconcile_wizard.py:0
+msgid "Amount to pay must be greater than zero for invoice %s."
+msgstr "El importe a pagar debe ser mayor que cero para la factura %s."
+
+#. module: l10n_ec_payment_batch
+#. odoo-python
+#: code:addons/l10n_ec_payment_batch/wizard/l10n_ec_payment_batch_reconcile_wizard.py:0
+#, python-format
+msgid "Amount to pay (%(amount)s) exceeds available residual (%(available)s) for invoice %(invoice)s."
+msgstr "El importe a pagar (%(amount)s) supera el residual disponible (%(available)s) para la factura %(invoice)s."

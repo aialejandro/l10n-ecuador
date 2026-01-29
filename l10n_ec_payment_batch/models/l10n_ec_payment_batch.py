@@ -13,6 +13,7 @@ class L10nEcPaymentBatch(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char('Batch Name', required=True, default='/', help='Name of the payment batch')
+    description = fields.Text('Description', help='Description to be used as memo in created payments')
     state = fields.Selection(
         selection=[
             ('draft', 'Draft'),
@@ -377,9 +378,11 @@ class L10nEcPaymentBatchLine(models.Model):
         batch = self.batch_id
 
         account_types = ['asset_receivable'] if batch.partner_type == 'customer' else ['liability_payable']
+        move_type = 'out_invoice' if batch.partner_type == 'customer' else 'in_invoice'
         domain = [
             ('partner_id', '=', partner.id),
             ('move_id.state', '=', 'posted'),
+            ('move_id.move_type', '=', move_type),
             ('account_id.account_type', 'in', account_types),
             ('amount_residual', '!=', 0),
             ('company_id', '=', batch.company_id.id),
@@ -429,7 +432,7 @@ class L10nEcPaymentBatchLine(models.Model):
             'journal_id': journal.id,
             'payment_method_line_id': batch.payment_method_line_id.id,
             'date': batch.batch_date or fields.Date.context_today(self),
-            'memo': batch.name,
+            'memo': batch.description or batch.name,
             'l10n_ec_payment_batch_id': batch.id,
         }
 

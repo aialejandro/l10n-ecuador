@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Report Definition -->
+    <record id="action_report_l10n_ec_payment_batch" model="ir.actions.report">
+        <field name="name">Payment Batch</field>
+        <field name="model">l10n_ec.payment.batch</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_ec_payment_batch.report_payment_batch_document</field>
+        <field name="report_file">l10n_ec_payment_batch.report_payment_batch_document</field>
+        <field name="binding_model_id" ref="model_l10n_ec_payment_batch"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Payment Batch - %s' % (object.name)</field>
+    </record>
+
+    <!-- Report Template -->
+    <template id="report_payment_batch_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="oe_structure"/>
+                        
+                        <!-- Header -->
+                        <h2 class="mt-4">
+                            <span>Payment Batch: </span>
+                            <span t-field="o.name"/>
+                        </h2>
+
+                        <!-- Batch Information -->
+                        <div class="row mt-4 mb-3">
+                            <div class="col-6">
+                                <strong>Batch Date:</strong>
+                                <span t-field="o.batch_date"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Status:</strong>
+                                <span t-field="o.state" class="badge badge-info" t-if="o.state == 'draft'"/>
+                                <span t-field="o.state" class="badge badge-success" t-if="o.state == 'confirmed'"/>
+                                <span t-field="o.state" class="badge badge-secondary" t-if="o.state == 'cancelled'"/>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Partner Type:</strong>
+                                <span t-if="o.partner_type == 'customer'">Customer</span>
+                                <span t-if="o.partner_type == 'supplier'">Supplier</span>
+                            </div>
+                            <div class="col-6">
+                                <strong>Payment Method:</strong>
+                                <span t-field="o.payment_method_line_id.name"/>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3" t-if="o.description">
+                            <div class="col-12">
+                                <strong>Description:</strong>
+                                <span t-field="o.description"/>
+                            </div>
+                        </div>
+
+                        <!-- Payment Lines Table -->
+                        <h4 class="mt-4 mb-3">Payment Lines</h4>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="text-left">Partner</th>
+                                    <th class="text-left" t-if="o.has_own_checks">Check Number</th>
+                                    <th class="text-left" t-if="o.has_own_checks">Beneficiary</th>
+                                    <th class="text-left" t-if="o.has_own_checks">Check Date</th>
+                                    <th class="text-left">Invoices</th>
+                                    <th class="text-right">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="line">
+                                    <td>
+                                        <span t-field="line.partner_id.name"/>
+                                    </td>
+                                    <td t-if="o.has_own_checks">
+                                        <span t-field="line.check_number"/>
+                                    </td>
+                                    <td t-if="o.has_own_checks">
+                                        <span t-field="line.check_beneficiary"/>
+                                    </td>
+                                    <td t-if="o.has_own_checks">
+                                        <span t-field="line.check_payment_date"/>
+                                    </td>
+                                    <td>
+                                        <div t-foreach="line.reconcile_line_ids" t-as="rec_line">
+                                            <span t-esc="rec_line.move_id.name"/>
+                                            <span t-if="rec_line.move_id.invoice_date">
+                                                (<span t-field="rec_line.move_id.invoice_date"/>)
+                                            </span>
+                                            - <span t-esc="rec_line.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </div>
+                                        <span t-if="not line.reconcile_line_ids" class="text-muted">No invoices allocated</span>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="line.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="border-black o_total">
+                                    <td colspan="99" t-att-colspan="2 if not o.has_own_checks else (5 if o.state == 'confirmed' else 6)" class="text-right">
+                                        <strong>Total:</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <strong t-field="o.total_amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <div class="oe_structure"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
