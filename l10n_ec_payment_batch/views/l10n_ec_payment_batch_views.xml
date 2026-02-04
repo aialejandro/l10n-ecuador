@@ -52,8 +52,11 @@
                     <group>
                         <field name="description" placeholder="This description will be used as memo in created payments..."/>
                     </group>
-                    <div class="oe_button_box" invisible="not partner_ids">
-                        <button name="action_update_lines" string="Update Lines" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_payments" icon="fa-money" invisible="payment_count == 0">
+                            <field string="Payments" name="payment_count" widget="statinfo"/>
+                        </button>
+                        <button name="action_update_lines" string="Update Lines" type="object" class="btn-primary" invisible="state != 'draft' or not partner_ids"/>
                     </div>
                     <notebook>
                         <page string="Payment Lines" name="lines">
@@ -66,9 +69,9 @@
                                     <field name="check_beneficiary" optional="show" column_invisible='not parent.has_own_checks'/>
                                     <field name="check_payment_date" optional="show" column_invisible='not parent.has_own_checks'/>
                                     <field name="reconcile_line_ids" widget="many2many_tags" readonly="1"/>
-                                    <button name="action_open_reconcile_wizard" type="object" string="Select Invoices" class="btn-secondary"/>
+                                    <button name="action_open_reconcile_wizard" type="object" string="Select Invoices" class="btn-secondary" invisible="parent.state != 'draft'"/>
                                     <field name="full_residual" widget="monetary"/>
-                                    <field name="amount" widget="monetary"/>
+                                    <field name="amount" widget="monetary" readonly="reconcile_line_ids"/>
                                     <field name="currency_id" column_invisible="True"/>
                                     <field name="batch_id" column_invisible="True"/>
                                     <field name="tag_color" widget="color" optional="hide"/>

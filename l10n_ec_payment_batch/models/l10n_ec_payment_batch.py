@@ -38,6 +38,7 @@ class L10nEcPaymentBatch(models.Model):
     
     line_ids = fields.One2many('l10n_ec.payment.batch.line', 'batch_id', 'Batch Lines')
     total_amount = fields.Monetary('Total Amount', compute='_compute_total', currency_field='currency_id', readonly=True)
+    payment_count = fields.Integer('Payments', compute='_compute_payment_count', readonly=True)
     has_own_checks = fields.Boolean(
         string='Has Own Checks',
         compute='_compute_has_own_checks',
@@ -49,6 +50,12 @@ class L10nEcPaymentBatch(models.Model):
     def _compute_total(self):
         for record in self:
             record.total_amount = sum(record.line_ids.mapped('amount'))
+
+    def _compute_payment_count(self):
+        for record in self:
+            record.payment_count = self.env['account.payment'].search_count([
+                ('l10n_ec_payment_batch_id', '=', record.id)
+            ])
     
     @api.onchange('partner_type')
     def _onchange_partner_type(self):
@@ -148,6 +155,21 @@ class L10nEcPaymentBatch(models.Model):
                     'amount': 0.0,
                 })
 
+    def action_view_payments(self):
+        self.ensure_one()
+        payments = self.env['account.payment'].search([
+            ('l10n_ec_payment_batch_id', '=', self.id)
+        ])
+        action = self.env.ref('account.action_account_payments').read()[0]
+        if len(payments) == 1:
+            action['views'] = [(self.env.ref('account.view_account_payment_form').id, 'form')]
+            action['res_id'] = payments.id
+            action['view_mode'] = 'form'
+        else:
+            action['domain'] = [('id', 'in', payments.ids)]
+        action['context'] = dict(self.env.context, default_l10n_ec_payment_batch_id=self.id)
+        return action
+
     def _l10n_ec_create_payments(self):
         for batch in self:
             if not batch.line_ids:
@@ -198,10 +220,18 @@ class L10nEcPaymentBatchLine(models.Model):
     amount = fields.Monetary(
         'Amount',
         compute='_compute_amount',
+        inverse='_inverse_amount',
         currency_field='currency_id',
         store=True,
-        readonly=True,
+        readonly=False,
         default=0.0,
+    )
+
+    manual_amount = fields.Monetary(
+        'Manual Amount',
+        currency_field='currency_id',
+        default=0.0,
+        help='Amount to pay when no reconcile lines are selected.'
     )
     
     reconcile_line_ids = fields.One2many('l10n_ec.payment.batch.line.reconcile', 'batch_line_id', 'Reconcile Lines')
@@ -307,10 +337,18 @@ class L10nEcPaymentBatchLine(models.Model):
             # Sum the residuals from all reconcile lines
             rec.full_residual = sum(line.move_line_id.amount_residual_currency for line in rec.reconcile_line_ids if line.move_line_id)
 
-    @api.depends('reconcile_line_ids', 'reconcile_line_ids.amount')
+    @api.depends('reconcile_line_ids', 'reconcile_line_ids.amount', 'manual_amount')
     def _compute_amount(self):
         for rec in self:
-            rec.amount = sum(rec.reconcile_line_ids.mapped('amount'))
+            if rec.reconcile_line_ids:
+                rec.amount = sum(rec.reconcile_line_ids.mapped('amount'))
+            else:
+                rec.amount = rec.manual_amount
+
+    def _inverse_amount(self):
+        for rec in self:
+            if not rec.reconcile_line_ids:
+                rec.manual_amount = rec.amount
 
     @api.constrains('amount')
     def _check_amount(self):
