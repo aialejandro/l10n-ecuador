@@ -45,7 +45,7 @@ def number_to_text_es(number, currency='DÓLARES'):
     
     # Mapear códigos de moneda a nombres completos
     currency_map = {
-        'USD': 'DÓLARES',
+        'USD': 'DOLARES',
         'EUR': 'EUROS',
         'COP': 'PESOS',
         'MXN': 'PESOS',

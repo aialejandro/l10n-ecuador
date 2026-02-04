@@ -79,6 +79,8 @@ class L10nEcCheckFormatField(models.Model):
         ('Courier New', 'Courier New'),
         ('Helvetica', 'Helvetica'),
         ('Verdana', 'Verdana'),
+        ('Miriam Fixed', 'Miriam Fixed'),
+        ('Calibri', 'Calibri'),
     ], string='Fuente', default='Arial')
     
     font_size = fields.Integer(

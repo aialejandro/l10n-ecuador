@@ -60,13 +60,21 @@ class L10nEcCheckFormatWizard(models.TransientModel):
             
             # Crear HTML de vista previa
             width, height = record.format_id.get_paper_dimensions()
+            margin_top = record.format_id.margin_top or 0
+            margin_left = record.format_id.margin_left or 0
+            mm_to_px = 3.7795275591  # 96dpi
+            max_preview_width_px = 800
+            width_px = width * mm_to_px
+            scale = min(1, max_preview_width_px / width_px) if width_px else 1
+
             html = '''
-            <div style="position: relative; border: 2px solid #ccc; margin: 20px; background: white; max-width: 800px;">
+            <div style="position: relative; border: 2px solid #ccc; margin: 20px; background: white;">
                 <div style="background: #f0f0f0; padding: 10px; border-bottom: 1px solid #ccc;">
                     <strong>Vista Previa: ''' + str(record.format_id.name) + '''</strong><br/>
                     <small>''' + str(record.paper_info) + '''</small>
                 </div>
-                <div style="position: relative; min-height: 400px; padding: 20px; background-color: #fafafa; border: 1px dashed #ccc;">
+                <div style="overflow: auto; padding: 10px; background-color: #fafafa;">
+                    <div style="position: relative; width: ''' + str(width) + '''mm; height: ''' + str(height) + '''mm; background: white; border: 1px dashed #ccc; transform: scale(''' + str(scale) + '''); transform-origin: top left;">
             '''
             
             # Agregar campos
@@ -108,12 +116,12 @@ class L10nEcCheckFormatWizard(models.TransientModel):
                     # Crear div para cada campo
                     field_style = []
                     field_style.append('position: absolute')
-                    field_style.append('left: ' + str(field.x_position) + 'px')
-                    field_style.append('top: ' + str(field.y_position) + 'px')
-                    field_style.append('width: ' + str(field.width) + 'px')
-                    field_style.append('height: ' + str(field.height) + 'px')
+                    field_style.append('left: ' + str((field.x_position or 0) + margin_left) + 'mm')
+                    field_style.append('top: ' + str((field.y_position or 0) + margin_top) + 'mm')
+                    field_style.append('width: ' + str(field.width or 0) + 'mm')
+                    field_style.append('height: ' + str(field.height or 0) + 'mm')
                     field_style.append('font-family: ' + (field.font_family or 'Arial') + ', sans-serif')
-                    field_style.append('font-size: ' + str(field.font_size) + 'px')
+                    field_style.append('font-size: ' + str(field.font_size or 10) + 'pt')
                     field_style.append('font-weight: ' + str(field.font_weight))
                     field_style.append('text-align: ' + str(field.text_align))
                     field_style.append('color: ' + str(field.text_color or '#000000'))
@@ -134,9 +142,10 @@ class L10nEcCheckFormatWizard(models.TransientModel):
                 html += '<p style="text-align: center; color: #999; margin-top: 150px;">No hay campos configurados en este formato</p>'
             
             html += '''
+                    </div>
                 </div>
                 <div style="background: #f0f0f0; padding: 10px; border-top: 1px solid #ccc; font-size: 12px; color: #666;">
-                    <strong>Nota:</strong> Esta es una vista previa aproximada. La posición real puede variar según la impresora.
+                    <strong>Nota:</strong> Esta vista previa mantiene proporciones reales del papel. La posición real puede variar según la impresora.
                 </div>
             </div>
             '''

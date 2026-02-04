@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     
+    <record id="paperformat_check_print" model="report.paperformat">
+        <field name="name">EC Check Print</field>
+        <field name="default" eval="False" />
+        <field name="format">Letter</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">0</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">0</field>
+        <field name="margin_right">0</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+        <field name="css_margins" eval="False" />
+    </record>
+
     <!-- Definición del reporte de impresión de cheques -->
     <record id="action_report_check_print" model="ir.actions.report">
         <field name="name">Imprimir Cheques</field>
@@ -9,6 +26,7 @@
         <field name="report_name">l10n_ec_check.report_check_print</field>
         <field name="report_file">l10n_ec_check.report_check_print</field>
         <field name="print_report_name">'Cheque - %s' % (object.name)</field>
+        <field name="paperformat_id" ref="l10n_ec_check.paperformat_check_print"/>
         <!-- NO usar binding para que no aparezca en el menú de impresión automáticamente -->
     </record>
     
@@ -17,11 +35,13 @@
         <t t-call="web.html_container">
         <t t-foreach="docs" t-as="check">
             <t t-set="check_format" t-value="check.payment_id.l10n_ec_check_format_id"/>
+            <t t-set="margin_top" t-value="check_format.margin_top or 0"/>
+            <t t-set="margin_left" t-value="check_format.margin_left or 0"/>
                 
-                <div class="page" t-attf-style="width: {{check_format.paper_width or 215.9}}mm; height: {{check_format.paper_height or 279.4}}mm; font-family: 'DejaVu Sans', Arial, sans-serif;">
+                <div class="page" t-attf-style="width: {{check_format.paper_width or 215.9}}mm; height: {{check_format.paper_height or 279.4}}mm; font-family: 'Miriam Fixed', 'DejaVu Sans', Arial, sans-serif;">
                     
                     <!-- Aplicar orientación y márgenes -->
-                    <div t-attf-style="padding-top: {{check_format.margin_top or 0}}mm; padding-bottom: {{check_format.margin_bottom or 0}}mm; padding-left: {{check_format.margin_left or 0}}mm; padding-right: {{check_format.margin_right or 0}}mm; position: relative; height: 100%;">
+                    <div t-attf-style="padding-bottom: {{check_format.margin_bottom or 0}}mm; padding-right: {{check_format.margin_right or 0}}mm; position: relative; height: 100%;">
                         
                         <!-- Renderizar cada campo del formato -->
                         <t t-foreach="check_format.format_field_ids.sorted(key=lambda f: f.sequence)" t-as="field">
@@ -29,7 +49,7 @@
                             
                             <!-- Solo mostrar si tiene valor -->
                             <t t-if="field_value and field.visible">
-                                <div t-attf-style="position: absolute; left: {{field.x_position or 0}}mm; top: {{field.y_position or 0}}mm; width: {{field.width or 50}}mm; height: {{field.height or 10}}mm; font-size: {{field.font_size or 12}}pt; text-align: {{field.text_align or 'left'}}; {{field.font_weight == 'bold' and 'font-weight: bold;' or ''}}">
+                                <div t-attf-style="position: absolute; left: {{(field.x_position or 0) + margin_left}}mm; top: {{(field.y_position or 0) + margin_top}}mm; width: {{field.width or 50}}mm; height: {{field.height or 10}}mm; font-family: {{field.font_family or 'Miriam Fixed'}}, 'Miriam Fixed', 'Calibri', 'DejaVu Sans', Arial, sans-serif; font-size: {{field.font_size or 12}}pt; text-align: {{field.text_align or 'left'}}; {{field.font_weight == 'bold' and 'font-weight: bold;' or ''}}">
                                     <span t-out="field_value"/>
                                 </div>
                             </t>
