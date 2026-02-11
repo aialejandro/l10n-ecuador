@@ -77,6 +77,7 @@ class L10nEcCheckFormatField(models.Model):
         ('Arial', 'Arial'),
         ('Times New Roman', 'Times New Roman'),
         ('Courier New', 'Courier New'),
+        ('Terminal', 'Terminal'),
         ('Helvetica', 'Helvetica'),
         ('Verdana', 'Verdana'),
         ('Miriam Fixed', 'Miriam Fixed'),
