@@ -118,7 +118,11 @@ class WizardCreateSaleWithhold(models.TransientModel):
     def validate_repeated_withhold(self):
         withhold_count = self.env["account.move"].search_count(
             [
-                ("partner_id", "=", self.partner_id.id),
+                (
+                    "commercial_partner_id",
+                    "=",
+                    self.partner_id.commercial_partner_id.id,
+                ),
                 ("ref", "=", f"RET {self.document_number}"),
                 ("l10n_ec_withholding_type", "=", "sale"),
                 ("l10n_latam_internal_type", "=", "withhold"),

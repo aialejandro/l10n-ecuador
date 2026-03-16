@@ -2,6 +2,7 @@ import logging
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools.sql import drop_index, index_exists
 from odoo.tools import frozendict
 from odoo.tools.safe_eval import safe_eval
 
@@ -12,6 +13,14 @@ _logger = logging.getLogger(__name__)
 
 class AccountMove(models.Model):
     _inherit = "account.move"
+
+    _sql_constraints = [
+        (
+            "unique_name_ec_sale_withhold",
+            "",
+            "Another withholding with the same number already exists for this customer.",
+        ),
+    ]
 
     l10n_ec_withholding_type = fields.Selection(
         [
@@ -96,7 +105,37 @@ class AccountMove(models.Model):
             ):
                 move.l10n_ec_withhold_active = False
 
-    @api.constrains("l10n_ec_withholding_type")
+    def _auto_init(self):
+        if not index_exists(self.env.cr, "account_move_unique_name_ec_sale_withhold"):
+            drop_index(self.env.cr, "account_move_unique_name", self._table)
+            self.env.cr.execute(
+                """
+                CREATE UNIQUE INDEX account_move_unique_name
+                                 ON account_move(name, journal_id)
+                              WHERE (
+                                  state = 'posted'
+                                  AND name != '/'
+                                  AND (
+                                      l10n_latam_document_type_id IS NULL
+                                      OR move_type NOT IN ('in_invoice', 'in_refund', 'in_receipt')
+                                  )
+                                  AND (
+                                      l10n_ec_withholding_type IS NULL
+                                      OR l10n_ec_withholding_type != 'sale'
+                                  )
+                              );
+                CREATE UNIQUE INDEX account_move_unique_name_ec_sale_withhold
+                                 ON account_move(name, commercial_partner_id, company_id)
+                              WHERE (
+                                  state = 'posted'
+                                  AND name != '/'
+                                  AND l10n_ec_withholding_type = 'sale'
+                              );
+                """
+            )
+        return super()._auto_init()
+
+    @api.constrains("l10n_ec_withholding_type", "ref", "name", "partner_id")
     def _check_l10n_ec_sale_withholding_duplicity(self):
         for move in self:
             if not move.is_sale_withhold():
