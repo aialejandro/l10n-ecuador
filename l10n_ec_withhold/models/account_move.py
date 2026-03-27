@@ -106,6 +106,7 @@ class AccountMove(models.Model):
                 move.l10n_ec_withhold_active = False
 
     def _auto_init(self):
+        res = super()._auto_init()
         if not index_exists(self.env.cr, "account_move_unique_name_ec_sale_withhold"):
             drop_index(self.env.cr, "account_move_unique_name", self._table)
             self.env.cr.execute(
@@ -133,7 +134,7 @@ class AccountMove(models.Model):
                               );
                 """
             )
-        return super()._auto_init()
+        return res
 
     @api.constrains("l10n_ec_withholding_type", "ref", "name", "partner_id")
     def _check_l10n_ec_sale_withholding_duplicity(self):
