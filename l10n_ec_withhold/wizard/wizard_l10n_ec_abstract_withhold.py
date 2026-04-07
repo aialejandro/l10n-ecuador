@@ -138,9 +138,13 @@ class WizardAbstractWithholdLine(models.AbstractModel):
     @api.depends("invoice_id", "tax_withhold_id", "base_amount")
     def _compute_withholding_amount(self):
         for line in self:
-            line.withhold_amount = abs(
+            raw_amount = abs(
                 line.base_amount * line.tax_withhold_id.amount / 100
             )
+            # Round the amount using the invoice's currency precision
+            # This prevents rounding differences when summing individual tax lines
+            currency = line.invoice_id.currency_id if line.invoice_id else self.env.company.currency_id
+            line.withhold_amount = currency.round(raw_amount)
 
     @api.onchange("tax_group_withhold_id")
     def onchange_tax_group_withhold(self):
