@@ -308,6 +308,14 @@ class AccountMove(models.Model):
             return "l10n_ec_account_edi.report_invoice_document"
         return super()._get_name_invoice_report()
 
+    def _l10n_ec_use_alternative_invoice_print_format(self):
+        self.ensure_one()
+        return (
+            self.move_type == "out_invoice"
+            and self.journal_id.l10n_ec_alternative_print_format
+            and not self.journal_id.edi_format_ids
+        )
+
     def _l10n_ec_get_document_date(self):
         return self.invoice_date
 

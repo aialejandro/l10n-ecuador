@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_account_journal_form_alternative_print" model="ir.ui.view">
+        <field name="name">account.journal.form.alternative.print</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="l10n_ec_base.account_journal_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='l10n_ec_sri_payment_id']" position="after">
+                <field
+                    name="l10n_ec_alternative_print_format"
+                    invisible="country_code != 'EC' or type != 'sale'"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>
