@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-inherit="tax_r_template_new" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[contains(@class, 'report_print')]" position="inside">
+            <button
+                type="button"
+                class="btn btn-primary btn-report-print"
+                t-on-click="exportAtsXml"
+                style="margin-left: 8px;"
+            >
+                ATS (XML)
+            </button>
+        </xpath>
+    </t>
+</templates>
