@@ -19,6 +19,9 @@
                         <td>
                             <strong>Fecha de Emisión:</strong>
                             <span t-field="o.invoice_date" />
+                            <br />
+                            <strong>Fecha de Vencimiento:</strong>
+                            <span t-field="o.invoice_date_due" />
                         </td>
                         <td>
                             <strong>Guia de remisión:</strong>

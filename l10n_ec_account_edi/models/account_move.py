@@ -235,7 +235,7 @@ class AccountMove(models.Model):
                 ),
                 "total": self.edi_document_ids._l10n_ec_number_format(amount),
             }
-            if self.invoice_payment_term_id and credit_days:
+            if self.invoice_payment_term_id:
                 payment_vals.update(
                     {
                         "plazo": credit_days,
@@ -254,7 +254,7 @@ class AccountMove(models.Model):
                     self.amount_total
                 ),
             }
-            if self.invoice_payment_term_id and credit_days:
+            if self.invoice_payment_term_id:
                 payment_vals.update(
                     {
                         "plazo": credit_days,
