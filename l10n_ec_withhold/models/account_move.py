@@ -55,6 +55,21 @@ class AccountMove(models.Model):
     l10n_ec_tax_support = fields.Selection(
         TAX_SUPPORT, string="Tax Support", help="Tax support in invoice line"
     )
+    l10n_ec_withhold_total_iva = fields.Monetary(
+        string="Total Retencion IVA",
+        compute="_compute_l10n_ec_withhold_totals",
+        store=True,
+    )
+    l10n_ec_withhold_total_fuente = fields.Monetary(
+        string="Total Retencion Fuente",
+        compute="_compute_l10n_ec_withhold_totals",
+        store=True,
+    )
+    l10n_ec_withhold_total = fields.Monetary(
+        string="Total Retencion",
+        compute="_compute_l10n_ec_withhold_totals",
+        store=True,
+    )
 
     @api.onchange("partner_id")
     def _onchange_partner_id(self):
@@ -104,6 +119,28 @@ class AccountMove(models.Model):
                 or company_fiscal_position.l10n_ec_avoid_withhold
             ):
                 move.l10n_ec_withhold_active = False
+
+    @api.depends(
+        "l10n_ec_withhold_line_ids.l10n_ec_withhold_tax_amount",
+        "l10n_ec_withhold_line_ids.tax_ids.tax_group_id.l10n_ec_type",
+    )
+    def _compute_l10n_ec_withhold_totals(self):
+        vat_types = {"withhold_vat_purchase", "withhold_vat_sale"}
+        income_types = {"withhold_income_purchase", "withhold_income_sale"}
+        for move in self:
+            total_iva = 0.0
+            total_fuente = 0.0
+            for line in move.l10n_ec_withhold_line_ids:
+                amount = abs(line.l10n_ec_withhold_tax_amount)
+                tax_types = set(line.tax_ids.mapped("tax_group_id.l10n_ec_type"))
+                if tax_types & vat_types:
+                    total_iva += amount
+                elif tax_types & income_types:
+                    total_fuente += amount
+
+            move.l10n_ec_withhold_total_iva = total_iva
+            move.l10n_ec_withhold_total_fuente = total_fuente
+            move.l10n_ec_withhold_total = total_iva + total_fuente
 
     def _auto_init(self):
         res = super()._auto_init()
@@ -476,10 +513,18 @@ class AccountMoveLine(models.Model):
     l10n_ec_withhold_tax_amount = fields.Monetary(
         string="Withhold Tax Amount", compute="_compute_withhold_tax_amount", store=True
     )
+    l10n_ec_withhold_tax_percentage = fields.Float(
+        string="Withhold Tax Percentage",
+        compute="_compute_withhold_tax_amount",
+        store=True,
+        digits=(16, 4),
+    )
 
-    @api.depends("tax_ids")
+    @api.depends("tax_ids", "l10n_ec_invoice_withhold_id", "balance", "amount_currency", "price_total", "price_subtotal")
     def _compute_withhold_tax_amount(self):
         for line in self:
+            tax = line.tax_ids[:1]
+            line.l10n_ec_withhold_tax_percentage = abs(tax.amount or 0.0) if line.l10n_ec_invoice_withhold_id and tax else 0.0
             if line.l10n_ec_invoice_withhold_id:
                 currency_rate = (
                     line.balance / line.amount_currency
@@ -489,6 +534,8 @@ class AccountMoveLine(models.Model):
                 line.l10n_ec_withhold_tax_amount = line.currency_id.round(
                     currency_rate * abs(line.price_total - line.price_subtotal)
                 )
+            else:
+                line.l10n_ec_withhold_tax_amount = 0.0
 
     @api.onchange("name", "product_id")
     def _onchange_get_l10n_ec_tax_support(self):

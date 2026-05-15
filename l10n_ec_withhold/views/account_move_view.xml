@@ -96,6 +96,9 @@
             </xpath>
             <xpath expr="//field[@name='state']" position="after">
                 <field name="l10n_ec_withholding_type" optional="hide" />
+                <field name="l10n_ec_withhold_total_iva" />
+                <field name="l10n_ec_withhold_total_fuente" />
+                <field name="l10n_ec_withhold_total" />
             </xpath>
         </field>
     </record>
