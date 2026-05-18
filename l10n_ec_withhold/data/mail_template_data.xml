@@ -32,7 +32,7 @@
         <t t-if="object.invoice_origin">
             (with reference: <t t-out="object.invoice_origin or ''">SUB003</t>)
         </t>
-        amounting in <span style="font-weight:bold;" t-out="format_amount(object.l10n_ec_withhold_tax_amount, object.currency_id) or ''">$ 143,750.00</span>
+        amounting in <span style="font-weight:bold;" t-out="format_amount(object.l10n_ec_withhold_total, object.currency_id) or ''">$ 143,750.00</span>
         from <t t-out="object.company_id.name or ''">YourCompany</t>.
         <t t-if="object.payment_state in ('paid', 'in_payment')">
             This withhold is already paid.
