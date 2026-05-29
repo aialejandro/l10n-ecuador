@@ -250,46 +250,30 @@ class L10nEcCheckFormatField(models.Model):
         }
     
     def _capitalize_month_names(self, date_string):
-        """Capitalizar nombres de meses en español e inglés"""
-        # Meses en español (completos)
-        spanish_months = {
+        """Normalizar nombres de meses a español con inicial mayúscula"""
+        # Soporta salida de strftime en locale español o inglés.
+        month_map = {
             'enero': 'Enero', 'febrero': 'Febrero', 'marzo': 'Marzo',
             'abril': 'Abril', 'mayo': 'Mayo', 'junio': 'Junio',
             'julio': 'Julio', 'agosto': 'Agosto', 'septiembre': 'Septiembre',
-            'octubre': 'Octubre', 'noviembre': 'Noviembre', 'diciembre': 'Diciembre'
-        }
-        # Meses en español (abreviados)
-        spanish_months_short = {
+            'octubre': 'Octubre', 'noviembre': 'Noviembre', 'diciembre': 'Diciembre',
             'ene': 'Ene', 'feb': 'Feb', 'mar': 'Mar', 'abr': 'Abr',
             'may': 'May', 'jun': 'Jun', 'jul': 'Jul', 'ago': 'Ago',
-            'sep': 'Sep', 'oct': 'Oct', 'nov': 'Nov', 'dic': 'Dic'
+            'sep': 'Sep', 'oct': 'Oct', 'nov': 'Nov', 'dic': 'Dic',
+            'january': 'Enero', 'february': 'Febrero', 'march': 'Marzo',
+            'april': 'Abril', 'june': 'Junio', 'july': 'Julio',
+            'august': 'Agosto', 'september': 'Septiembre', 'october': 'Octubre',
+            'november': 'Noviembre', 'december': 'Diciembre',
+            'jan': 'Ene', 'apr': 'Abr', 'aug': 'Ago', 'dec': 'Dic',
         }
-        # Meses en inglés (completos)
-        english_months = {
-            'january': 'January', 'february': 'February', 'march': 'March',
-            'april': 'April', 'may': 'May', 'june': 'June',
-            'july': 'July', 'august': 'August', 'september': 'September',
-            'october': 'October', 'november': 'November', 'december': 'December'
-        }
-        # Meses en inglés (abreviados)
-        english_months_short = {
-            'jan': 'Jan', 'feb': 'Feb', 'mar': 'Mar', 'apr': 'Apr',
-            'may': 'May', 'jun': 'Jun', 'jul': 'Jul', 'aug': 'Aug',
-            'sep': 'Sep', 'oct': 'Oct', 'nov': 'Nov', 'dec': 'Dec'
-        }
-        
+
         result = date_string
-        
-        # Reemplazar meses en minúsculas con primera letra mayúscula
-        all_months = {**spanish_months, **spanish_months_short, 
-                     **english_months, **english_months_short}
-        
-        for lower_month, capitalized_month in all_months.items():
-            # Reemplazar solo palabras completas (con límites de palabra)
+        for source_month, target_month in month_map.items():
+            # Reemplazar solo palabras completas para no alterar otros textos.
             import re
-            pattern = r'\b' + re.escape(lower_month) + r'\b'
-            result = re.sub(pattern, capitalized_month, result, flags=re.IGNORECASE)
-        
+            pattern = r'\b' + re.escape(source_month) + r'\b'
+            result = re.sub(pattern, target_month, result, flags=re.IGNORECASE)
+
         return result
     
     def get_field_value(self, check):
