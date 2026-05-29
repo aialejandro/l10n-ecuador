@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import re
+
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
@@ -249,30 +251,37 @@ class L10nEcCheckFormatField(models.Model):
             }
         }
     
-    def _capitalize_month_names(self, date_string):
+    def _capitalize_month_names(self, date_string, date_format=None):
         """Normalizar nombres de meses a español con inicial mayúscula"""
-        # Soporta salida de strftime en locale español o inglés.
-        month_map = {
+        # Si el formato usa mes completo, traducir primero nombres completos.
+        full_month_map = {
             'enero': 'Enero', 'febrero': 'Febrero', 'marzo': 'Marzo',
             'abril': 'Abril', 'mayo': 'Mayo', 'junio': 'Junio',
             'julio': 'Julio', 'agosto': 'Agosto', 'septiembre': 'Septiembre',
             'octubre': 'Octubre', 'noviembre': 'Noviembre', 'diciembre': 'Diciembre',
+            'january': 'Enero', 'february': 'Febrero', 'march': 'Marzo',
+            'april': 'Abril', 'may': 'Mayo', 'june': 'Junio', 'july': 'Julio',
+            'august': 'Agosto', 'september': 'Septiembre', 'october': 'Octubre',
+            'november': 'Noviembre', 'december': 'Diciembre',
+        }
+        short_month_map = {
             'ene': 'Ene', 'feb': 'Feb', 'mar': 'Mar', 'abr': 'Abr',
             'may': 'May', 'jun': 'Jun', 'jul': 'Jul', 'ago': 'Ago',
             'sep': 'Sep', 'oct': 'Oct', 'nov': 'Nov', 'dic': 'Dic',
-            'january': 'Enero', 'february': 'Febrero', 'march': 'Marzo',
-            'april': 'Abril', 'june': 'Junio', 'july': 'Julio',
-            'august': 'Agosto', 'september': 'Septiembre', 'october': 'Octubre',
-            'november': 'Noviembre', 'december': 'Diciembre',
             'jan': 'Ene', 'apr': 'Abr', 'aug': 'Ago', 'dec': 'Dic',
         }
 
         result = date_string
-        for source_month, target_month in month_map.items():
-            # Reemplazar solo palabras completas para no alterar otros textos.
-            import re
-            pattern = r'\b' + re.escape(source_month) + r'\b'
-            result = re.sub(pattern, target_month, result, flags=re.IGNORECASE)
+
+        if date_format and '%B' in date_format:
+            for source_month, target_month in full_month_map.items():
+                pattern = r'\b' + re.escape(source_month) + r'\b'
+                result = re.sub(pattern, target_month, result, flags=re.IGNORECASE)
+
+        if date_format and '%b' in date_format:
+            for source_month, target_month in short_month_map.items():
+                pattern = r'\b' + re.escape(source_month) + r'\b'
+                result = re.sub(pattern, target_month, result, flags=re.IGNORECASE)
 
         return result
     
@@ -302,7 +311,7 @@ class L10nEcCheckFormatField(models.Model):
         elif self.field_type == 'date' and hasattr(value, 'strftime'):
             value = value.strftime(self.date_format)
             # Capitalizar nombres de meses
-            value = self._capitalize_month_names(value)
+            value = self._capitalize_month_names(value, self.date_format)
         elif self.field_type == 'currency' and isinstance(value, (int, float)):
             # Solo agregar símbolo si show_currency_symbol está activado
             if self.show_currency_symbol:
