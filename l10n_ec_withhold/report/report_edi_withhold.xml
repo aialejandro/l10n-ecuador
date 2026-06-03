@@ -20,6 +20,10 @@
                             <strong>Fecha de Emisión:</strong>
                             <span t-field="o.date" />
                         </td>
+                        <td>
+                            <strong>Correo:</strong>
+                            <span t-esc="partner.email or '-'" />
+                        </td>
                     </tr>
                 </tbody>
             </table>
