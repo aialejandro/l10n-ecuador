@@ -37,13 +37,31 @@
                         .voucher-title {
                             text-align: right;
                         }
-                        .voucher-title span {
+                        .voucher-title .title-line,
+                        .voucher-title .voucher-date {
                             display: block;
+                        }
+                        .voucher-title .title-line {
+                            white-space: nowrap;
                         }
                         .voucher-title .title {
                             font-size: 18px;
                             font-weight: bold;
                             text-transform: uppercase;
+                        }
+                        .voucher-title .voucher-number {
+                            font-size: 18px;
+                            font-weight: bold;
+                            line-height: 1.1;
+                            margin-left: 8px;
+                        }
+                        .voucher-title .voucher-date {
+                            font-size: 14px;
+                            line-height: 1.2;
+                            white-space: nowrap;
+                        }
+                        .voucher-title .voucher-date .label {
+                            font-weight: bold;
                         }
                         .voucher-info table,
                         .voucher-lines table {
@@ -100,9 +118,17 @@
                                 </t>
                             </div>
                             <div class="voucher-title">
-                                <span class="title">Comprobante de Egreso</span>
-                                <span t-esc="data.get('move_name')"/>
-                                <span t-if="data.get('payment_date')" t-esc="format_date(data.get('payment_date'))"/>
+                                <div class="title-line">
+                                    <span class="title">Comprobante de Egreso</span>
+                                    <span
+                                        class="voucher-number"
+                                        t-esc="((data.get('move_name') or '').split('/')[-1].lstrip('0') or '0') if data.get('move_name') else ''"
+                                    />
+                                </div>
+                                <span class="voucher-date" t-if="data.get('payment_date')">
+                                    <span class="label">FECHA :</span>
+                                    <t t-esc="format_date(data.get('payment_date'))"/>
+                                </span>
                             </div>
                         </div>
 

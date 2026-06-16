@@ -34,6 +34,13 @@ class L10nEcPaymentBatch(models.Model):
         required=True,
         domain="[('payment_method_id.payment_type', '=', 'outbound' if partner_type == 'supplier' else 'inbound')]"
     )
+    bank_id = fields.Many2one(
+        'res.bank',
+        string='Bank',
+        related='payment_method_line_id.journal_id.bank_id',
+        readonly=True,
+        store=True,
+    )
     partner_ids = fields.Many2many('res.partner', string='Partners')
     
     line_ids = fields.One2many('l10n_ec.payment.batch.line', 'batch_id', 'Batch Lines')
@@ -89,40 +96,80 @@ class L10nEcPaymentBatch(models.Model):
         if not payment_method_line or not payment_method_line.journal_id:
             raise ValidationError(_('Please select a payment method with a journal.'))
 
+        if payment_method_line.payment_method_id.code == 'own_checks':
+            raise ValidationError(_('TXT download is only available for non-own-check payment methods.'))
+
         bank_account = payment_method_line.journal_id.bank_account_id
         if not bank_account:
             raise ValidationError(_('The selected journal has no bank account.'))
 
-        bic_value = (bank_account.bank_bic or '').strip()
-        if bic_value != '10':
-            raise ValidationError(_('The bank account BIC must be 10 to download this TXT file.'))
+        source_bank = payment_method_line.journal_id.bank_id or bank_account.bank_id
+        if not source_bank:
+            raise ValidationError(_('The selected journal has no bank configured.'))
+
+        source_bank_name = (source_bank.name or '').lower()
+        source_bank_bic = (bank_account.bank_bic or '').strip()
+        txt_format = self._l10n_ec_get_txt_bank_format(source_bank_name, source_bank_bic)
+        if not txt_format:
+            raise ValidationError(_(
+                'TXT format for this bank is not implemented yet. Currently available: Pichincha, Produbanco, Promerica and Guayaquil.'
+            ))
 
         if not self.line_ids:
             raise ValidationError(_('Please add at least one batch line.'))
 
-        currency_name = self.currency_id.name or ''
-        account_number = bank_account.acc_number or ''
-        company_name = self.company_id.name or ''
-
         lines = []
-        for index, line in enumerate(self.line_ids.sorted('id'), start=1):
+        sequence = 1
+        for line in self.line_ids.sorted('id'):
+            if line.amount <= 0:
+                continue
+
             partner = line.partner_id
-            partner_vat = partner.vat or ''
-            partner_name = partner.name or ''
-            columns = [
-                'PA',
-                str(index),
-                currency_name,
-                account_number,
-                company_name,
-                'C',
-                partner_vat,
-                partner_name,
-            ]
-            lines.append('|'.join(columns))
+            partner_bank = self._l10n_ec_get_partner_bank_account(partner)
+            if not partner_bank:
+                raise ValidationError(_(
+                    'Partner %s has no bank account configured.'
+                ) % partner.display_name)
+
+            related_bank_code = self._l10n_ec_get_related_bank_code(
+                source_bank,
+                partner_bank.bank_id,
+                partner,
+            )
+
+            if txt_format == 'pichincha':
+                lines.append(self._l10n_ec_build_pichincha_txt_line(
+                    sequence,
+                    line,
+                    partner,
+                    partner_bank,
+                    related_bank_code,
+                ))
+            elif txt_format == 'guayaquil':
+                lines.append(self._l10n_ec_build_guayaquil_txt_line(
+                    sequence,
+                    line,
+                    partner,
+                    partner_bank,
+                    related_bank_code,
+                    bank_account,
+                ))
+            else:
+                lines.append(self._l10n_ec_build_produbanco_txt_line(
+                    sequence,
+                    line,
+                    partner,
+                    partner_bank,
+                    related_bank_code,
+                    bank_account,
+                ))
+            sequence += 1
+
+        if not lines:
+            raise ValidationError(_('Please add at least one batch line with amount greater than zero.'))
 
         content = '\n'.join(lines) + '\n'
-        filename = f"payment_batch_{self.id}.txt"
+        filename = f"payment_batch_{txt_format}_{self.id}.txt"
         attachment = self.env['ir.attachment'].create({
             'name': filename,
             'type': 'binary',
@@ -137,6 +184,143 @@ class L10nEcPaymentBatch(models.Model):
             'url': f'/web/content/{attachment.id}?download=1',
             'target': 'self',
         }
+
+    def _l10n_ec_get_txt_bank_format(self, source_bank_name, source_bank_bic):
+        if source_bank_bic == '10' or 'pichincha' in source_bank_name:
+            return 'pichincha'
+        if source_bank_bic == '17' or 'guayaquil' in source_bank_name:
+            return 'guayaquil'
+        if 'produbanco' in source_bank_name or 'promerica' in source_bank_name:
+            return 'produbanco'
+        return False
+
+    def _l10n_ec_build_pichincha_txt_line(self, sequence, line, partner, partner_bank, related_bank_code):
+        columns = [
+            'PA',
+            str(sequence),
+            'USD',
+            ('%.2f' % line.amount),
+            'CTA',
+            self._l10n_ec_get_partner_account_type_code(partner_bank),
+            (partner_bank.acc_number or '').strip(),
+            (self.description or '').strip(),
+            self._l10n_ec_get_partner_person_type(partner),
+            (partner.vat or '').strip(),
+            (partner.name or '').strip(),
+            related_bank_code,
+        ]
+        return '\t'.join(columns)
+
+    def _l10n_ec_build_produbanco_txt_line(self, sequence, line, partner, partner_bank, related_bank_code, source_bank_account):
+        person_type = self._l10n_ec_get_partner_person_type(partner)
+        identifier = (partner.vat or '').strip()
+        amount_no_decimal = ('%013d' % int(round(line.amount * 100)))
+        sequence_padded = ('%06d' % sequence)
+        bank_code = (related_bank_code or '').zfill(4)
+        comment = (self.description or '').strip().ljust(40)[:40]
+        partner_name = (partner.name or '').strip().ljust(200)[:200]
+        partner_account = (partner_bank.acc_number or '').strip()[:20]
+        source_account = (source_bank_account.acc_number or '').strip()
+
+        columns = [
+            'PA',
+            source_account,
+            sequence_padded,
+            '',
+            partner_account,
+            'USD',
+            amount_no_decimal,
+            'CTA',
+            bank_code,
+            self._l10n_ec_get_partner_account_type_code(partner_bank),
+            partner_account,
+            person_type,
+            identifier,
+            partner_name,
+            '',
+            '',
+            ' ',
+            '',
+            comment,
+        ]
+        return '\t'.join(columns)
+
+    def _l10n_ec_build_guayaquil_txt_line(self, sequence, line, partner, partner_bank, related_bank_code, source_bank_account):
+        person_type, identifier = self._l10n_ec_get_guayaquil_person_type_and_identifier(partner)
+        amount_no_decimal = ('%013d' % int(round(line.amount * 100)))
+        sequence_padded = ('%06d' % sequence)
+        bank_code = (related_bank_code or '').zfill(4)
+        comment = (self.description or '').strip().ljust(40)[:40]
+        partner_name = (partner.name or '').strip().ljust(200)[:200]
+        partner_account = (partner_bank.acc_number or '').strip()[:20]
+        source_account = (source_bank_account.acc_number or '').strip()
+
+        columns = [
+            'PA',
+            source_account,
+            sequence_padded,
+            '',
+            partner_account,
+            'USD',
+            amount_no_decimal,
+            'CTA',
+            bank_code,
+            self._l10n_ec_get_partner_account_type_code(partner_bank),
+            partner_account,
+            person_type,
+            identifier,
+            partner_name,
+            '',
+            '',
+            ' ',
+            '',
+            comment,
+        ]
+        return '\t'.join(columns)
+
+    def _l10n_ec_get_guayaquil_person_type_and_identifier(self, partner):
+        vat = (partner.vat or '').strip()
+        vat_compact = ''.join(vat.split())
+
+        # Legacy Banco Guayaquil rule from FoxPro implementation.
+        if len(vat_compact) == 9 or partner.company_type == 'person':
+            return 'C', vat_compact[:10].ljust(18)
+        if len(vat_compact) == 13:
+            return 'R', vat_compact[:13].ljust(18)
+        return 'P', vat_compact[:13].ljust(18)
+
+    def _l10n_ec_get_partner_bank_account(self, partner):
+        self.ensure_one()
+        partner = partner.commercial_partner_id
+        candidate_banks = partner.bank_ids.filtered(lambda b: b.acc_number and b.bank_id)
+        return candidate_banks[:1]
+
+    def _l10n_ec_get_partner_account_type_code(self, partner_bank):
+        account_type = partner_bank.l10n_ec_account_type or 'checking'
+        return 'AHO' if account_type == 'savings' else 'CTE'
+
+    def _l10n_ec_get_partner_person_type(self, partner):
+        partner.ensure_one()
+        id_type = partner._l10n_ec_get_identification_type()
+        if id_type == 'cedula':
+            return 'C'
+        if id_type == 'ruc':
+            return 'R'
+        if id_type in ('passport', 'ec_passport'):
+            return 'P'
+        return 'O'
+
+    def _l10n_ec_get_related_bank_code(self, source_bank, target_bank, partner):
+        self.ensure_one()
+        relation = self.env['l10n.ec.bank.related.line'].search([
+            ('bank_id', '=', source_bank.id),
+            ('related_bank_id', '=', target_bank.id),
+        ], limit=1)
+        if not relation or not relation.code:
+            raise ValidationError(_(
+                'No related bank code configured from %s to %s for partner %s.'
+            ) % (source_bank.display_name, target_bank.display_name, partner.display_name))
+        return relation.code.strip()
     
     def action_update_lines(self):
         """Add lines for partners that don't already have one"""

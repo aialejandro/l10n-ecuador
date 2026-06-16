@@ -5,6 +5,12 @@ from odoo import models, fields, api
 
 class ResBank(models.Model):
     _inherit = 'res.bank'
+
+    related_bank_line_ids = fields.One2many(
+        'l10n.ec.bank.related.line',
+        'bank_id',
+        string='Bancos Relacionados'
+    )
     
     # Relación con formatos de cheque
     check_format_ids = fields.One2many(

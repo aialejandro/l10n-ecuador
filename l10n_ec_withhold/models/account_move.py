@@ -1,7 +1,7 @@
 import logging
 
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tools.sql import drop_index, index_exists
 from odoo.tools import frozendict
 from odoo.tools.safe_eval import safe_eval
@@ -75,6 +75,20 @@ class AccountMove(models.Model):
     def _onchange_partner_id(self):
         self.l10n_ec_tax_support = self._get_l10n_ec_tax_support()
         return super()._onchange_partner_id()
+
+    @api.constrains("move_type", "l10n_ec_tax_support", "l10n_ec_customer_id")
+    def _check_l10n_ec_customer_required_for_vendor_tax_support(self):
+        for move in self:
+            if (
+                move.move_type == "in_invoice"
+                and move.l10n_ec_tax_support in ("08", "09")
+                and not move.l10n_ec_customer_id
+            ):
+                raise ValidationError(
+                    _(
+                        "Debe ingresar el Cliente cuando el Sustento Tributario es 08 o 09 en facturas de proveedor."
+                    )
+                )
 
     @api.depends("l10n_ec_withhold_ids")
     def _compute_l10n_ec_withhold_count(self):

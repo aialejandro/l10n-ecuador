@@ -6,6 +6,16 @@ from odoo.exceptions import ValidationError
 
 class ResPartnerBank(models.Model):
     _inherit = 'res.partner.bank'
+
+    l10n_ec_account_type = fields.Selection(
+        [
+            ('savings', 'Ahorro'),
+            ('checking', 'Corriente'),
+        ],
+        string='Tipo de cuenta',
+        default='checking',
+        help='Define si la cuenta bancaria es de ahorro o corriente.'
+    )
     
     l10n_ec_check_format_id = fields.Many2one(
         'l10n_ec.check.format',

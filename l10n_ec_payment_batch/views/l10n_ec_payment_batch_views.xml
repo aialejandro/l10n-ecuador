@@ -7,6 +7,7 @@
         <field name="arch" type="xml">
             <list string="Payment Batches" decoration-info="state=='draft'" decoration-success="state=='confirmed'">
                 <field name="name"/>
+                <field name="bank_id" string="Banco"/>
                 <field name="batch_date"/>
                 <field name="company_id" groups="base.group_multi_company"/>
                 <field name="payment_method_line_id"/>
@@ -26,7 +27,7 @@
                 <header>
                     <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" invisible="state != 'draft'"/>
                     <button name="action_cancel" string="Cancel" type="object" invisible="state not in ('draft', 'confirmed')"/>
-                    <button name="action_download_txt" string="Download TXT" type="object" invisible="not line_ids"/>
+                    <button name="action_download_txt" string="Download TXT" type="object" invisible="not line_ids or has_own_checks"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"/>
                 </header>
                 <sheet>
@@ -129,6 +130,7 @@
         <field name="name">Supplier Payment Batches</field>
         <field name="res_model">l10n_ec.payment.batch</field>
         <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_l10n_ec_payment_batch_tree"/>
         <field name="context">{'search_default_draft': 1, 'default_partner_type': 'supplier'}</field>
         <field name="domain">[('partner_type', '=', 'supplier')]</field>
         <field name="help" type="html">

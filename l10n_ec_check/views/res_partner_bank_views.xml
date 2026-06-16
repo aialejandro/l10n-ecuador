@@ -7,6 +7,10 @@
         <field name="model">res.partner.bank</field>
         <field name="inherit_id" ref="base.view_partner_bank_form"/>
         <field name="arch" type="xml">
+            <field name="acc_number" position="after">
+                <field name="l10n_ec_account_type" widget="radio" options="{'horizontal': true}"/>
+            </field>
+
             <!-- Agregar el campo después del campo bank_id -->
             <field name="bank_id" position="after">
                 <field name="l10n_ec_check_format_id" 

@@ -8,3 +8,4 @@ access_l10n_ec_check_format_field_accountant,l10n_ec.check.format.field accounta
 access_l10n_ec_check_format_wizard_manager,l10n_ec.check.format.wizard manager,model_l10n_ec_check_format_wizard,group_check_format_manager,1,1,1,1
 access_l10n_ec_check_format_wizard_user,l10n_ec.check.format.wizard user,model_l10n_ec_check_format_wizard,group_check_format_user,1,1,1,1
 access_l10n_ec_check_reset_wizard_system,l10n_ec.check.reset.wizard system,model_l10n_ec_check_reset_wizard,base.group_system,1,1,1,1
+access_l10n_ec_related_bank_line_accountant,l10n.ec.bank.related.line accountant,model_l10n_ec_bank_related_line,account.group_account_user,1,1,1,1
