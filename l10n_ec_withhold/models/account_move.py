@@ -55,6 +55,11 @@ class AccountMove(models.Model):
     l10n_ec_tax_support = fields.Selection(
         TAX_SUPPORT, string="Tax Support", help="Tax support in invoice line"
     )
+    l10n_ec_customer_id = fields.Many2one(
+        "res.partner",
+        string="Customer",
+        domain="[('customer_rank', '>', 0)]",
+    )
     l10n_ec_withhold_total_iva = fields.Monetary(
         string="Total Retencion IVA",
         compute="_compute_l10n_ec_withhold_totals",
